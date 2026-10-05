@@ -13,3 +13,4 @@ This repository holds both parts of the SE411 project (Fall 2026-27):
 Optional AI features run entirely in the browser, with no API key: search by meaning in Arabic and English, comparable market listings, and a fair-rent estimate.
 
 Sample data comes from the public Kaggle dataset "Saudi Arabia Real Estate (AQAR)" (2021).
+https://www.kaggle.com/datasets/lama122/saudi-arabia-real-estate-aqar
