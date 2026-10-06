@@ -39,15 +39,7 @@ Every page needs these three, so they start first.
 | 9 | Dashboard | Totals, status counts, the occupancy rate and rent. | 4.2 | |
 | 10 | About | The three names and student IDs, the course and the term. | 8.1 | |
 
-### One way to split the work
 
-This is a suggestion: the team decides. Each person starts with one foundation task, and each person's tasks stay in different files, so two people rarely change the same one.
-
-| Person | Starts with | Then |
-| --- | --- | --- |
-| 1 | 2 Data layer | 6 Add and Edit property |
-| 2 | 1 Sample data | 4 Property list, 8 Search and filters |
-| 3 | 3 Shared pieces | 5 Property detail, 7 Delete property, 9 Dashboard, 10 About |
 
 ## Stage 2: after the main features
 
