@@ -58,7 +58,7 @@ No listing appears in both files. `npm run prepare-data` builds both; do not edi
 - **Text.** Trim leading and trailing spaces. Number fields accept digits only (FR-ADD-12).
 - **No mutation.** Never change the collection or a property in place. Every change produces new objects (NFR-REL-04).
 - **Derived values are never stored**: the display title ("Villa in {district}, {city}"), comparables, the fair-rent estimate, the market position and embeddings (SRS section 3.5).
-- **One validator.** All field checks live in pure functions in `frontend/src/lib/validation.js`. The form uses them to show errors, and the service uses them again to reject invalid input, so no invalid property can enter the portfolio (NFR-REL-03).
+- **One validator.** All field checks live in pure functions in `frontend/src/utils/validation.js`. The form uses them to show errors, and the service uses them again to reject invalid input, so no invalid property can enter the portfolio (NFR-REL-03).
 
 ## The data service
 

@@ -23,24 +23,36 @@ Darscope is a web app that manages one company's rental villas and duplexes in R
 ```
 darscope/
 ├── CLAUDE.md, README.md
+├── .gitignore, .gitattributes
 ├── .claude/            rules, settings, skills
-├── docs/               SRS.md, design/, architecture.md, features.md,
+├── docs/               SRS.md, tasks.md, design/, architecture.md, features.md,
 │                       test-report.md, code-review.md, ai-usage.md
 ├── frontend/           Part 1
-│   ├── package.json, index.html, vite.config.js
+│   ├── package.json, index.html, vite.config.js, eslint.config.js
+│   ├── public/         favicon.svg
 │   ├── scripts/        prepare-data.mjs
 │   └── src/
 │       ├── main.jsx, App.jsx
-│       ├── config/     choices, thresholds, messages, team details
+│       ├── routes/     routes.jsx (the URL to page table), paths.js
+│       ├── layouts/    AppLayout, NavMenu, Footer
+│       ├── pages/      one component per URL
+│       ├── components/ ui/ (Button, Badge, Dialog, Message, Page), then one folder
+│       │               per feature: properties/, dashboard/, market/, search/
+│       ├── context/    portfolio context and reducer
+│       ├── hooks/      shared hooks
+│       ├── services/   propertyService.js, marketService.js, embeddingService.js
+│       ├── utils/      validation, search, sort, arabic, similarity, estimate
+│       ├── constants/  choices, thresholds, messages, team details
+│       ├── styles/     tokens.css, global.css
 │       ├── data/       portfolio.seed.json, market.reference.json
-│       ├── services/   propertyService.js, marketService.js
-│       ├── state/      portfolio context and reducer
-│       ├── lib/        validation, search, sort, arabic, similarity, estimate
-│       ├── ai/         embedding wrapper, loaded on demand
-│       ├── components/ Layout, Menu, Dialog, Message, Badge
-│       └── features/   dashboard/, properties/, market/, about/
+│       └── test/       setup.js, shared fixtures and helpers
+├── ai-model/           rent-prediction model, trained outside the app (not started)
 └── backend/            Part 2, hand-coded later
 ```
+
+The layout is layered: each folder under `src/` holds one kind of code. A folder appears when its first file is written, so not all of them exist yet. The open tasks, most important first, are in `docs/tasks.md`.
+
+`ai-model/` holds a rent-prediction model that the team trains on the dataset. It is not part of the React app: nothing under `frontend/src/` imports from it, and the SRS has no requirements for it yet. Read `ai-model/README.md` before working there.
 
 Each test file sits beside the module it tests and ends in `.test.js` or `.test.jsx`.
 
@@ -81,13 +93,13 @@ These are the defaults from SRS section 11. Ask before you swap one.
 6. Render user-entered text as text. Never use `dangerouslySetInnerHTML`.
 7. The AI features are optional extras. No Must requirement may depend on them, and each one must fail safely.
 8. Never commit the raw Kaggle CSV, model files, `.env` files or `node_modules`.
-9. Never invent team names or student IDs. They live in `frontend/src/config/team.js`: leave placeholders and ask the user.
+9. Never invent team names or student IDs. They live in `frontend/src/constants/team.js`: leave placeholders and ask the user.
 10. Tell the user before you add a dependency, and say why it is needed.
 
 ## How to work on a task
 
 1. Find the requirement IDs the task touches in `docs/SRS.md` and read them.
-2. Put logic in pure functions under `frontend/src/lib/` and test it there first. Keep components thin.
+2. Put logic in pure functions under `frontend/src/utils/` and test it there first. Keep pages and components thin.
 3. Write or update tests with the code, in a file beside the module.
 4. Run `npm test` and `npm run lint` in `frontend/`, and fix what fails before you report.
 5. Report what changed, which requirement IDs it covers, the test result, and anything left undone or uncertain.
@@ -143,3 +155,4 @@ Do not assume an answer to any of these. Ask the user when a task depends on one
 - Whether the app must be deployed online.
 - Whether the dataset's licence allows publishing data derived from it. Tell the user before generated data files are committed.
 - Whether every non-duplex listing in the dataset is a villa (assumption A-06).
+- Where the rent-prediction model in `ai-model/` runs, and how the app shows its prediction beside the fair-rent estimate. Neither is in the SRS yet.

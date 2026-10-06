@@ -1,11 +1,12 @@
 ---
 paths:
-  - "frontend/src/ai/**/*"
-  - "frontend/src/features/market/**/*"
+  - "frontend/src/services/embeddingService*"
   - "frontend/src/services/marketService*"
-  - "frontend/src/lib/similarity*"
-  - "frontend/src/lib/estimate*"
-  - "frontend/src/config/market*"
+  - "frontend/src/components/market/**/*"
+  - "frontend/src/pages/MarketInsightsPage*"
+  - "frontend/src/utils/similarity*"
+  - "frontend/src/utils/estimate*"
+  - "frontend/src/constants/market*"
 ---
 
 # AI features
@@ -21,10 +22,11 @@ Describe these features accurately in code comments, the interface and the docum
 - Search by meaning uses a ready-made neural language model. The team trains no model.
 - Comparable listings and the fair-rent estimate use a nearest-neighbour method with fixed weights. Nothing is trained.
 - Market insights are plain statistics, not AI.
+- A rent-prediction model is planned in `ai-model/`. It will be the only model the team trains. It is not built yet, the app does not use it, and the SRS has no requirements for it: do not describe any feature as using it until that changes.
 
 ## Constants
 
-Keep these in `frontend/src/config/market.js` and nowhere else (FR-EST-06).
+Keep these in `frontend/src/constants/market.js` and nowhere else (FR-EST-06).
 
 | Constant | Value |
 | --- | --- |
@@ -75,7 +77,7 @@ Keep these in `frontend/src/config/market.js` and nowhere else (FR-EST-06).
 ## Search by meaning (SRS 7.1, Appendix B.1)
 
 - Model: `Xenova/multilingual-e5-small`, run with `@huggingface/transformers`. Load the 8-bit quantised weights with `{ dtype: 'q8' }`, never the full-precision file (FR-AIS-12).
-- Import the library with a dynamic `import()` inside `frontend/src/ai/`, only after the user turns the switch on and agrees to the download (FR-AIS-02, NFR-PERF-04). Before the download, show the Appendix C message that names its size.
+- Import the library with a dynamic `import()` inside `frontend/src/services/embeddingService.js`, the one module that wraps the model, only after the user turns the switch on and agrees to the download (FR-AIS-02, NFR-PERF-04). Before the download, show the Appendix C message that names its size.
 - Show download progress. Keyword search stays usable meanwhile (FR-AIS-03).
 - Build each property's search text with the template in Appendix B.1: the structured facts first, then the description.
 - Prefix property texts with `passage: ` and queries with `query: `. Use mean pooling and normalise the embeddings. Similarity is the dot product.

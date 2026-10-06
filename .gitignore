@@ -1,0 +1,22 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+
+# Secrets (CLAUDE.md rule 8). Part 1 needs none.
+.env
+.env.*
+
+# The raw Kaggle CSV and language-model files are never committed (CLAUDE.md rule 8)
+frontend/data-raw/
+*.onnx
+
+# Personal tool settings
+.claude/settings.local.json
+.vscode/
+.idea/
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db
