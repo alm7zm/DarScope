@@ -24,7 +24,7 @@ Read the code itself. Report only what you can point to in a file. Do not change
 - Bundle size against NFR-PERF-07: run `npm run build` and quote the sizes it prints
 
 **Code quality**
-- Logic inside components that belongs in `src/lib/`
+- Logic inside pages or components that belongs in `src/utils/`
 - State changed in place (NFR-REL-04)
 - Missing error handling, dead code, unclear names, components past about 250 lines
 - Accessibility gaps against SRS section 10.3
@@ -32,7 +32,7 @@ Read the code itself. Report only what you can point to in a file. Do not change
 
 **Code reuse**
 - Duplicated logic, markup or styles that should be one function or component
-- Constants or messages repeated in components that belong in `src/config/` (NFR-MNT-04)
+- Constants or messages repeated in components that belong in `src/constants/` (NFR-MNT-04)
 - Shared components that are bypassed
 
 ## The report

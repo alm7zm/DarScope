@@ -9,22 +9,28 @@ This file condenses `docs/SRS.md` sections 4 to 6 and 8 to 10. The SRS wins if t
 
 ## Structure
 
-- Organise code by feature under `src/features/` (dashboard, properties, market, about). Shared pieces go in `src/components/` (NFR-MNT-03).
-- Field checks, filtering, sorting, Arabic normalisation, similarity and the estimate are pure functions in `src/lib/`, with no React or DOM code, so they can be unit-tested (NFR-MNT-01).
-- Choices, thresholds, labels, messages and team details live in `src/config/`. Never repeat them inside components (NFR-MNT-04).
+The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.md` shows the full tree.
+
+- `src/pages/` holds one component per URL. A page stays thin: it reads state, calls hooks and arranges components.
+- `src/components/` holds the building blocks of the pages, grouped by feature: `properties/`, `dashboard/`, `market/`, `search/`. Pieces that more than one feature uses go in `src/components/ui/` (NFR-MNT-03).
+- `src/layouts/` holds the shared layout: `AppLayout`, `NavMenu`, `Footer`.
+- `src/routes/` holds `routes.jsx`, the one table that maps each URL to its page, and `paths.js`, the URL of every page. Build links from `PATHS`, never from a URL written by hand.
+- Field checks, filtering, sorting, Arabic normalisation, similarity and the estimate are pure functions in `src/utils/`, with no React or DOM code, so they can be unit-tested (NFR-MNT-01).
+- Choices, thresholds, labels, messages and team details live in `src/constants/`. Never repeat them inside components (NFR-MNT-04).
   - `options.js`: cities, property types, statuses, front directions, amenities with their labels
   - `messages.js`: every fixed message, copied exactly from SRS Appendix C
   - `market.js`: the constants in `.claude/rules/ai-features.md`
-  - `team.js`: team names and student IDs (FR-ABT-06)
+  - `team.js`: the course details, and the team names and student IDs (FR-ABT-06)
 - Use function components and hooks. Split a component file that grows past about 250 lines.
-- State is one portfolio context with a reducer in `src/state/`. Its async actions call `propertyService`. Components never import the service's data or the JSON files.
+- State is one portfolio context with a reducer in `src/context/`. Its async actions call `propertyService`. Hooks that several components share go in `src/hooks/`. Components never import the service's data or the JSON files.
+- Everything that reaches outside React lives in `src/services/`: `propertyService.js` for the portfolio, `marketService.js` for the market reference set and `embeddingService.js` for the language model.
 
 ## Routing and layout
 
 - Use React Router with the URLs in `.claude/rules/product.md`. Navigation never reloads the whole app, and Back and Forward work (FR-NAV-03, FR-NAV-06).
 - Every page shares one layout: a header with the app name and menu, the page content, and a footer with the course, the data credit and the notice that changes last only until the page reloads (UI-01, FR-DAT-06).
 - Mark the current menu item visually and with `aria-current="page"` (FR-NAV-04).
-- Each page has exactly one `h1` that names it, and sets the tab title in the form "Properties · Darscope" (UI-02, FR-NAV-09).
+- Each page has exactly one `h1` that names it, and sets the tab title in the form "Properties · Darscope" (UI-02, FR-NAV-09). Wrap the page in `components/ui/Page.jsx`, which does both.
 - Below 768 px the menu collapses behind a toggle button (FR-NAV-08).
 
 ## Dashboard
@@ -46,7 +52,7 @@ This file condenses `docs/SRS.md` sections 4 to 6 and 8 to 10. The SRS wins if t
 
 - One `PropertyForm` component serves both Add and Edit.
 - Group the fields under Location, Building, Amenities, Rent and tenancy, Description. Put labels above inputs, mark required fields, and show the unit (m², SAR, years) beside number fields (UI-03, UI-04, FR-ADD-02).
-- Validate on Save with `src/lib/validation.js`. If any check fails: save nothing, show each error beside its field, move focus to the first invalid field, and keep everything the user typed (FR-ADD-03).
+- Validate on Save with `src/utils/validation.js`. If any check fails: save nothing, show each error beside its field, move focus to the first invalid field, and keep everything the user typed (FR-ADD-03).
 - Enable tenant name and lease dates only when Status is Occupied (FR-ADD-07).
 - After a successful add or update, open the detail page and show the confirmation message (FR-ADD-05, FR-UPD-04).
 - When the status leaves Occupied on Edit, warn that tenant and lease details will be cleared (FR-UPD-07).
@@ -63,7 +69,7 @@ This file condenses `docs/SRS.md` sections 4 to 6 and 8 to 10. The SRS wins if t
 - Update results 300 ms after typing stops, and at once on Enter (FR-SRC-03).
 - Filters: City (one or more), Status (one or more), Type, yearly rent from and to, size from and to, minimum bedrooms. The search box and all filters combine with AND (FR-SRC-04, FR-SRC-05).
 - A range whose "from" is above its "to" shows a message and is not applied (FR-SRC-07).
-- Arabic words must be searchable (FR-SRC-08). Normalise both the query and the text with `src/lib/arabic.js`, following SRS Appendix B.4. Normalise for matching only; always display the original text.
+- Arabic words must be searchable (FR-SRC-08). Normalise both the query and the text with `src/utils/arabic.js`, following SRS Appendix B.4. Normalise for matching only; always display the original text.
 - Default sort is Last updated, newest first (FR-SRC-09).
 
 ## Arabic text
@@ -77,13 +83,13 @@ This file condenses `docs/SRS.md` sections 4 to 6 and 8 to 10. The SRS wins if t
 - Use the exact wording in SRS Appendix C for field errors and fixed messages. Do not rephrase them.
 - Show a confirmation message after every add, update, delete, undo and reset. It disappears after 5 seconds, or 8 seconds when it offers Undo, and can be dismissed sooner (FR-FBK-01).
 - Announce messages to screen readers with a live region (FR-FBK-02).
-- Wrap the routes in an error boundary that shows an error screen with a Reload button, never a blank page (FR-FBK-03).
+- Wrap the routes in an error boundary that shows an error screen with a Reload button, never a blank page (FR-FBK-03). The route table does this with `errorElement` and `pages/ErrorPage.jsx`.
 
 ## Styling
 
-- Use CSS Modules. Define colours, spacing and type sizes once as CSS variables, and use only those tokens in components (UI-06).
+- Use CSS Modules, with each `.module.css` file beside its component. Colours, spacing and type sizes are defined once as CSS variables in `src/styles/tokens.css`: use only those tokens in components (UI-06). `src/styles/global.css` styles plain elements only.
 - The layout works from 360 px to 1920 px wide without the page scrolling sideways. Wide tables scroll inside their own frame (NFR-USE-02).
-- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05).
+- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`.
 - Follow the wireframes and style guide in `docs/design/` once they exist.
 
 ## Accessibility

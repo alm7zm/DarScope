@@ -659,6 +659,7 @@ darscope/
 ├── .claude/               rules, settings and skills for the AI coding tool
 ├── docs/
 │   ├── SRS.md             this document, exported
+│   ├── tasks.md           the open tasks, most important first
 │   ├── design/            wireframes and style guide
 │   ├── architecture.md
 │   ├── features.md
@@ -668,27 +669,34 @@ darscope/
 ├── frontend/              Part 1: the React app
 │   ├── package.json
 │   ├── index.html
+│   ├── public/            favicon
 │   ├── scripts/
 │   │   └── prepare-data.mjs   builds the two JSON files (Appendix A)
 │   └── src/
 │       ├── main.jsx
-│       ├── App.jsx            routes and shared layout
-│       ├── config/            choices, thresholds, labels, team details
+│       ├── App.jsx            the router and the providers every page needs
+│       ├── routes/            routes.jsx (the URL to page table), paths.js
+│       ├── layouts/           AppLayout, NavMenu, Footer
+│       ├── pages/             one component per URL
+│       ├── components/
+│       │   ├── ui/            Button, Badge, Dialog, Message, Page
+│       │   ├── properties/    table, form, delete dialog
+│       │   ├── dashboard/
+│       │   ├── market/        comparables panel
+│       │   └── search/        search box, filters
+│       ├── context/           portfolio context and reducer
+│       ├── hooks/             shared hooks
+│       ├── services/          propertyService.js, marketService.js,
+│       │                      embeddingService.js (loaded on demand)
+│       ├── utils/             validation, search, sort, arabic, similarity, estimate
+│       ├── constants/         choices, thresholds, labels, team details
+│       ├── styles/            tokens.css, global.css
 │       ├── data/              portfolio.seed.json, market.reference.json
-│       ├── services/          propertyService.js, marketService.js
-│       ├── state/             portfolio context and reducer
-│       ├── lib/               validation, search, sort, arabic, similarity, estimate
-│       ├── ai/                embedding wrapper, loaded on demand
-│       ├── components/        Layout, Menu, Dialog, Message, Badge
-│       └── features/
-│           ├── dashboard/
-│           ├── properties/    list, detail, form
-│           ├── market/        comparables panel, insights page
-│           └── about/
+│       └── test/              setup and shared fixtures
 └── backend/               Part 2: hand-coded, added later
 ```
 
-Each test file sits beside the module it tests and ends in `.test.js` or `.test.jsx`.
+The layout is layered: each folder under `src/` holds one kind of code. Each test file sits beside the module it tests and ends in `.test.js` or `.test.jsx`.
 
 ## 12. Project deliverables
 
