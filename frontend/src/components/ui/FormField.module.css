@@ -1,0 +1,94 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.required {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  /* A long hint wraps rather than stretching its grid column. */
+  text-wrap: pretty;
+}
+
+.control {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--target-min);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius);
+  /* Windows dark mode draws a native select with its own colours unless both are set. */
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  transition:
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.control:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+}
+
+.control:disabled {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+textarea.control {
+  min-height: 6rem;
+  line-height: var(--line-height);
+  resize: vertical;
+}
+
+/* An invalid field is marked by its border, its message and aria-invalid, never by colour
+   alone (NFR-ACC-05). */
+.invalid {
+  border-color: var(--color-danger);
+  border-width: var(--border-width-thick);
+  padding: calc(var(--space-2) - 2px) calc(var(--space-3) - 2px);
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger-strong);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.25rem;
+}
+
+.checkbox input {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Label and box are one hit target, with no dead zone between them. */
+.checkbox label {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}

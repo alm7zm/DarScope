@@ -4,25 +4,65 @@
   min-height: 100dvh;
 }
 
-.header {
-  border-bottom: var(--border-width) solid var(--color-border);
+/* Off screen until a keyboard reaches it, then it parks under the header (WCAG 2.4.1). */
+.skipLink {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 10;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
   background: var(--color-surface);
+  color: var(--color-primary-strong);
+  font-weight: var(--font-weight-bold);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-200%);
+}
+
+.skipLink:focus-visible {
+  transform: translateY(0);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: var(--border-width) solid var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  /* Falls back to a solid bar wherever backdrop-filter is unavailable. */
+  backdrop-filter: blur(8px);
 }
 
 .headerInner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-6);
+  gap: var(--space-2) var(--space-8);
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-5);
 }
 
 .brand {
-  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: var(--color-on-accent);
+  font-size: var(--font-size-sm);
 }
 
 .main {
@@ -30,10 +70,10 @@
   width: 100%;
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-8) var(--space-5) var(--space-12);
 }
 
-/* Even vertical rhythm between the blocks of a page. */
-.main > * + * {
-  margin-top: var(--space-4);
+/* The skip link sends focus here; it should not then draw a ring around the whole page. */
+.main:focus {
+  outline: none;
 }

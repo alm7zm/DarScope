@@ -1,0 +1,115 @@
+.panel {
+  margin-bottom: var(--space-6);
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.searchRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.searchField {
+  /* Grows to fill the row, and `min-width: 0` lets it shrink below its content at 360 px. */
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+/* A quiet rule between the search box and the filters that narrow its results. */
+.filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+@media (min-width: 40rem) {
+  .filters {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    align-items: start;
+  }
+}
+
+/* Filter groups are plain blocks, not boxed-in fieldsets: a border around every one turned the
+   panel into a wall of rectangles. */
+.group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* These are single fields rather than groups, so their labels are styled to match the uppercase
+   legends of the filters beside them. */
+.column label,
+.range label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Label and box share one hit target, with no dead zone between them. */
+.checkbox label {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-1) 0;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.range {
+  display: flex;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.range > * {
+  min-width: 0;
+}
+
+.rangeError {
+  margin-top: var(--space-2);
+  color: var(--color-danger-strong);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
