@@ -1,25 +1,36 @@
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
+  gap: var(--space-1);
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .link {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
   padding: var(--space-2) var(--space-3);
-  border-bottom: var(--border-width-thick) solid transparent;
-  color: var(--color-text);
+  border-radius: var(--radius);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
+  transition:
+    background-color var(--duration) var(--ease),
+    color var(--duration) var(--ease);
 }
 
 .link:hover {
-  text-decoration: underline;
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
 }
 
-/* The current page is marked by a bar as well as by colour (FR-NAV-04, NFR-ACC-05). */
+/* The current page is marked by a filled pill as well as by colour, so the mark survives
+   greyscale (FR-NAV-04, NFR-ACC-05). */
 .link[aria-current='page'] {
-  border-bottom-color: var(--color-primary);
-  color: var(--color-primary);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-strong);
+  font-weight: var(--font-weight-bold);
 }

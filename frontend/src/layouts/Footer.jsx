@@ -10,7 +10,9 @@ export default function Footer() {
           {COURSE.code} · {COURSE.term} · {COURSE.part}
         </p>
         <p>Sample data: Saudi Arabia Real Estate (AQAR), Kaggle, 2021.</p>
-        <p>Changes are kept only until the page reloads.</p>
+        <p className={styles.notice}>
+          Changes are kept only until the page reloads.
+        </p>
       </div>
     </footer>
   );

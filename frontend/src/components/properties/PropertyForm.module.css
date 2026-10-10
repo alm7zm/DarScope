@@ -1,0 +1,75 @@
+.group {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fields {
+  display: grid;
+  /* One column at 360 px, more once there is room (NFR-USE-02). */
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 36rem) {
+  .fields {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+}
+
+.amenities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-2) var(--space-4);
+}
+
+/* FR-UPD-07. A warning, not an error: the save is allowed, the details are cleared. */
+.warning {
+  margin: var(--space-5) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-status-maintenance-text);
+  border-left-width: var(--border-width-thick);
+  border-radius: var(--radius);
+  background-color: var(--color-status-maintenance-bg);
+  color: var(--color-status-maintenance-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.saveError {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-danger);
+  border-left-width: var(--border-width-thick);
+  border-radius: var(--radius);
+  background-color: var(--color-danger-tint);
+  color: var(--color-danger-strong);
+  font-weight: var(--font-weight-bold);
+}
+
+/* The actions stay reachable while a long form scrolls, without covering a focused field:
+   the bar sits at the end of the flow, not over it. */
+.actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}

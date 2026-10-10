@@ -1,10 +1,12 @@
-import { render, screen, within } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { renderRoutes } from '../test/render.jsx';
 import AppLayout from './AppLayout.jsx';
 
+// The layout reads the confirmation message from the portfolio state, so it renders inside the
+// provider here exactly as it does in App.jsx.
 function renderLayout(url = '/') {
-  const router = createMemoryRouter(
+  renderRoutes(
     [
       {
         element: <AppLayout />,
@@ -13,7 +15,6 @@ function renderLayout(url = '/') {
     ],
     { initialEntries: [url] },
   );
-  render(<RouterProvider router={router} />);
 }
 
 describe('AppLayout', () => {
@@ -60,6 +61,25 @@ describe('AppLayout', () => {
     expect(
       screen.getByRole('link', { name: 'Properties' }),
     ).not.toHaveAttribute('aria-current');
+  });
+
+  it('offers a skip link that jumps past the menu to the content (WCAG 2.4.1)', () => {
+    renderLayout();
+
+    const skip = screen.getByRole('link', { name: 'Skip to content' });
+    expect(skip).toHaveAttribute('href', '#main');
+    // The target exists and can take focus.
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
+    expect(screen.getByRole('main')).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('is the first thing a keyboard reaches, before the menu', () => {
+    renderLayout();
+
+    const focusable = [
+      ...document.querySelectorAll('a[href], button, input, select, textarea'),
+    ];
+    expect(focusable[0]).toHaveAccessibleName('Skip to content');
   });
 
   it('states the course, the data credit and the reload notice in the footer (UI-01, FR-DAT-06)', () => {

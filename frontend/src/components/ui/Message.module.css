@@ -1,0 +1,48 @@
+/* The region stays in the tree so that a screen reader is already watching it (FR-FBK-02). */
+.region:empty {
+  display: none;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5);
+  border: var(--border-width) solid var(--color-primary);
+  border-left-width: var(--border-width-thick);
+  border-radius: var(--radius);
+  background-color: var(--color-primary-tint);
+  color: var(--color-primary-strong);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-sm);
+}
+
+.text {
+  flex: 1;
+  /* Lets a long message wrap instead of pushing the dismiss button off the row. */
+  min-width: 0;
+  margin: 0;
+}
+
+.dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Past the 24 px WCAG 2.5.8 floor. */
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease);
+}
+
+.dismiss:hover {
+  background: var(--color-surface);
+}
