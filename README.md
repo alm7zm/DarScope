@@ -59,4 +59,27 @@ A folder appears when its first file is written. Each test file sits beside the 
 
 ## Status
 
-The app shell is in place: the shared layout, the menu, a URL for every page and placeholder pages. The features are still to build, and [docs/tasks.md](docs/tasks.md) lists them.
+Every **Must** requirement of Part 1 is built and tested: the property list, the detail page, the
+one form that adds and edits, delete with confirmation, keyword search and filters in Arabic and
+English, the Dashboard and the About page. The app runs entirely in the browser, with no server.
+
+| Area | State |
+| --- | --- |
+| Navigation, layout, About | Done |
+| Property list, detail, add, edit, delete | Done |
+| Search and filters | Done |
+| Dashboard | Done |
+| Market insights, comparables, fair-rent estimate | Not started |
+| Search by meaning | Not started |
+| Sorting, pagination, card view, undo delete | Not started |
+
+Two things are worth knowing before you run it:
+
+- **The sample data is a placeholder.** `frontend/src/data/portfolio.seed.json` holds 8
+  hand-written properties, not the 40 the specification asks for, because the raw Kaggle CSV is
+  not in the repository. Drop it into `frontend/data-raw/` and run `npm run prepare-data` to
+  build the real files. See [frontend/src/data/README.md](frontend/src/data/README.md).
+- **Changes are kept only until the page reloads.** That is required, not a gap: Part 1 holds the
+  portfolio in memory and Part 2 replaces the data service with a real backend.
+
+[docs/tasks.md](docs/tasks.md) lists what is left, most important first.

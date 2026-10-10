@@ -6,10 +6,17 @@ To take a task, write your name in **Owner**. Add ✔ when it is merged.
 
 ## Already built
 
+Merged into `main`:
+
 - The project setup: React, the page router, the test tools and the npm commands in the README.
 - The layout every page shares: the header with the menu, and the footer.
 - A URL and a placeholder for every page, plus the "Page not found" and error screens.
 - The design colours and a Button in three styles.
+
+Built and in review, as the ten pull requests below: the data layer, the property list, the
+detail page, the add and edit form, delete with confirmation, search and filters, the Dashboard,
+the About page, and the interface rework. **Every Must requirement of Part 1 except task 1, the
+sample data.**
 
 ## Stage 1: main pages and features
 
@@ -19,23 +26,40 @@ Build only the **Must** requirements of each SRS section at this stage. The Shou
 
 ### In review
 
-Tasks 2 to 8 are built and waiting for a review. Each is one branch and one pull request, and
-each is based on the one before it, so review them in this order and merge them in it too.
+**Every Must requirement of stage 1 is built.** Tasks 2 to 10 are waiting for a review.
 
-| PR | Branch | Task | SRS |
+Each task is one branch and one pull request, and **each is based on the one before it**. Review
+them in this order and merge them in it too: merging out of order will show the wrong diff.
+
+| PR | Branch | What | SRS |
 | --- | --- | --- | --- |
-| #1 | `feat/data-layer` | 2 and 3, the data layer and the shared pieces | 3.1, 3.2, 8.2, 8.3, C |
-| #2 | `feat/property-list` | 4, the property list | 4.3 |
-| #3 | `feat/property-detail` | 5, the property detail page | 4.4 |
-| #4 | `feat/property-form` | 6, add and edit | 5.1, 5.2 |
-| #5 | `feat/delete-property` | 7, delete with confirmation | 5.3 |
-| #6 | `feat/search-filters` | 8, search and filters | 6 |
+| #1 | `feat/data-layer` | Tasks 2 and 3: the data layer and the shared pieces | 3.1, 3.2, 8.2, 8.3, C |
+| #2 | `feat/property-list` | Task 4: the property list | 4.3 |
+| #3 | `feat/property-detail` | Task 5: the property detail page | 4.4 |
+| #4 | `feat/property-form` | Task 6: add and edit | 5.1, 5.2 |
+| #5 | `feat/delete-property` | Task 7: delete with confirmation | 5.3 |
+| #6 | `feat/search-filters` | Task 8: search and filters | 6 |
+| #7 | `docs/record-ai-usage` | The AI usage record and this section | 12 |
+| #8 | `feat/design-system` | The interface rework, and the accessibility fixes it found | 9.1, 10.3 |
+| #9 | `feat/dashboard` | Task 9: the Dashboard | 4.2 |
+| #10 | `feat/about` | Task 10: the About page | 8.1 |
 
-Task 1, the sample data, is still blocked: `npm run prepare-data` needs the Kaggle CSV in
-`frontend/data-raw/`. Until then `src/data/portfolio.seed.json` holds 8 hand-written properties
-that are not derived from the dataset. See `frontend/src/data/README.md`.
+Three Should requirements were pulled forward out of stage 2, because the Dashboard is not worth
+opening without them: the per-city table, the needs-attention list and the shortcuts
+(FR-DSH-05 to FR-DSH-07). Everything else in stage 2 is still stage 2.
 
-Tasks 9 and 10, the Dashboard and the About page, are not started.
+**Still blocked.** Task 1, the sample data, needs two things that do not exist yet: the Kaggle
+CSV in `frontend/data-raw/`, and the script `frontend/scripts/prepare-data.mjs` that turns it
+into the two JSON files. `package.json` already points at that script, so `npm run prepare-data`
+fails with "Cannot find module" until somebody writes it. Until then
+`src/data/portfolio.seed.json` holds 8 hand-written properties that are **not** derived from the
+dataset, so the open licence question is untouched. See `frontend/src/data/README.md`.
+
+**Before you submit**, two things still need a person:
+
+- The other two names and student IDs in `frontend/src/constants/team.js`. The About page shows
+  how many are missing, so this is hard to forget.
+- The manual acceptance checks a test cannot make: AC-16 (keyboard only) and AC-23 (360 px).
 
 ### Foundations
 
@@ -93,21 +117,27 @@ A rent-prediction model in the `ai-model/` folder. It goes beyond the course bri
 
 ## Documents to hand in
 
-| Document | How | Owner |
-| --- | --- | --- |
-| Visual design: wireframes and a style guide in `docs/design/` | With an AI tool, ideally before the pages are styled | |
-| Architecture and features | Run `/project-docs` | |
-| Test report | Run `/test-report` | |
-| Code review | Run `/code-review-report` | |
-| AI usage record in `docs/ai-usage.md` | Add a row each time an AI tool produces something | Everyone |
-| The repository URL | Submit it on or before 17 October | |
+| Document | How | State | Owner |
+| --- | --- | --- | --- |
+| Style guide in `docs/design/` | Written from the tokens the app uses | ✔ written | |
+| Wireframes in `docs/design/` | With an AI tool | Not started | |
+| Architecture and features | Run `/project-docs` | Not started | |
+| Test report | Run `/test-report` | Not started | |
+| Code review | Run `/code-review-report` | Not started | |
+| AI usage record in `docs/ai-usage.md` | Add a row each time an AI tool produces something | Kept up to date | Everyone |
+| The repository URL | Submit it on or before 17 October | | |
+
+The last three reports are worth running **after** the pull requests above are merged, so they
+describe the merged code rather than a branch.
 
 ## Team to-dos
 
-- [ ] Add the other two names and student IDs to `frontend/src/constants/team.js`.
+- [ ] Add the other two names and student IDs to `frontend/src/constants/team.js`. The About page shows how many are still missing, so this is hard to forget but easy to leave.
+- [ ] Review and merge the ten pull requests, in order. They are stacked, so an out-of-order merge shows the wrong diff.
 - [ ] Download the Kaggle CSV into `frontend/data-raw/`. Git ignores that folder: never commit the file. Task 1 and the AI model wait for it.
 - [ ] Ask the instructor the open questions in SRS section 15.3, above all whether the dataset may be published and whether changes must survive a page reload. Until the dataset question is answered, do not commit the data files that task 1 produces.
 - [ ] Copy the new SRS section 11.2 into the team's master SRS document.
+- [ ] Walk AC-16 (keyboard only) and AC-23 (360 px) by hand in a real browser. No test can make these two, and the test report has to list them as manual checks.
 
 ## Dates
 
