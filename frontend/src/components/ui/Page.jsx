@@ -9,7 +9,11 @@ export default function Page({ title, children }) {
   return (
     <>
       <title>{`${title} · Darscope`}</title>
-      <h1 className={styles.title}>{title}</h1>
+      {/* A page title can carry property data, such as an Arabic district, so the browser
+          decides its direction (FR-LST-07). */}
+      <h1 className={styles.title} dir="auto">
+        {title}
+      </h1>
       {children}
     </>
   );
