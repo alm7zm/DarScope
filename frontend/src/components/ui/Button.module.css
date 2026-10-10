@@ -1,36 +1,74 @@
 .button {
-  padding: var(--space-2) var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
   border: var(--border-width) solid transparent;
   border-radius: var(--radius);
   font: inherit;
   font-weight: var(--font-weight-bold);
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
+  /* Properties are listed one by one: `transition: all` would animate layout too. */
+  transition:
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+/* Comfortable to hit with a finger, and well past the 24 px WCAG 2.5.8 floor. */
+.medium {
+  min-height: var(--target-min);
+  padding: var(--space-3) var(--space-5);
+}
+
+/* Dense rows, where a full-size button would stretch the table. Still 32 px tall. */
+.small {
+  min-height: 2rem;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .primary {
   background: var(--color-primary);
   color: var(--color-on-accent);
+  box-shadow: var(--shadow-sm);
 }
 
-.primary:hover {
+.primary:hover:not(:disabled) {
   background: var(--color-primary-strong);
 }
 
 .secondary {
-  border-color: var(--color-text-muted);
+  border-color: var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
+  box-shadow: var(--shadow-sm);
 }
 
-.secondary:hover {
-  background: var(--color-bg);
+.secondary:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+  background: var(--color-surface-sunken);
 }
 
 .danger {
   background: var(--color-danger);
   color: var(--color-on-accent);
+  box-shadow: var(--shadow-sm);
 }
 
-.danger:hover {
+.danger:hover:not(:disabled) {
   background: var(--color-danger-strong);
+}
+
+/* Active state reads stronger than hover, which reads stronger than rest. */
+.button:active:not(:disabled) {
+  box-shadow: none;
 }

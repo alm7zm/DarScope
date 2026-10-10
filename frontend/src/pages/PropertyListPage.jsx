@@ -39,7 +39,13 @@ export default function PropertyListPage() {
   const { matching } = search;
 
   return (
-    <Page title="Properties">
+    // No "Add property" action in the header: FR-NAV-01 already puts one in the menu, and a
+    // second copy a few centimetres away is clutter rather than convenience. The empty state
+    // still offers one, where it is the only thing to do (FR-LST-05).
+    <Page
+      title="Properties"
+      description="Every rental house in the portfolio. Search and filter to narrow the list."
+    >
       <SearchControls
         text={search.text}
         onTextChange={search.setText}
@@ -83,7 +89,9 @@ export default function PropertyListPage() {
 function NothingToShow({ searching, onClearAll }) {
   return (
     <div className={styles.empty}>
-      <p>{searching ? TEXT.noSearchMatches : TEXT.emptyPortfolio}</p>
+      <p className={styles.emptyText}>
+        {searching ? TEXT.noSearchMatches : TEXT.emptyPortfolio}
+      </p>
       {searching ? (
         <Button variant="primary" onClick={onClearAll}>
           Clear all

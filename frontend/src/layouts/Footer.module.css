@@ -1,4 +1,5 @@
 .footer {
+  margin-top: auto;
   border-top: var(--border-width) solid var(--color-border);
   background: var(--color-surface);
   color: var(--color-text-muted);
@@ -11,5 +12,11 @@
   gap: var(--space-1) var(--space-6);
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-4);
+  padding: var(--space-5);
+}
+
+/* The reload notice is the one line here a user may need to act on (FR-DAT-06). */
+.notice {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
 }

@@ -1,4 +1,40 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.heading {
+  /* Lets a long title wrap instead of pushing the actions off the row. */
+  min-width: 0;
+  flex: 1 1 18rem;
+}
+
 .title {
-  font-size: var(--font-size-xl);
-  line-height: var(--line-height-tight);
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 48rem) {
+  .title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.description {
+  margin-top: var(--space-2);
+  max-width: 60ch;
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
 }

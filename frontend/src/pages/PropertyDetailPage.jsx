@@ -39,23 +39,27 @@ export default function PropertyDetailPage() {
   }
 
   return (
-    <Page title={displayTitle(property)}>
-      {/* FR-DET-02: Edit, Delete and Back to list. */}
-      <div className={styles.actions}>
-        <Link
-          to={generatePath(PATHS.editProperty, { id: property.id })}
-          className={styles.primaryAction}
-        >
-          Edit
-        </Link>
-        <Button variant="danger" onClick={() => setConfirmingDelete(true)}>
-          Delete
-        </Button>
-        <Link to={PATHS.properties} className={styles.back}>
-          Back to list
-        </Link>
-      </div>
-
+    <Page
+      title={displayTitle(property)}
+      description={`Property ${property.id}`}
+      actions={
+        /* FR-DET-02: Edit, Delete and Back to list. */
+        <div className={styles.actions}>
+          <Link
+            to={generatePath(PATHS.editProperty, { id: property.id })}
+            className={styles.primaryAction}
+          >
+            Edit
+          </Link>
+          <Button variant="danger" onClick={() => setConfirmingDelete(true)}>
+            Delete
+          </Button>
+          <Link to={PATHS.properties} className={styles.back}>
+            Back to list
+          </Link>
+        </div>
+      }
+    >
       <PropertyDetail property={property} />
 
       <DeletePropertyDialog
