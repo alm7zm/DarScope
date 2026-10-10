@@ -17,6 +17,26 @@ Do these first. They are what the course brief requires, and the target is to ha
 
 Build only the **Must** requirements of each SRS section at this stage. The Should and Could ones come in stages 2 and 3.
 
+### In review
+
+Tasks 2 to 8 are built and waiting for a review. Each is one branch and one pull request, and
+each is based on the one before it, so review them in this order and merge them in it too.
+
+| PR | Branch | Task | SRS |
+| --- | --- | --- | --- |
+| #1 | `feat/data-layer` | 2 and 3, the data layer and the shared pieces | 3.1, 3.2, 8.2, 8.3, C |
+| #2 | `feat/property-list` | 4, the property list | 4.3 |
+| #3 | `feat/property-detail` | 5, the property detail page | 4.4 |
+| #4 | `feat/property-form` | 6, add and edit | 5.1, 5.2 |
+| #5 | `feat/delete-property` | 7, delete with confirmation | 5.3 |
+| #6 | `feat/search-filters` | 8, search and filters | 6 |
+
+Task 1, the sample data, is still blocked: `npm run prepare-data` needs the Kaggle CSV in
+`frontend/data-raw/`. Until then `src/data/portfolio.seed.json` holds 8 hand-written properties
+that are not derived from the dataset. See `frontend/src/data/README.md`.
+
+Tasks 9 and 10, the Dashboard and the About page, are not started.
+
 ### Foundations
 
 Every page needs these three, so they start first.
