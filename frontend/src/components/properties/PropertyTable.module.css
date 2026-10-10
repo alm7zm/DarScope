@@ -3,13 +3,15 @@
 .frame {
   overflow-x: auto;
   border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: var(--font-size-sm);
 }
 
@@ -27,16 +29,29 @@
 
 .table th,
 .table td {
-  padding: var(--space-3);
-  border-bottom: var(--border-width) solid var(--color-border);
+  padding: var(--space-3) var(--space-4);
   text-align: left;
   vertical-align: middle;
   white-space: nowrap;
 }
 
+/* The header stays put while the rows scroll under it. */
 .table thead th {
-  background-color: var(--color-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: var(--border-width) solid var(--color-border);
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table tbody th,
+.table tbody td {
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 
 .table tbody tr:last-child th,
@@ -44,17 +59,25 @@
   border-bottom: none;
 }
 
+.table tbody tr {
+  transition: background-color var(--duration) var(--ease);
+}
+
 .table tbody tr:hover {
-  background-color: var(--color-bg);
+  background-color: var(--color-surface-sunken);
 }
 
 .idCell {
+  color: var(--color-text);
   font-weight: var(--font-weight-bold);
+  /* An identifier, which machine translation should leave alone. */
+  font-variant-numeric: tabular-nums;
 }
 
 /* District and description can be long; let the district wrap rather than stretch the table. */
 .table td[dir='auto'] {
   max-width: 14rem;
+  min-width: 8rem;
   white-space: normal;
 }
 
@@ -67,21 +90,22 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-}
-
-/* Button sets its own class, so the row's Delete is sized by element rather than by class. */
-.actions button {
-  padding: var(--space-1) var(--space-3);
-  font-size: var(--font-size-sm);
+  gap: var(--space-2);
 }
 
 .action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
   color: var(--color-primary-strong);
-  text-decoration: underline;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: background-color var(--duration) var(--ease);
 }
 
-.action:focus-visible {
-  outline: var(--border-width-thick) solid var(--color-focus);
-  outline-offset: 2px;
+.action:hover {
+  background: var(--color-primary-tint);
+  text-decoration: underline;
 }

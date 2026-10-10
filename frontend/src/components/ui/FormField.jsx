@@ -41,20 +41,19 @@ function Wrapper({ id, label, required = false, hint, error, children }) {
       <label className={styles.label} htmlFor={id}>
         {label}
         {required ? (
-          <span className={styles.required}>
-            {' '}
-            {/* The marker is a word, not only an asterisk, so it is never colour or symbol
-                alone (FR-ADD-02, NFR-ACC-05). */}
-            (required)
-          </span>
+          /* The marker is a word, not only an asterisk, so it is never colour or symbol
+             alone (FR-ADD-02, NFR-ACC-05). */
+          <span className={styles.required}> (required)</span>
         ) : null}
       </label>
+      {children}
+      {/* The hint sits below the control, not above it: a hint above pushes its input down, and
+          the inputs on a row stop lining up. `aria-describedby` reads it either way. */}
       {hint ? (
         <p className={styles.hint} id={hintId(id)}>
           {hint}
         </p>
       ) : null}
-      {children}
       {error ? (
         <p className={styles.error} id={errorId(id)}>
           {error}
@@ -100,6 +99,10 @@ export function TextField({
         value={value ?? ''}
         onChange={(event) => onChange(event.target.value)}
         disabled={disabled}
+        // These are property records, not the person's own details, so the browser should not
+        // offer to fill them in or flag districts as misspelt.
+        autoComplete="off"
+        spellCheck={type === 'search' ? false : undefined}
         // District, tenant name and description may be Arabic, so the field reads
         // right-to-left as soon as Arabic is typed into it (FR-LST-07).
         dir={type === 'date' ? undefined : 'auto'}
@@ -186,6 +189,7 @@ export function TextAreaField({
         value={value ?? ''}
         onChange={(event) => onChange(event.target.value)}
         dir="auto"
+        autoComplete="off"
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, { hint, error })}
       />
