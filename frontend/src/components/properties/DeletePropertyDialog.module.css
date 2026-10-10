@@ -1,0 +1,14 @@
+.name {
+  margin: 0 0 var(--space-2);
+}
+
+.warning {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.failure {
+  margin: var(--space-3) 0 0;
+  color: var(--color-danger-strong);
+  font-weight: var(--font-weight-bold);
+}
