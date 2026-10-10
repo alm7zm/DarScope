@@ -63,6 +63,25 @@ describe('AppLayout', () => {
     ).not.toHaveAttribute('aria-current');
   });
 
+  it('offers a skip link that jumps past the menu to the content (WCAG 2.4.1)', () => {
+    renderLayout();
+
+    const skip = screen.getByRole('link', { name: 'Skip to content' });
+    expect(skip).toHaveAttribute('href', '#main');
+    // The target exists and can take focus.
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
+    expect(screen.getByRole('main')).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('is the first thing a keyboard reaches, before the menu', () => {
+    renderLayout();
+
+    const focusable = [
+      ...document.querySelectorAll('a[href], button, input, select, textarea'),
+    ];
+    expect(focusable[0]).toHaveAccessibleName('Skip to content');
+  });
+
   it('states the course, the data credit and the reload notice in the footer (UI-01, FR-DAT-06)', () => {
     renderLayout();
 

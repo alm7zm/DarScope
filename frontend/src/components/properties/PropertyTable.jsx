@@ -73,7 +73,8 @@ function PropertyRow({ property, onDelete }) {
   return (
     <tr>
       <th scope="row" className={styles.idCell}>
-        {property.id}
+        {/* An identifier, which machine translation should leave alone. */}
+        <span translate="no">{property.id}</span>
       </th>
       <td>{property.city}</td>
       {/* District may be Arabic, so it reads right-to-left inside the English table
@@ -110,6 +111,7 @@ function PropertyRow({ property, onDelete }) {
               confirmed first (FR-DEL-02). */}
           <Button
             variant="danger"
+            size="small"
             onClick={() => onDelete(property)}
             aria-label={`Delete ${property.id}`}
           >

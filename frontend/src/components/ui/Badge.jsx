@@ -14,5 +14,11 @@ const VARIANT_BY_STATUS = {
  */
 export default function Badge({ status }) {
   const variant = VARIANT_BY_STATUS[status] ?? 'unknown';
-  return <span className={`${styles.badge} ${styles[variant]}`}>{status}</span>;
+  return (
+    <span className={`${styles.badge} ${styles[variant]}`}>
+      {/* Decoration only; the word beside it is what conveys the status. */}
+      <span className={styles.dot} aria-hidden="true" />
+      {status}
+    </span>
+  );
 }

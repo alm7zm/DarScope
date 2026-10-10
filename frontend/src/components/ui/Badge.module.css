@@ -1,12 +1,24 @@
 .badge {
-  display: inline-block;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  /* The status word must not wrap mid-badge in a narrow table column. */
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  /* The status word must not wrap mid-chip in a narrow table column. */
   white-space: nowrap;
+}
+
+/* The dot is decoration: the word beside it carries the meaning (NFR-ACC-05). */
+.dot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
 }
 
 .vacant {
@@ -26,6 +38,6 @@
 
 /* A status outside the three in SRS 3.1 still reads, just without a colour of its own. */
 .unknown {
-  background-color: var(--color-bg);
+  background-color: var(--color-surface-sunken);
   color: var(--color-text);
 }

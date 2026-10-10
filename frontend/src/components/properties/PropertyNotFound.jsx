@@ -9,7 +9,7 @@ import styles from './PropertyNotFound.module.css';
  */
 export default function PropertyNotFound({ id }) {
   return (
-    <div>
+    <div className={styles.panel}>
       <p className={styles.explanation}>
         No property has the ID {id}. It may have been deleted.
       </p>
