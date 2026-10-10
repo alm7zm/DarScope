@@ -20,11 +20,19 @@ question in SRS section 15.3.
 
 ## What replaces it
 
-1. Download the Kaggle CSV into `frontend/data-raw/`. Git ignores that folder.
-2. Build the real files with `npm run prepare-data`, which writes 40 properties `RP-0001` to
-   `RP-0040` here and overwrites this placeholder.
-3. Do not commit the generated files until the instructor answers whether the dataset licence
-   allows publishing data derived from it (SRS 15.3, `docs/tasks.md`).
+Task 1 in `docs/tasks.md`, which has three parts and none of them are done:
+
+1. **Download the Kaggle CSV** into `frontend/data-raw/`. Git ignores that folder, so the raw file
+   is never committed.
+2. **Write `frontend/scripts/prepare-data.mjs`.** It does not exist yet. `package.json` already
+   has the `prepare-data` script pointing at it, so `npm run prepare-data` currently fails with
+   "Cannot find module" — that is a missing script, not a broken setup.
+   `.claude/rules/data-prep.md` and SRS Appendix A say what it has to do.
+3. **Run it**, which writes 40 properties `RP-0001` to `RP-0040` here and overwrites this
+   placeholder, plus `market.reference.json`.
+
+Do not commit the generated files until the instructor answers whether the dataset licence allows
+publishing data derived from it (SRS 15.3, `docs/tasks.md`).
 
 Nothing else needs to change: the pages read the portfolio through
 `src/services/propertyService.js`, which does not care how many properties the seed holds.
