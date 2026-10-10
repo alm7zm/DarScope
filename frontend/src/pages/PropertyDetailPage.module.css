@@ -29,8 +29,3 @@
   outline: var(--border-width-thick) solid var(--color-focus);
   outline-offset: 2px;
 }
-
-.notFound {
-  margin: 0 0 var(--space-4);
-  color: var(--color-text-muted);
-}

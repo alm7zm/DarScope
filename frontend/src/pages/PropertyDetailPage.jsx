@@ -1,5 +1,6 @@
 import { Link, generatePath, useParams } from 'react-router';
 import PropertyDetail from '../components/properties/PropertyDetail.jsx';
+import PropertyNotFound from '../components/properties/PropertyNotFound.jsx';
 import Page from '../components/ui/Page.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
@@ -26,12 +27,7 @@ export default function PropertyDetailPage() {
   if (!property) {
     return (
       <Page title={TEXT.propertyNotFound}>
-        <p className={styles.notFound}>
-          No property has the ID {id}. It may have been deleted.
-        </p>
-        <Link to={PATHS.properties} className={styles.back}>
-          Back to list
-        </Link>
+        <PropertyNotFound id={id} />
       </Page>
     );
   }
