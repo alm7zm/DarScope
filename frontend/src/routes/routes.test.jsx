@@ -1,7 +1,9 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import * as propertyService from '../services/propertyService.js';
 import { renderRoutes } from '../test/render.jsx';
+import { displayTitle } from '../utils/format.js';
 import { routes } from './routes.jsx';
 
 function renderApp(url, table = routes) {
@@ -39,7 +41,6 @@ describe('routes', () => {
     ['/', 'Dashboard'],
     ['/properties', 'Properties'],
     ['/properties/new', 'Add property'],
-    ['/properties/RP-0001', 'Property detail'],
     ['/properties/RP-0001/edit', 'Edit property'],
     ['/insights', 'Market insights'],
     ['/about', 'About'],
@@ -53,6 +54,17 @@ describe('routes', () => {
       expect(document.title).toBe(`${name} · Darscope`);
     },
   );
+
+  it('opens /properties/:id as the page for that property (FR-NAV-05, UI-02, FR-NAV-09)', async () => {
+    // This page is named after its property, so the expected title comes from the data rather
+    // than from a fixed string.
+    renderApp('/properties/RP-0001');
+    const title = displayTitle(await propertyService.getById('RP-0001'));
+
+    await waitFor(() => expect(mainHeading(title)).toBeInTheDocument());
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(document.title).toBe(`${title} · Darscope`);
+  });
 
   it('shows "Page not found" with a link to the Dashboard for an unknown URL (FR-NAV-07)', () => {
     renderApp('/no/such/page');
