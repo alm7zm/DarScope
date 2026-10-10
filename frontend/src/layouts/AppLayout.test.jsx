@@ -1,10 +1,12 @@
-import { render, screen, within } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { renderRoutes } from '../test/render.jsx';
 import AppLayout from './AppLayout.jsx';
 
+// The layout reads the confirmation message from the portfolio state, so it renders inside the
+// provider here exactly as it does in App.jsx.
 function renderLayout(url = '/') {
-  const router = createMemoryRouter(
+  renderRoutes(
     [
       {
         element: <AppLayout />,
@@ -13,7 +15,6 @@ function renderLayout(url = '/') {
     ],
     { initialEntries: [url] },
   );
-  render(<RouterProvider router={router} />);
 }
 
 describe('AppLayout', () => {

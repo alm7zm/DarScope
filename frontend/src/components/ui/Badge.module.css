@@ -1,0 +1,31 @@
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  /* The status word must not wrap mid-badge in a narrow table column. */
+  white-space: nowrap;
+}
+
+.vacant {
+  background-color: var(--color-status-vacant-bg);
+  color: var(--color-status-vacant-text);
+}
+
+.occupied {
+  background-color: var(--color-status-occupied-bg);
+  color: var(--color-status-occupied-text);
+}
+
+.maintenance {
+  background-color: var(--color-status-maintenance-bg);
+  color: var(--color-status-maintenance-text);
+}
+
+/* A status outside the three in SRS 3.1 still reads, just without a colour of its own. */
+.unknown {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}

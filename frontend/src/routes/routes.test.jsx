@@ -1,13 +1,12 @@
-import { act, render, screen, within } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryRouter, RouterProvider } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
+import { renderRoutes } from '../test/render.jsx';
 import { routes } from './routes.jsx';
 
 function renderApp(url, table = routes) {
-  const router = createMemoryRouter(table, { initialEntries: [url] });
-  render(<RouterProvider router={router} />);
-  return router;
+  // renderRoutes adds the portfolio state that the layout and the pages read, as App.jsx does.
+  return renderRoutes(table, { initialEntries: [url] }).router;
 }
 
 function mainHeading(name) {
