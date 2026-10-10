@@ -37,6 +37,12 @@
   gap: var(--space-8);
 }
 
+/* A grid item defaults to min-width: auto, so without this the city table would push its own
+   column wider than the screen instead of scrolling inside its frame (NFR-USE-02, AC-23). */
+.panels > * {
+  min-width: 0;
+}
+
 @media (min-width: 64rem) {
   .panels {
     /* The city table needs room for four columns; the attention list carries long names and
