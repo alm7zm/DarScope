@@ -1,5 +1,6 @@
 import { Link, generatePath } from 'react-router';
 import Badge from '../ui/Badge.jsx';
+import Button from '../ui/Button.jsx';
 import { PATHS } from '../../routes/paths.js';
 import { formatCount, formatRent, formatSize } from '../../utils/format.js';
 import { textDirection } from '../../utils/arabic.js';
@@ -19,13 +20,17 @@ const COLUMNS = [
 ];
 
 /**
- * The portfolio as a table, one row per property (FR-LST-02). Every row links to the property and
- * to its edit form (FR-LST-03). The frame around the table scrolls sideways on its own, so the
- * page never does, down to 360 px (NFR-USE-02).
+ * The portfolio as a table, one row per property (FR-LST-02). Every row offers View, Edit and
+ * Delete (FR-LST-03). The frame around the table scrolls sideways on its own, so the page never
+ * does, down to 360 px (NFR-USE-02).
  *
- * @param {{ properties: Array<Record<string, unknown>> }} props
+ * @param {{
+ *   properties: Array<Record<string, unknown>>,
+ *   onDelete: (property: Record<string, unknown>) => void,
+ * }} props `onDelete` opens the confirmation; the row never deletes anything itself
+ *   (FR-DEL-02).
  */
-export default function PropertyTable({ properties }) {
+export default function PropertyTable({ properties, onDelete }) {
   return (
     <div className={styles.frame}>
       <table className={styles.table}>
@@ -43,7 +48,11 @@ export default function PropertyTable({ properties }) {
         </thead>
         <tbody>
           {properties.map((property) => (
-            <PropertyRow key={property.id} property={property} />
+            <PropertyRow
+              key={property.id}
+              property={property}
+              onDelete={onDelete}
+            />
           ))}
         </tbody>
       </table>
@@ -51,8 +60,13 @@ export default function PropertyTable({ properties }) {
   );
 }
 
-/** @param {{ property: Record<string, unknown> }} props */
-function PropertyRow({ property }) {
+/**
+ * @param {{
+ *   property: Record<string, unknown>,
+ *   onDelete: (property: Record<string, unknown>) => void,
+ * }} props
+ */
+function PropertyRow({ property, onDelete }) {
   const detailPath = generatePath(PATHS.propertyDetail, { id: property.id });
   const editPath = generatePath(PATHS.editProperty, { id: property.id });
 
@@ -92,6 +106,15 @@ function PropertyRow({ property }) {
           >
             Edit
           </Link>
+          {/* Delete is a button, not a link: it acts rather than navigates, and it must be
+              confirmed first (FR-DEL-02). */}
+          <Button
+            variant="danger"
+            onClick={() => onDelete(property)}
+            aria-label={`Delete ${property.id}`}
+          >
+            Delete
+          </Button>
         </div>
       </td>
     </tr>
