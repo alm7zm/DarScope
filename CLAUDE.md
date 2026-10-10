@@ -36,12 +36,12 @@ darscope/
 │       ├── routes/     routes.jsx (the URL to page table), paths.js
 │       ├── layouts/    AppLayout, NavMenu, Footer
 │       ├── pages/      one component per URL
-│       ├── components/ ui/ (Button, Badge, Dialog, Message, Page), then one folder
-│       │               per feature: properties/, dashboard/, market/, search/
-│       ├── context/    portfolio context and reducer
-│       ├── hooks/      shared hooks
+│       ├── components/ ui/ (Button, Badge, Dialog, FormField, Message, Page), then one
+│       │               folder per feature: properties/, dashboard/, market/, search/
+│       ├── context/    portfolio context, reducer and provider
+│       ├── hooks/      shared hooks: usePortfolio, usePropertySearch
 │       ├── services/   propertyService.js, marketService.js, embeddingService.js
-│       ├── utils/      validation, search, sort, arabic, similarity, estimate
+│       ├── utils/      validation, search, sort, arabic, format, stats, similarity, estimate
 │       ├── constants/  choices, thresholds, messages, team details
 │       ├── styles/     tokens.css, global.css
 │       ├── data/       portfolio.seed.json, market.reference.json
@@ -140,7 +140,7 @@ Each one loads when you open a file it covers. When you start in an area that ha
 The brief asks for all of these in the repository by the deadline (SRS section 12):
 
 - Requirements: `docs/SRS.md`
-- Visual design: wireframes and a style guide in `docs/design/`
+- Visual design: wireframes and a style guide in `docs/design/`. The style guide is written; the wireframes are not.
 - Documentation: `docs/architecture.md`, `docs/features.md`, `README.md`
 - Tests, and proof they ran: test files plus `docs/test-report.md`
 - Code review of security, performance, code quality and code reuse: `docs/code-review.md`

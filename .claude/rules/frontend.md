@@ -88,16 +88,21 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 ## Styling
 
 - Use CSS Modules, with each `.module.css` file beside its component. Colours, spacing and type sizes are defined once as CSS variables in `src/styles/tokens.css`: use only those tokens in components (UI-06). `src/styles/global.css` styles plain elements only.
-- The layout works from 360 px to 1920 px wide without the page scrolling sideways. Wide tables scroll inside their own frame (NFR-USE-02).
-- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`.
-- Follow the wireframes and style guide in `docs/design/` once they exist.
+- The layout works from 360 px to 1920 px wide without the page scrolling sideways. Wide tables scroll inside their own frame (NFR-USE-02). **A grid or flex item holding a table needs `min-width: 0`**, or it sizes itself to the table and pushes the page wide instead of scrolling.
+- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`, and its `size="small"` for dense table rows. Never style a button from outside by element selector.
+- Follow `docs/design/style-guide.md`, which records the tokens and the component rules the app already uses. The wireframes are still to come.
+- Form controls come from `components/ui/FormField.jsx`, which owns each field's label, required marker, hint and error. Do not hand-roll an input: the error wiring is the part that gets forgotten.
 
 ## Accessibility
 
 - Every feature works with the keyboard alone, with a visible focus indicator (NFR-ACC-01).
-- Text contrast is at least 4.5:1 (NFR-ACC-02).
+- Text contrast is at least 4.5:1, and the focus ring at least 3:1 against whatever sits behind it (NFR-ACC-02). Measure a new colour pair before using it; do not judge it by eye.
 - Every input has a label, and each error is linked to its field with `aria-describedby` (NFR-ACC-03).
 - Use `header`, `nav`, `main` and `footer` landmarks and a logical heading order (NFR-ACC-04).
+- `AppLayout` already provides the skip link and the one live region; a page does not add its own.
+- An interactive target is at least 24 × 24 px, and 44 × 44 where there is room (WCAG 2.5.8). `Button` and the field controls already meet this.
+- Anything that moves is off for anyone who asked for reduced motion. `global.css` does this for the whole app, so do not reintroduce motion with an inline style.
+- Prefer the element the browser already provides. The delete dialog is a real `<dialog>` with `showModal()`, which gives focus trapping, Esc and focus return for nothing (NFR-ACC-06); jsdom does not implement any of that, so `src/test/setup.js` shims it for tests only.
 
 ## Performance
 
