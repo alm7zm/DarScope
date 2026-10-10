@@ -1,13 +1,19 @@
 import { screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 import { ARABIC_DISTRICT, makePortfolio } from '../../test/fixtures.js';
 import { renderRoutes } from '../../test/render.jsx';
 import PropertyTable from './PropertyTable.jsx';
 
 function renderTable(properties = makePortfolio()) {
-  return renderRoutes([
-    { path: '/', element: <PropertyTable properties={properties} /> },
+  const onDelete = vi.fn();
+  const result = renderRoutes([
+    {
+      path: '/',
+      element: <PropertyTable properties={properties} onDelete={onDelete} />,
+    },
   ]);
+  return { ...result, onDelete };
 }
 
 /** The cells of the row whose ID cell holds `id`. */
@@ -111,7 +117,7 @@ describe('PropertyTable: Arabic text (FR-LST-07, NFR-ACC-07)', () => {
 });
 
 describe('PropertyTable: row actions (FR-LST-03)', () => {
-  it('offers View and Edit on every row', () => {
+  it('offers View, Edit and Delete on every row', () => {
     const properties = makePortfolio();
     renderTable(properties);
 
@@ -122,7 +128,21 @@ describe('PropertyTable: row actions (FR-LST-03)', () => {
       expect(
         screen.getByRole('link', { name: `Edit ${property.id}` }),
       ).toHaveAttribute('href', `/properties/${property.id}/edit`);
+      expect(
+        screen.getByRole('button', { name: `Delete ${property.id}` }),
+      ).toBeInTheDocument();
     }
+  });
+
+  it('asks the page to confirm rather than deleting the row itself (FR-DEL-02)', async () => {
+    const user = userEvent.setup();
+    const properties = makePortfolio();
+    const { onDelete } = renderTable(properties);
+
+    await user.click(screen.getByRole('button', { name: 'Delete RP-0002' }));
+
+    expect(onDelete).toHaveBeenCalledOnce();
+    expect(onDelete).toHaveBeenCalledWith(properties[1]);
   });
 
   it('names each action with its property, so the links are told apart', () => {

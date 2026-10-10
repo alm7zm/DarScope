@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
+import DeletePropertyDialog from '../components/properties/DeletePropertyDialog.jsx';
 import PropertyTable from '../components/properties/PropertyTable.jsx';
 import Page from '../components/ui/Page.jsx';
 import { TEXT } from '../constants/messages.js';
@@ -9,6 +11,8 @@ import styles from './PropertyListPage.module.css';
 /** Find and browse properties (SRS 4.3 and 6). */
 export default function PropertyListPage() {
   const { properties, loading, loadError } = usePortfolio();
+  /** The property awaiting a confirmed delete, or null (FR-DEL-02). */
+  const [pendingDelete, setPendingDelete] = useState(null);
 
   return (
     <Page title="Properties">
@@ -30,8 +34,20 @@ export default function PropertyListPage() {
           {properties.length === 0 ? (
             <EmptyPortfolio />
           ) : (
-            <PropertyTable properties={properties} />
+            <PropertyTable
+              properties={properties}
+              onDelete={setPendingDelete}
+            />
           )}
+
+          {/* ponytail: after a confirmed delete the row that opened the dialog is gone, so the
+              browser drops focus to the body. Acceptable while the list is short; move focus to
+              the count if a keyboard pass finds it annoying. */}
+          <DeletePropertyDialog
+            property={pendingDelete}
+            onCancel={() => setPendingDelete(null)}
+            onDeleted={() => setPendingDelete(null)}
+          />
         </>
       ) : null}
     </Page>
