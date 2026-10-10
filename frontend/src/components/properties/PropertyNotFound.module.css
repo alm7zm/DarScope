@@ -1,0 +1,14 @@
+.explanation {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.back {
+  color: var(--color-primary-strong);
+  text-decoration: underline;
+}
+
+.back:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-focus);
+  outline-offset: 2px;
+}

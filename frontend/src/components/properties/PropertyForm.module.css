@@ -1,0 +1,60 @@
+.group {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+}
+
+.legend {
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.fields {
+  display: grid;
+  /* One column at 360 px, more once there is room (NFR-USE-02). */
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 36rem) {
+  .fields {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+
+.amenities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-3);
+}
+
+/* FR-UPD-07. A warning, not an error: the save is allowed, the details are cleared. */
+.warning {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-status-maintenance-text);
+  border-left-width: var(--border-width-thick);
+  border-radius: var(--radius);
+  background-color: var(--color-status-maintenance-bg);
+  color: var(--color-status-maintenance-text);
+}
+
+.saveError {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-danger);
+  border-left-width: var(--border-width-thick);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  color: var(--color-danger-strong);
+  font-weight: var(--font-weight-bold);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
