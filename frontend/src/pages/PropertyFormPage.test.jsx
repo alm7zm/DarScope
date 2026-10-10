@@ -344,12 +344,13 @@ describe('PropertyFormPage: AC-05 update a property', () => {
     await user.type(field('Yearly rent (SAR)'), '95000');
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
+    // Wait for the detail page itself, not for the confirmation: the message is set by the
+    // reducer and can appear while the form is still on screen, a frame before the route
+    // changes.
     await waitFor(() =>
-      expect(screen.getByText('Property RP-0001 updated')).toBeInTheDocument(),
+      expect(screen.getByText('95,000 SAR')).toBeInTheDocument(),
     );
-
-    // The detail page is open and shows the new rent.
-    expect(screen.getByText('95,000 SAR')).toBeInTheDocument();
+    expect(screen.getByText('Property RP-0001 updated')).toBeInTheDocument();
 
     const after = await propertyService.getById('RP-0001');
     expect(after.id).toBe(before.id);
