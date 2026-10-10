@@ -1,0 +1,67 @@
+.groups {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.group {
+  padding: var(--space-4) var(--space-6);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+}
+
+.groupTitle {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+.list {
+  display: grid;
+  /* One column at 360 px, two once there is room for both a label and its value. */
+  grid-template-columns: 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+
+@media (min-width: 30rem) {
+  .list {
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.value {
+  margin: 0;
+}
+
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding-left: var(--space-6);
+}
+
+.description {
+  margin: 0;
+  line-height: var(--line-height);
+  /* Keep line breaks the user typed, without letting long text stretch the page. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.none {
+  margin: 0;
+  color: var(--color-text-muted);
+}
