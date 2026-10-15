@@ -34,6 +34,7 @@
     "jsdom": "^29.1.1",
     "prettier": "^3.9.9",
     "vite": "^8.3.0",
+    "vite-imagetools": "^12.0.1",
     "vitest": "^5.0.3"
   }
 }
