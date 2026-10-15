@@ -11,6 +11,9 @@ coverage/
 frontend/data-raw/
 *.onnx
 
+# Browser-automation output: page snapshots and console logs from local checks
+.playwright-mcp/
+
 # Personal tool settings
 .claude/settings.local.json
 .vscode/

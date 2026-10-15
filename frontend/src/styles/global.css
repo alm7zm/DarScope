@@ -82,6 +82,21 @@ output {
   border: 0;
 }
 
+/* The morph on the About page (components/about/TeamGallery.jsx) runs through the browser's View
+   Transitions, drawn in these pseudo-elements. Each kind gets its own rule: a browser that does
+   not know one of these selectors drops the whole rule it appears in. */
+::view-transition-group(*) {
+  animation-duration: var(--duration-morph);
+  animation-timing-function: var(--ease);
+}
+
+/* A block of text whose width changes moves at its own size; stretched, it would show twice at
+   two sizes while it fades. */
+::view-transition-old(*.morph-text),
+::view-transition-new(*.morph-text) {
+  inline-size: auto;
+}
+
 /* Anyone who asks for less motion gets none of it (WCAG 2.3.3). */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -91,5 +106,14 @@ output {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* `*` does not reach the view-transition pseudo-elements, so they need a rule of their own. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

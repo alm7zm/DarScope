@@ -90,7 +90,10 @@
 
   --content-width: 76rem;
 
-  /* One duration and curve, so everything that moves feels like the same app. */
+  /* One curve, so everything that moves feels like the same app. The short duration is for small
+     changes such as a hover; the morph on the About page takes longer, because the eye has to
+     follow a photo across the screen. */
   --ease: cubic-bezier(0.2, 0, 0.2, 1);
   --duration: 140ms;
+  --duration-morph: 400ms;
 }

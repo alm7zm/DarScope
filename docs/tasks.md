@@ -6,10 +6,17 @@ To take a task, write your name in **Owner**. Add ✔ when it is merged.
 
 ## Already built
 
+In `main`:
+
 - The project setup: React, the page router, the test tools and the npm commands in the README.
 - The layout every page shares: the header with the menu, and the footer.
 - A URL and a placeholder for every page, plus the "Page not found" and error screens.
-- The design colours and a Button in three styles.
+- The data layer, the property list, the detail page, the add and edit form, delete with
+  confirmation, search and filters, and the interface rework (merged through pull request #12).
+
+On `dev`, not yet merged into `main`: the Dashboard, the About page with the team photos, and the
+document updates. Together that is **every Must requirement of Part 1 except task 1, the sample
+data.**
 
 ## Stage 1: main pages and features
 
@@ -17,25 +24,32 @@ Do these first. They are what the course brief requires, and the target is to ha
 
 Build only the **Must** requirements of each SRS section at this stage. The Should and Could ones come in stages 2 and 3.
 
-### In review
+### Built
 
-Tasks 2 to 8 are built and waiting for a review. Each is one branch and one pull request, and
-each is based on the one before it, so review them in this order and merge them in it too.
+**Every Must requirement of stage 1 is built.** Tasks 2 to 8 and the interface rework are in
+`main`. Tasks 9 and 10, the Dashboard and the About page, are on `dev` and reach `main` with its
+next merge.
 
-| PR | Branch | Task | SRS |
-| --- | --- | --- | --- |
-| #1 | `feat/data-layer` | 2 and 3, the data layer and the shared pieces | 3.1, 3.2, 8.2, 8.3, C |
-| #2 | `feat/property-list` | 4, the property list | 4.3 |
-| #3 | `feat/property-detail` | 5, the property detail page | 4.4 |
-| #4 | `feat/property-form` | 6, add and edit | 5.1, 5.2 |
-| #5 | `feat/delete-property` | 7, delete with confirmation | 5.3 |
-| #6 | `feat/search-filters` | 8, search and filters | 6 |
+They were first built as ten stacked pull requests, one per task. On 15 October 2026 the team
+moved to two branches (see How we work) and closed pull requests #2 to #11. Nothing was lost:
+their work is in `main` or on `dev`.
 
-Task 1, the sample data, is still blocked: `npm run prepare-data` needs the Kaggle CSV in
-`frontend/data-raw/`. Until then `src/data/portfolio.seed.json` holds 8 hand-written properties
-that are not derived from the dataset. See `frontend/src/data/README.md`.
+Three Should requirements were pulled forward out of stage 2, because the Dashboard is not worth
+opening without them: the per-city table, the needs-attention list and the shortcuts
+(FR-DSH-05 to FR-DSH-07). Everything else in stage 2 is still stage 2.
 
-Tasks 9 and 10, the Dashboard and the About page, are not started.
+**Still blocked.** Task 1, the sample data, needs two things that do not exist yet: the Kaggle
+CSV in `frontend/data-raw/`, and the script `frontend/scripts/prepare-data.mjs` that turns it
+into the two JSON files. `package.json` already points at that script, so `npm run prepare-data`
+fails with "Cannot find module" until somebody writes it. Until then
+`src/data/portfolio.seed.json` holds 8 hand-written properties that are **not** derived from the
+dataset, so the open licence question is untouched. See `frontend/src/data/README.md`.
+
+**Before you submit**, two things still need a person:
+
+- The other two student IDs in `frontend/src/constants/team.js`. Until they are filled in, the
+  About page shows "Student ID to add" under each of those two names.
+- The manual acceptance checks a test cannot make: AC-16 (keyboard only) and AC-23 (360 px).
 
 ### Foundations
 
@@ -93,21 +107,28 @@ A rent-prediction model in the `ai-model/` folder. It goes beyond the course bri
 
 ## Documents to hand in
 
-| Document | How | Owner |
-| --- | --- | --- |
-| Visual design: wireframes and a style guide in `docs/design/` | With an AI tool, ideally before the pages are styled | |
-| Architecture and features | Run `/project-docs` | |
-| Test report | Run `/test-report` | |
-| Code review | Run `/code-review-report` | |
-| AI usage record in `docs/ai-usage.md` | Add a row each time an AI tool produces something | Everyone |
-| The repository URL | Submit it on or before 17 October | |
+| Document | How | State | Owner |
+| --- | --- | --- | --- |
+| Style guide in `docs/design/` | Written from the tokens the app uses | ✔ written | |
+| Wireframes in `docs/design/` | With an AI tool | Not started | |
+| Architecture and features | Run `/project-docs` | Not started | |
+| Test report | Run `/test-report` | Not started | |
+| Code review | Run `/code-review-report` | Not started | |
+| AI usage record in `docs/ai-usage.md` | Add a row each time an AI tool produces something | Kept up to date | Everyone |
+| The repository URL | Submit it on or before 17 October | | |
+
+The last three reports are worth running **after** `dev` is merged into `main`, so they describe
+the code that is submitted.
 
 ## Team to-dos
 
-- [ ] Add the other two names and student IDs to `frontend/src/constants/team.js`.
+- [ ] Add the other two student IDs to `frontend/src/constants/team.js`. Until then, the About page shows "Student ID to add" under each of those two names.
+- [ ] Review `dev` and merge it into `main`: the Dashboard and the About page are not in `main` yet.
+- [ ] Optional: the other two members' photos. Put each in `frontend/src/assets/team/` at any size and write its file name in `frontend/src/constants/team.js`.
 - [ ] Download the Kaggle CSV into `frontend/data-raw/`. Git ignores that folder: never commit the file. Task 1 and the AI model wait for it.
 - [ ] Ask the instructor the open questions in SRS section 15.3, above all whether the dataset may be published and whether changes must survive a page reload. Until the dataset question is answered, do not commit the data files that task 1 produces.
 - [ ] Copy the new SRS section 11.2 into the team's master SRS document.
+- [ ] Walk AC-16 (keyboard only) and AC-23 (360 px) by hand in a real browser. No test can make these two, and the test report has to list them as manual checks.
 
 ## Dates
 
@@ -121,6 +142,8 @@ A rent-prediction model in the `ai-model/` folder. It goes beyond the course bri
 ## How we work
 
 - One owner per file, so that two people do not change the same file.
-- One branch and one pull request per task. Another member reads it before it is merged.
+- Two branches always exist: `main`, which holds what is submitted, and `dev`, where the work
+  comes together. Build each feature on one short-lived branch off `dev`, merge it back through a
+  pull request that another member reads, then delete the branch. Do not stack pull requests.
 - Before every pull request, run `npm test`, `npm run lint` and `npm run format` inside `frontend/`.
 - To build a task, run `/implement-requirement` with its SRS section, read the change it makes, then check the matching scenarios in SRS section 14 by hand.

@@ -1,0 +1,79 @@
+.title {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.list li + li {
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+/* The whole row is the link, so the target is comfortably past 44 px (WCAG 2.5.8). */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color var(--duration) var(--ease);
+}
+
+.row:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  /* Lets a long district wrap instead of pushing the status off the row. */
+  min-width: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+.id {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.rent {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.allLet {
+  margin: 0;
+  padding: var(--space-6) var(--space-5);
+  border: var(--border-width) dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
