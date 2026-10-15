@@ -20,7 +20,7 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
   - `options.js`: cities, property types, statuses, front directions, amenities with their labels
   - `messages.js`: every fixed message, copied exactly from SRS Appendix C
   - `market.js`: the constants in `.claude/rules/ai-features.md`
-  - `team.js`: the course details, and the team names and student IDs (FR-ABT-06)
+  - `team.js`: the course details, and the team names and student IDs (FR-ABT-06). Each person's `photo` is the file name of an image in `src/assets/team/`, which the build crops and shrinks (`components/about/teamPhotos.js`).
 - Use function components and hooks. Split a component file that grows past about 250 lines.
 - State is one portfolio context with a reducer in `src/context/`. Its async actions call `propertyService`. Hooks that several components share go in `src/hooks/`. Components never import the service's data or the JSON files.
 - Everything that reaches outside React lives in `src/services/`: `propertyService.js` for the portfolio, `marketService.js` for the market reference set and `embeddingService.js` for the language model.
