@@ -22,5 +22,8 @@ Deliverable PD-07 (SRS section 12): which AI tool produced each deliverable. Add
 | 11 Oct 2026 | Tests (PD-05) | 42 further tests for the Dashboard figures, the About page and the skip link, including acceptance scenarios AC-14 and AC-15 | Claude Code (Claude Opus 5) |
 | 11 Oct 2026 | Visual design (PD-03) | `docs/design/style-guide.md`, written from the design tokens the app actually uses. The wireframes are still to do | Claude Code (Claude Opus 5) |
 | 11 Oct 2026 | Documentation (PD-04) | The Status section of `README.md`, the review order in `docs/tasks.md`, and this record | Claude Code (Claude Opus 5) |
+| 11 Oct 2026 | Source code and tests (PD-01, PD-05) | The person card on the About page (`components/about/PersonCard.jsx` and its test): a photo, a short paragraph and contact links for each team member and the instructor, read from `constants/team.js` | Claude Code (Claude Opus 5.5) |
+| 15 Oct 2026 | Source code and tests (PD-01, PD-05) | The team gallery on the About page (`components/about/TeamGallery.jsx` and its test): three photo tiles that morph into a spotlight for the member chosen and turn the others grey, using React's `<ViewTransition>`, plus one About page test. The warning about missing team details was removed at the team's request | Claude Code (Claude Opus 5.5) |
+| 15 Oct 2026 | Visual design (PD-03) | The Motion section and the team gallery entry in `docs/design/style-guide.md` | Claude Code (Claude Opus 5.5) |
 
 Still to record by the team: the tool that produced the SRS itself (PD-02) and the tool configuration under `.claude/`.

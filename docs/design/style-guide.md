@@ -103,6 +103,18 @@ Spacing steps from `--space-1` (4px) to `--space-12` (48px), on a 4px grid. Card
 Elevation is deliberately shallow: `--shadow-sm` for a resting card, `--shadow-md` for the form
 action bar, `--shadow-overlay` for a dialog. Nothing floats without a reason.
 
+## Motion
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--ease` | `cubic-bezier(0.2, 0, 0.2, 1)` | Everything that moves |
+| `--duration` | 140ms | Small changes, such as a hover |
+| `--duration-morph` | 400ms | The team morph on the About page, where the eye follows a photo across the screen |
+
+The morph uses the browser's View Transitions, through React's `<ViewTransition>`. A browser
+without them shows the new state at once. Anyone who asks for reduced motion gets none of it:
+`global.css` turns off CSS transitions and view transitions alike.
+
 ## Components
 
 ### Buttons
@@ -147,6 +159,14 @@ and the page never scrolls sideways at 360px (NFR-USE-02). Table headers are sti
 holding a table needs `min-width: 0` on its children, or the table will push the column wider
 than the screen instead of scrolling.
 
+### Team gallery
+
+The About page shows the team as three equal photo tiles, each captioned with the name and the
+student ID, so both are on screen as soon as the page opens (FR-ABT-02, AC-15). Each tile is a
+button. Choosing one moves that person into a spotlight with their details, and the other two
+shrink into a strip beside it and turn grey (`filter: grayscale(1)`). Choosing it again goes back.
+Until a photo is added, a tile shows the person's initials.
+
 ### Messages and dialogs
 
 One confirmation strip lives in the layout, in a `aria-live="polite"` region that is always on
@@ -162,7 +182,8 @@ The content column is `--content-width` (76rem) and centred. The app works from 
 1920px** with no sideways page scroll.
 
 Breakpoints are expressed in `rem` and chosen where the content needs them, not at device sizes:
-30rem (field pairs), 36rem (form columns), 40rem (filter columns), 48rem (larger page titles),
+30rem (field pairs), 36rem (form columns), 40rem (filter columns, the team spotlight's details
+beside the photo), 48rem (larger page titles),
 54rem (About panels), 60rem (detail cards), 64rem (dashboard panels).
 
 ## Accessibility checklist for a new screen

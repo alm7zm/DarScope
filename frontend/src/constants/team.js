@@ -14,12 +14,62 @@ export const REPOSITORY_URL = 'https://github.com/alm7zm/DarScope';
  * `pending: true` marks a row nobody has filled in yet. The About page shows those rows as
  * clearly unfinished rather than printing an invented name, so an incomplete submission is
  * obvious on screen instead of being discovered by the marker.
+ *
+ * Everything after `studentId` is optional, and the page leaves out whatever is empty:
+ * - `bio`: a short paragraph about the person.
+ * - `photo`: the name of a square image in `frontend/public/team/`, such as `hussam.jpg`. With
+ *   none, the page shows the person's initials.
+ * - `email`: an address, with no `mailto:`.
+ * - `linkedin`, `github`: the full profile URL, starting with `https://`.
+ *
+ * This repository is public, so anything written here is published.
  */
 export const TEAM = [
-  { name: 'Hussam Aldossary', studentId: '222110518' },
-  { name: 'Team member 2', studentId: '', pending: true },
-  { name: 'Team member 3', studentId: '', pending: true },
+  {
+    name: 'Hussam Aldossary',
+    studentId: '222110518',
+    bio: '',
+    photo: '',
+    email: '',
+    linkedin: '',
+    github: '',
+  },
+  {
+    name: 'Muhammad Yawar',
+    studentId: '',
+    bio: '',
+    photo: '',
+    email: '',
+    linkedin: '',
+    github: '',
+    pending: true,
+  },
+  {
+    name: 'Omar Alrajhi',
+    studentId: '',
+    bio: '',
+    photo: '',
+    email: '',
+    linkedin: '',
+    github: '',
+    pending: true,
+  },
 ];
+
+/**
+ * The course instructor, shown on the About page with the same optional details as a team
+ * member. Remove `pending` once the name is filled in.
+ */
+export const INSTRUCTOR = {
+  name: 'Course instructor',
+  role: `${COURSE.code} instructor`,
+  bio: '',
+  photo: '',
+  email: '',
+  linkedin: '',
+  github: '',
+  pending: true,
+};
 
 /**
  * The dataset both data files are built from (FR-ABT-05).
