@@ -1,4 +1,5 @@
 import styles from './PersonCard.module.css';
+import { teamPhotoUrl } from './teamPhotos.js';
 
 /** The first letter of the first and last word of a name, shown when there is no photo. */
 function initials(name) {
@@ -11,7 +12,8 @@ function initials(name) {
 }
 
 /**
- * A person's photo from `frontend/public/team/`, or their initials when there is none.
+ * A person's photo from `src/assets/team/`, or their initials when there is none or the file
+ * cannot be found.
  *
  * @param {{
  *   person: { name: string, photo?: string, pending?: boolean },
@@ -20,18 +22,13 @@ function initials(name) {
  */
 export function PersonPhoto({ person, className = '' }) {
   const { name, photo, pending } = person;
+  const src = teamPhotoUrl(photo);
   const classes = `${styles.photo} ${className}`;
 
-  return photo ? (
+  return src ? (
     // The name is always beside the picture or on the button around it, so repeating it as alt
     // text would only make a screen reader say it twice.
-    <img
-      className={classes}
-      src={`${import.meta.env.BASE_URL}team/${photo}`}
-      alt=""
-      width="72"
-      height="72"
-    />
+    <img className={classes} src={src} alt="" width="72" height="72" />
   ) : (
     <span className={classes} aria-hidden="true">
       {pending ? '?' : initials(name)}

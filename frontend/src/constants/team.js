@@ -17,22 +17,24 @@ export const REPOSITORY_URL = 'https://github.com/alm7zm/DarScope';
  *
  * Everything after `studentId` is optional, and the page leaves out whatever is empty:
  * - `bio`: a short paragraph about the person.
- * - `photo`: the name of a square image in `frontend/public/team/`, such as `hussam.jpg`. With
- *   none, the page shows the person's initials.
+ * - `photo`: the file name of a photo in `frontend/src/assets/team/`, such as `Sara.jpg`. Any
+ *   size or shape will do: the build crops it to a square around the face and shrinks it. Only
+ *   the file name counts, in any letter case. With none, the page shows the person's initials.
  * - `email`: an address, with no `mailto:`.
  * - `linkedin`, `github`: the full profile URL, starting with `https://`.
  *
- * This repository is public, so anything written here is published.
+ * This repository is public, so anything written here is published, and so is every photo in
+ * `src/assets/team/` together with any location the camera stored in it.
  */
 export const TEAM = [
   {
     name: 'Hussam Aldossary',
     studentId: '222110518',
-    bio: '',
-    photo: '',
-    email: '',
-    linkedin: '',
-    github: '',
+    bio: 'A Software Engineering student at Prince Sultan University, passionate about building intelligent systems and pursuing a career in Agentic AI. Through personal projects, coursework, and national programming competitions, I have developed a strong interest in software engineering and machine learning. I aim to specialize in Agentic AI by graduation in 2027, building systems that can reason, make decisions, and act autonomously.',
+    photo: 'Hussam Aldossary.jpeg',
+    email: 'h.s.m.d.23@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/hussam-aldossary',
+    github: 'https://github.com/alm7zm',
   },
   {
     name: 'Muhammad Yawar',
@@ -61,14 +63,13 @@ export const TEAM = [
  * member. Remove `pending` once the name is filled in.
  */
 export const INSTRUCTOR = {
-  name: 'Course instructor',
+  name: 'Dr. Skander Turki',
   role: `${COURSE.code} instructor`,
-  bio: '',
-  photo: '',
-  email: '',
-  linkedin: '',
-  github: '',
-  pending: true,
+  bio: 'Software Engineer, PhD in model-based systems engineering Assistant Professor and Model-driven Engineering Consultant',
+  photo: 'Dr. Skander Turki.jpg',
+  email: 'skanderturki@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/skander-turki-96992218',
+  github: 'https://github.com/skanderturki/',
 };
 
 /**
