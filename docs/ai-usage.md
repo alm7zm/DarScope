@@ -27,5 +27,6 @@ Deliverable PD-07 (SRS section 12): which AI tool produced each deliverable. Add
 | 15 Oct 2026 | Visual design (PD-03) | The Motion section and the team gallery entry in `docs/design/style-guide.md` | Claude Code (Claude Opus 5.5) |
 | 15 Oct 2026 | Source code and tests (PD-01, PD-05) | Team photos of any size or shape: `components/about/teamPhotos.js` and `utils/photos.js` find a photo by its file name, and the build crops and shrinks it with the `vite-imagetools` dev dependency. Tests in `utils/photos.test.js`, `constants/team.test.js` and `PersonCard.test.jsx` | Claude Code (Claude Opus 5.5) |
 | 15 Oct 2026 | Documentation (PD-04) | `docs/tasks.md`, `README.md`, `CLAUDE.md` and `.claude/rules/frontend.md` brought up to date with the two branches (`main` and `dev`) and the team photo folder | Claude Code (Claude Opus 5.5) |
+| 15 Oct 2026 | Source code (PD-01) | The first steps of the rent model in `ai-model/prepare.ipynb`: guidance and review while the student loaded the dataset, checked it, removed the exact copies and split off a test set. The duplicate-count and train/test split cells, and the note explaining the split, were written by the AI tool on request; the student wrote the rest | Claude Code (Claude Opus 5.5) |
 
 Still to record by the team: the tool that produced the SRS itself (PD-02) and the tool configuration under `.claude/`.

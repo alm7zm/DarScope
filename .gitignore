@@ -9,6 +9,7 @@ coverage/
 
 # The raw Kaggle CSV and language-model files are never committed (CLAUDE.md rule 8)
 frontend/data-raw/
+ai-model/data-raw/
 *.onnx
 
 # Browser-automation output: page snapshots and console logs from local checks
@@ -23,3 +24,8 @@ frontend/data-raw/
 *.log
 .DS_Store
 Thumbs.db
+
+#AI/ML files 
+.venv/ 
+ai-model/data/ 
+ai-model/figures/
