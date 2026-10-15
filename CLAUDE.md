@@ -45,6 +45,7 @@ darscope/
 │       ├── constants/  choices, thresholds, messages, team details
 │       ├── styles/     tokens.css, global.css
 │       ├── data/       portfolio.seed.json, market.reference.json
+│       ├── assets/     team/: the team photos, any size; the build crops and shrinks them
 │       └── test/       setup.js, shared fixtures and helpers
 ├── ai-model/           rent-prediction model, trained outside the app (not started)
 └── backend/            Part 2, hand-coded later
@@ -82,6 +83,11 @@ These are the defaults from SRS section 11. Ask before you swap one.
 - CSS Modules, with design tokens as CSS variables. No component library or CSS framework.
 - Vitest with React Testing Library. ESLint and Prettier.
 - `@huggingface/transformers` version 4 or later, loaded only when search by meaning is first turned on.
+- `vite-imagetools`, a development dependency added on 15 October 2026, which crops and shrinks the team photos when the app is built.
+
+## Branches
+
+`main` holds what is submitted and `dev` is where the work comes together. They are the only two permanent branches. Build each feature on one short-lived branch off `dev`, merge it back through a pull request, and delete the branch afterwards: GitHub does not delete it automatically. Do not stack pull requests.
 
 ## Rules that never bend
 

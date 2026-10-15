@@ -50,6 +50,7 @@ darscope/
 │       ├── constants/  choices, messages, team details
 │       ├── styles/     design tokens and base styles
 │       ├── data/       the seed portfolio and the market reference set
+│       ├── assets/     team photos, at any size: the build crops and shrinks them
 │       └── test/       test setup and fixtures
 ├── ai-model/           a rent-prediction model trained on the dataset (not started)
 └── backend/            Part 2: hand-coded, added later
