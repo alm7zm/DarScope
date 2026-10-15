@@ -165,7 +165,10 @@ The About page shows the team as three equal photo tiles, each captioned with th
 student ID, so both are on screen as soon as the page opens (FR-ABT-02, AC-15). Each tile is a
 button. Choosing one moves that person into a spotlight with their details, and the other two
 shrink into a strip beside it and turn grey (`filter: grayscale(1)`). Choosing it again goes back.
-Until a photo is added, a tile shows the person's initials.
+Until a photo is added, a tile shows the person's initials. Photos go in
+`frontend/src/assets/team/` at any size or shape: the build (vite-imagetools) crops each to a
+square around the face, shrinks it to at most 800 px and strips its metadata, so only a small WebP
+reaches the browser.
 
 ### Messages and dialogs
 
