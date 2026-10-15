@@ -57,8 +57,8 @@ dataset, so the open licence question is untouched. See `frontend/src/data/READM
 
 **Before you submit**, two things still need a person:
 
-- The other two names and student IDs in `frontend/src/constants/team.js`. The About page shows
-  how many are missing, so this is hard to forget.
+- The other two student IDs in `frontend/src/constants/team.js`. Until they are filled in, the
+  About page shows "Student ID to add" under each of those two names.
 - The manual acceptance checks a test cannot make: AC-16 (keyboard only) and AC-23 (360 px).
 
 ### Foundations
@@ -132,7 +132,7 @@ describe the merged code rather than a branch.
 
 ## Team to-dos
 
-- [ ] Add the other two names and student IDs to `frontend/src/constants/team.js`. The About page shows how many are still missing, so this is hard to forget but easy to leave.
+- [ ] Add the other two student IDs to `frontend/src/constants/team.js`. Until then, the About page shows "Student ID to add" under each of those two names.
 - [ ] Review and merge the ten pull requests, in order. They are stacked, so an out-of-order merge shows the wrong diff.
 - [ ] Download the Kaggle CSV into `frontend/data-raw/`. Git ignores that folder: never commit the file. Task 1 and the AI model wait for it.
 - [ ] Ask the instructor the open questions in SRS section 15.3, above all whether the dataset may be published and whether changes must survive a page reload. Until the dataset question is answered, do not commit the data files that task 1 produces.

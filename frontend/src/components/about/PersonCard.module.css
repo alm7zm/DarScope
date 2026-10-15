@@ -1,0 +1,80 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* The photo and the initials that stand in for it share one look, so a person with a picture and
+   one without line up. The caller's class sets the size and the shape. */
+.photo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-tint);
+  color: var(--color-primary-strong);
+  font-weight: var(--font-weight-bold);
+  object-fit: cover;
+}
+
+/* The small round photo on a card. */
+.avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xl);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  overflow-wrap: anywhere;
+}
+
+.detail {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* An unfilled row reads as unfinished rather than as a real value. */
+.pending {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-status-maintenance-bg);
+  color: var(--color-status-maintenance-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.bio {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-sm);
+}
+
+/* Tall enough to hit comfortably, and a long address wraps instead of widening the card. */
+.contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  overflow-wrap: anywhere;
+}

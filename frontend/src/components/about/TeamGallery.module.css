@@ -1,0 +1,94 @@
+/* Three people side by side at every width, in equal columns (FR-ABT-02). */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 40rem) {
+  .gallery {
+    gap: var(--space-6);
+  }
+}
+
+.member {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* The photo is the button: a plain frame round the picture, which keeps the global focus ring.
+   It is also the container the initials scale against. */
+.photoButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: none;
+  cursor: pointer;
+  container-type: inline-size;
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  font-size: clamp(var(--font-size-md), 25cqi, var(--font-size-3xl));
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* Under an 80 px photo on a phone, the name goes a size down so a first name fits on its line. */
+.text h3 {
+  font-size: var(--font-size-sm);
+}
+
+@media (min-width: 40rem) {
+  .text h3 {
+    font-size: var(--font-size-md);
+  }
+}
+
+/* The member chosen takes the main column, and the other two shrink into a strip beside it. The
+   strip's 3rem floor keeps each photo above the 44 px target size at 360 px. */
+.spotlight {
+  grid-template-columns: minmax(0, 1fr) clamp(3rem, 18%, 8rem);
+  grid-template-rows: auto 1fr;
+}
+
+.open {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+/* With room to spare, the details sit beside the photo instead of under it. */
+@media (min-width: 40rem) {
+  .open {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: var(--space-6);
+  }
+}
+
+/* The others turn grey and drop their captions; each photo still carries its name. */
+.dimmed .photo {
+  filter: grayscale(1);
+}
+
+.dimmed .text {
+  display: none;
+}

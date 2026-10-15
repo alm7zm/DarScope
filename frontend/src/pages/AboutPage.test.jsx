@@ -1,8 +1,10 @@
 import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import {
   COURSE,
   DATASET,
+  INSTRUCTOR,
   REPOSITORY_URL,
   TEAM,
   TECHNOLOGIES,
@@ -59,13 +61,29 @@ describe('AboutPage: the team (FR-ABT-02)', () => {
     );
   });
 
-  it('says how many members are still missing, so nobody submits without noticing', () => {
+  it("opens a member's details from their photo", async () => {
+    const user = userEvent.setup();
     renderAbout();
 
-    const pending = TEAM.filter((member) => member.pending).length;
+    const photo = panel('Team').getByRole('button', { name: TEAM[0].name });
+    expect(photo).toHaveAttribute('aria-expanded', 'false');
+
+    await user.click(photo);
+    expect(photo).toHaveAttribute('aria-expanded', 'true');
+  });
+});
+
+describe('AboutPage: the instructor', () => {
+  it('shows the instructor, or says plainly that the name is still to add', () => {
+    renderAbout();
+
+    const instructor = panel('Instructor');
     expect(
-      panel('Team').getByText(
-        new RegExp(`${pending} of ${TEAM.length} team members`),
+      instructor.getByRole('heading', { level: 3, name: INSTRUCTOR.name }),
+    ).toBeInTheDocument();
+    expect(
+      instructor.getByText(
+        INSTRUCTOR.pending ? 'Name to add' : INSTRUCTOR.role,
       ),
     ).toBeInTheDocument();
   });
