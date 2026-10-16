@@ -49,6 +49,10 @@ async function fillValidForm(user, overrides = {}) {
   };
 
   for (const [label, value] of Object.entries(values)) {
+    if (label === 'District') {
+      await chooseDistrict(user, value);
+      continue;
+    }
     const control = field(label);
     if (control.tagName === 'SELECT') {
       await user.selectOptions(control, value);
@@ -57,6 +61,21 @@ async function fillValidForm(user, overrides = {}) {
       if (value !== '') await user.type(control, value);
     }
   }
+}
+
+/**
+ * Pick a district from the dropdown, as AC-02's "Al Malqa", or type it through "Other district…"
+ * when the list lacks it (FR-ADD-14). An empty name leaves the dropdown unchosen.
+ */
+async function chooseDistrict(user, name) {
+  const list = field('District');
+  const inList = [...list.options].some((option) => option.value === name);
+  if (name === '' || inList) {
+    await user.selectOptions(list, name);
+    return;
+  }
+  await user.selectOptions(list, 'Other district…');
+  await user.type(field('Other district'), name);
 }
 
 describe('PropertyFormPage: the Add form (FR-ADD-01, FR-ADD-02)', () => {
@@ -245,7 +264,11 @@ describe('PropertyFormPage: AC-03 reject invalid input (FR-ADD-03)', () => {
     await user.click(screen.getByRole('button', { name: 'Save' }));
     expect(screen.getByText(FIELD_ERRORS.districtRequired)).toBeInTheDocument();
 
-    await user.type(field('District'), 'Al Malqa');
+    // Choosing the city leaves the district's error alone: the district is still empty.
+    await user.selectOptions(field('City'), 'Riyadh');
+    expect(screen.getByText(FIELD_ERRORS.districtRequired)).toBeInTheDocument();
+
+    await chooseDistrict(user, 'Al Malqa');
     expect(
       screen.queryByText(FIELD_ERRORS.districtRequired),
     ).not.toBeInTheDocument();
@@ -291,6 +314,159 @@ describe('PropertyFormPage: AC-04 cancel an add (FR-ADD-08)', () => {
         `Showing ${before.length} of ${before.length} properties`,
       ),
     ).toBeInTheDocument();
+  });
+});
+
+describe('PropertyFormPage: the rent suggestion (FR-ADD-13)', () => {
+  /** The amount the suggestion shows, such as "123,500 SAR". */
+  function suggestedAmount() {
+    const panel = screen.getByRole('group', { name: 'Suggested rent' });
+    return within(panel).getByText(/ SAR$/).textContent;
+  }
+
+  it('follows the form as it is filled, and fills Yearly rent only when asked', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    // Before the fields it needs are filled, it says which they are.
+    expect(
+      await screen.findByText(TEXT.rentSuggestionNeedsFields),
+    ).toBeInTheDocument();
+
+    await fillValidForm(user, {
+      Front: 'North',
+      'Age (years)': '0',
+      Bathrooms: '5',
+      'Yearly rent (SAR)': '',
+    });
+    const withoutAmenities = suggestedAmount();
+
+    for (const amenity of [
+      'Kitchen',
+      'Garage',
+      "Maid's room",
+      'Air conditioning',
+    ]) {
+      await user.click(screen.getByLabelText(amenity));
+    }
+    await user.type(field('Description'), 'فيلا جديدة مع ملحق');
+
+    // The made-up Riyadh villa of utils/rentModel.test.js: 123,468 SAR, to the nearest 500.
+    expect(suggestedAmount()).toBe('123,500 SAR');
+    expect(withoutAmenities).not.toBe('123,500 SAR');
+    expect(screen.getByText(TEXT.estimateDisclaimer)).toBeInTheDocument();
+    // It never changes the field by itself.
+    expect(field('Yearly rent (SAR)')).toHaveValue('');
+
+    await user.click(screen.getByRole('button', { name: 'Use this rent' }));
+    expect(field('Yearly rent (SAR)')).toHaveValue('123500');
+  });
+
+  it('is on the Edit form too, and says when the district is not in the 2021 data', async () => {
+    const { user } = await renderForm('/properties/RP-0001/edit');
+
+    // RP-0001 is in Al Malqa, a district the dropdown lists, so the model knows it.
+    expect(
+      await screen.findByRole('button', { name: 'Use this rent' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(TEXT.rentSuggestionUnknownDistrict),
+    ).not.toBeInTheDocument();
+
+    // Al Ghadir is a Riyadh district the 2021 data does not have.
+    await chooseDistrict(user, 'Al Ghadir');
+    expect(
+      screen.getByText(TEXT.rentSuggestionUnknownDistrict),
+    ).toBeInTheDocument();
+  });
+
+  it('warns when the rent looks mistyped, but still lets it be saved (FR-RNT-07)', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    // 1,200,000 instead of 120,000: an extra zero.
+    await fillValidForm(user, {
+      'Yearly rent (SAR)': '1200000',
+    });
+    expect(
+      await screen.findByText(TEXT.rentFarFromSuggestion),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(screen.getByText(/^Property RP-\d{4} added$/)).toBeInTheDocument(),
+    );
+  });
+});
+
+describe('PropertyFormPage: choices instead of typing (FR-ADD-14, FR-ADD-15)', () => {
+  it('offers age and the room counts as dropdowns of whole numbers', async () => {
+    await renderForm('/properties/new');
+
+    for (const [label, last] of [
+      ['Age (years)', '100'],
+      ['Bedrooms', '20'],
+      ['Bathrooms', '20'],
+      ['Living rooms', '20'],
+    ]) {
+      const options = [...field(label).options].map((option) => option.value);
+      // The first option is the blank "Choose", so nothing is picked for the user.
+      expect(options.slice(0, 2)).toEqual(['', '0']);
+      expect(options.at(-1)).toBe(last);
+    }
+  });
+
+  it('lists the chosen city’s districts, and clears one the new city does not have', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    expect(field('District')).toBeDisabled();
+
+    await user.selectOptions(field('City'), 'Riyadh');
+    await user.selectOptions(field('District'), 'Al Malqa');
+    expect(field('District')).toHaveValue('Al Malqa');
+
+    await user.selectOptions(field('City'), 'Jeddah');
+    expect(field('District')).toHaveValue('');
+  });
+});
+
+describe('PropertyFormPage: number fields (FR-ADD-12)', () => {
+  it('turns Arabic digits into 0 to 9 and drops thousands separators as they are typed', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    await user.type(field('Size (m²)'), '٤٠٠');
+    await user.type(field('Yearly rent (SAR)'), '120,000');
+
+    expect(field('Size (m²)')).toHaveValue('400');
+    expect(field('Yearly rent (SAR)')).toHaveValue('120000');
+  });
+
+  it('takes nothing but digits and one decimal point', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    // Letters and spaces are refused, and so is a second decimal point.
+    await user.type(field('Size (m²)'), 'abc 12.5.3x');
+
+    expect(field('Size (m²)')).toHaveValue('12.53');
+  });
+
+  it('keeps a decimal point, so the check reports it instead of changing the number', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    await user.type(field('Size (m²)'), '400.5');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(field('Size (m²)')).toHaveValue('400.5');
+    expect(screen.getByText(FIELD_ERRORS.sizeWholeNumber)).toBeInTheDocument();
+  });
+
+  it('takes no more digits than the largest allowed value has', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    // Size goes up to 100,000 (6 digits), rent up to 10,000,000 (8 digits).
+    await user.type(field('Size (m²)'), '1234567');
+    await user.type(field('Yearly rent (SAR)'), '123456789');
+
+    expect(field('Size (m²)')).toHaveValue('123456');
+    expect(field('Yearly rent (SAR)')).toHaveValue('12345678');
   });
 });
 
