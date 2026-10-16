@@ -47,15 +47,17 @@ A market listing has the descriptive fields of a property, `city` through `descr
 | --- | --- | --- |
 | `frontend/src/data/portfolio.seed.json` | 40 properties, RP-0001 to RP-0040 | Copied into memory when the app starts |
 | `frontend/src/data/market.reference.json` | About 1,350 listings | Read-only. Load it with a dynamic `import()` the first time a page needs it (FR-DAT-07). |
+| `frontend/src/data/rent-model.json` | The rent model's weights (SRS 7.6), no rows of the dataset | Read-only. Loaded with a dynamic `import()` by `services/rentModelService.js` when a form first shows the suggestion (FR-RNT-02). |
+| `frontend/src/data/districts.json` | Each city's districts in the 2021 data: the English name, paired with the most common Arabic spelling | The District dropdown's choices (FR-ADD-14), read through `DISTRICTS` in `constants/options.js`; the rent model finds a district by the Arabic spelling |
 
-No listing appears in both files. `npm run prepare-data` builds both; do not edit them by hand.
+No listing appears in both files. `npm run prepare-data` builds both; do not edit them by hand. `rent-model.json` and `districts.json` come from step 19 of `ai-model/prepare.ipynb` instead, and are never edited by hand either.
 
 ## Rules for property data
 
 - **IDs.** The service generates `RP-` plus four digits. An ID is unique for the session, is never edited, and is never reused after a delete (FR-ADD-04, FR-DEL-06, FR-DAT-04). Keep a counter of the highest ID issued. Never derive the next ID from the collection's length.
 - **Timestamps.** `createdAt` is set once. `updatedAt` is set on every save. `id` and `createdAt` never change (FR-UPD-03).
 - **Tenancy.** `tenantName` is required when `status` is Occupied. Lease dates are allowed only then. When the status leaves Occupied, clear the tenant and lease fields on save (FR-ADD-07, FR-UPD-07).
-- **Text.** Trim leading and trailing spaces. Number fields accept digits only (FR-ADD-12).
+- **Text.** Trim leading and trailing spaces. Number fields accept digits and one decimal point only, and no more digits than their largest value has (FR-ADD-12).
 - **No mutation.** Never change the collection or a property in place. Every change produces new objects (NFR-REL-04).
 - **Derived values are never stored**: the display title ("Villa in {district}, {city}"), comparables, the fair-rent estimate, the market position and embeddings (SRS section 3.5).
 - **One validator.** All field checks live in pure functions in `frontend/src/utils/validation.js`. The form uses them to show errors, and the service uses them again to reject invalid input, so no invalid property can enter the portfolio (NFR-REL-03).

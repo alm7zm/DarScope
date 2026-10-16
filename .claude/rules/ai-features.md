@@ -7,6 +7,10 @@ paths:
   - "frontend/src/utils/similarity*"
   - "frontend/src/utils/estimate*"
   - "frontend/src/constants/market*"
+  - "frontend/src/utils/rentModel*"
+  - "frontend/src/services/rentModelService*"
+  - "frontend/src/components/properties/RentSuggestion*"
+  - "ai-model/**/*"
 ---
 
 # AI features
@@ -22,7 +26,7 @@ Describe these features accurately in code comments, the interface and the docum
 - Search by meaning uses a ready-made neural language model. The team trains no model.
 - Comparable listings and the fair-rent estimate use a nearest-neighbour method with fixed weights. Nothing is trained.
 - Market insights are plain statistics, not AI.
-- A rent-prediction model is planned in `ai-model/`. It will be the only model the team trains. It is not built yet, the app does not use it, and the SRS has no requirements for it: do not describe any feature as using it until that changes.
+- The rent model is the only model the team trains: Ridge regression in `ai-model/prepare.ipynb`, learned from the 2021 listings. The app runs its exported weights for the rent suggestion on the Add and Edit forms (FR-ADD-13, SRS 7.6). Call it a suggestion from 2021 listings, never a valuation.
 
 ## Constants
 
@@ -74,6 +78,17 @@ Keep these in `frontend/src/constants/market.js` and nowhere else (FR-EST-06).
 - Appendix B.2: a 400 m² villa against a 360 m² listing in the same district gives distance 0.16 and similarity 84%.
 - Appendix B.3: rents of 90,000, 100,000, 104,000, 110,000 and 130,000 SAR give an estimate of 104,000 SAR. A property at 125,000 SAR has ratio 1.20 and is Above market by 21,000 SAR (20%).
 
+## Rent model (SRS 7.6, FR-ADD-13)
+
+- The weights are `frontend/src/data/rent-model.json`, written by step 19 of `ai-model/prepare.ipynb`. Never edit the file by hand. After exporting it again, copy the two rents step 19 prints into `utils/rentModel.test.js`.
+- `utils/rentModel.js` turns a property into the model's inputs the way the notebook does (steps 5, 17 and 19). Change both together, or the app and the notebook disagree.
+- Load the file only in `services/rentModelService.js`, with a dynamic `import()`, when a form first shows the suggestion (FR-RNT-02).
+- The suggestion is always visible beside Yearly rent on Add and Edit, and follows the values as they change. It is not a live region: it changes with every keystroke. "Use this rent" copies it into the field, which it never changes by itself (FR-ADD-13).
+- Round to the nearest 500 SAR (`RENT_ROUNDING_SAR` in `constants/market.js`) and show the FR-EST-05 note.
+- Warn when the entered rent is more than `RENT_CHECK_FACTOR` (3) times the suggestion or under a third of it, without stopping Save (FR-RNT-07).
+- The District dropdown's names come from `frontend/src/data/districts.json`, also written by step 19. It pairs each district's English name, which the form shows and saves, with the Arabic spelling the model learned, and `modelInputs` looks the English name up, so every district picked from the list is one the model knows (FR-ADD-14, FR-RNT-01). The English names are a hand-written table in step 19; correct a spelling there, never in the JSON file.
+- Suggest nothing outside the file's `sizeRange`, say when the district is unknown, and fail safely when the file cannot load (FR-RNT-03 to FR-RNT-06). The messages are in Appendix C.2.
+
 ## Search by meaning (SRS 7.1, Appendix B.1)
 
 - Model: `Xenova/multilingual-e5-small`, run with `@huggingface/transformers`. Load the 8-bit quantised weights with `{ dtype: 'q8' }`, never the full-precision file (FR-AIS-12).
@@ -86,7 +101,7 @@ Keep these in `frontend/src/constants/market.js` and nowhere else (FR-EST-06).
 - Keep each embedding in memory with the text it was built from. Embed a property again only when that text changes, and drop the embedding when the property is deleted (FR-AIS-08).
 - If the model cannot load or run: say so, turn the switch off, and fall back to keyword search (FR-AIS-09).
 - No query text or property data leaves the browser. No API key, ever (FR-AIS-10).
-- Never commit model files. They are fetched from their public host at run time (IF-04).
+- Never commit the language-model files. They are fetched from their public host at run time (IF-04).
 
 ## Market insights (SRS 7.4)
 

@@ -105,6 +105,7 @@ Pages read and change the portfolio only through the data service, which Part 2 
 | Search | Find properties by keyword, filters and sorting | 6 |
 | Search by meaning | Find properties by describing them in Arabic or English | 7.1 |
 | Comparables and estimate | See similar market listings and a fair-rent estimate | 7.2, 7.3 |
+| Rent suggestion | See a suggested yearly rent from the team's rent model while adding or editing a property | 5.1, 7.6 |
 | Market insights | Read market statistics by city and district | 7.4 |
 | About | See the team and course details | 8.1 |
 
@@ -306,8 +307,10 @@ One form adds and edits properties, and every delete is confirmed before it happ
 | FR-ADD-09 | The form shall start with Type set to Villa, Status set to Vacant and all amenities unticked. | Should |
 | FR-ADD-10 | Leaving a form that has unsaved input shall ask the user to confirm. | Should |
 | FR-ADD-11 | If city, district, size, bedrooms and rent all equal an existing property, the app shall warn of a possible duplicate and let the user save anyway. | Should |
-| FR-ADD-12 | Text shall be trimmed of leading and trailing spaces. Number fields shall accept digits only. | Should |
-| FR-ADD-13 | A "Suggest rent" button shall fill Yearly rent with the fair-rent estimate for the values entered (needs 7.3). | Could |
+| FR-ADD-12 | Text shall be trimmed of leading and trailing spaces. Number fields shall accept only digits and one decimal point: Arabic-Indic digits become 0 to 9, and letters, spaces and thousands separators are dropped as they are typed. A field shall take no more digits than its largest allowed value has (3.1). The decimal point is kept so that the check in Appendix C reports it, instead of the number silently changing. | Should |
+| FR-ADD-13 | The Add and Edit forms shall always show the rent model's suggestion for the values entered (7.6), updated as they change and rounded to the nearest 500 SAR, with the note in FR-EST-05. A "Use this rent" button shall copy it into Yearly rent; the suggestion shall never change the field by itself. | Could |
+| FR-ADD-14 | District shall be chosen from a dropdown of the chosen city's districts in the 2021 data, by their English names. "Other district…" shall open a text box for a district the list lacks, and a stored district the list lacks shall stay a choice when editing. A new city shall clear a district it does not have. | Should |
+| FR-ADD-15 | Age and the counts of bedrooms, bathrooms and living rooms shall be chosen from dropdowns of the whole numbers in their ranges (3.1), starting blank. | Should |
 
 ### 5.2 Update a property
 
@@ -436,6 +439,20 @@ This is a bonus that works in one browser only. Chrome's built-in [Prompt API](h
 | FR-NLI-02 | The user shall review and be able to change every filled value. Nothing is saved until Save, and the usual checks apply. | Could |
 | FR-NLI-03 | Where the browser offers no such model, the box shall not appear. | Could |
 | FR-NLI-04 | The feature shall use no external AI service and no API key. | Could |
+
+### 7.6 Rent model
+
+The team trains one model, in `ai-model/prepare.ipynb`: Ridge regression on the log of the yearly rent, learned from the 2021 listings after cleaning. On 304 houses held out from training, its suggestions are off by 23.1% of the rent on average (22,998 SAR), and 46.1% of them fall within 15% of the real rent. The app runs it in the browser from its exported weights, `frontend/src/data/rent-model.json`, which hold no rows of the dataset. FR-ADD-13 is its one use.
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-RNT-01 | The model shall use the city, district, front, type, size, age, room counts and amenities, and whether the description mentions an annex (ملحق) or an internal staircase (درج داخلي). District names are compared after Appendix B.4, including step 8, and only within their city. A district chosen by its English name (FR-ADD-14) is found by the Arabic name the list pairs it with. | Could |
+| FR-RNT-02 | The weights shall be loaded when a form first shows the suggestion, never with the first page. No property data shall leave the browser. | Could |
+| FR-RNT-03 | When the city, size, age or a room count is missing or fails its check in Appendix C, the app shall ask for them and suggest nothing. | Could |
+| FR-RNT-04 | For a size outside the sizes the model learned from (100 to 1,652 m²), the app shall suggest nothing and say why. | Could |
+| FR-RNT-05 | When the district is not in the model's data, the app shall still suggest a rent and say that it is less precise. | Could |
+| FR-RNT-06 | If the weights cannot be loaded, the app shall say so, and the form shall work as before. | Could |
+| FR-RNT-07 | When the entered rent is more than 3 times the suggestion or less than a third of it, the form shall warn that it may be mistyped. The warning shall not stop Save. | Could |
 
 ## 8. Functional requirements: About, feedback and data
 
@@ -1035,6 +1052,12 @@ The form and the data service apply the same checks, in this order, and show the
 | Model cannot load | The language model could not be loaded. Keyword search is still available. |
 | Too few comparables | Not enough market data |
 | Under every estimate | Based on 2021 listings. Indicative only, not a valuation. |
+| Rent suggested | The label "Suggested rent", with the amount under it: X SAR |
+| Rent suggestion without the fields it needs | Enter the city, size, age and room counts to get a suggestion. |
+| Rent suggestion for a size outside the model's data | The 2021 data has no houses of this size, so no rent is suggested. |
+| Rent suggestion for an unknown district | This district is not in the 2021 data, so the suggestion is less precise. |
+| Rent model cannot load | The rent suggestion could not be loaded. Enter the rent yourself. |
+| Rent far from the suggestion | This rent is far from the suggestion. Check it for a typing mistake. |
 
 ## References
 
