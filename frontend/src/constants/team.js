@@ -48,13 +48,12 @@ export const TEAM = [
   },
   {
     name: 'Omar Alrajhi',
-    studentId: '',
-    bio: '',
-    photo: '',
-    email: '',
+    studentId: '221110415',
+    bio: 'Software Engineering senior at Prince Sultan University',
+    photo: 'Omar Alrajhi.jpg',
+    email: 'omarexample123@gmail.com',
     linkedin: '',
-    github: '',
-    pending: true,
+    github: 'https://github.com/221110415-oss',
   },
 ];
 
