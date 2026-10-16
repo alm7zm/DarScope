@@ -92,7 +92,7 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 
 - Use CSS Modules, with each `.module.css` file beside its component. Colours, spacing and type sizes are defined once as CSS variables in `src/styles/tokens.css`: use only those tokens in components (UI-06). `src/styles/global.css` styles plain elements only.
 - The layout works from 360 px to 1920 px wide without the page scrolling sideways. Wide tables scroll inside their own frame (NFR-USE-02). **A grid or flex item holding a table needs `min-width: 0`**, or it sizes itself to the table and pushes the page wide instead of scrolling.
-- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`, and its `size="small"` for dense table rows. Never style a button from outside by element selector.
+- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`, and its `size="small"` for dense table rows. A link that should look like a button is a `ButtonLink` from the same file. Never style a button from outside by element selector, and never copy its styles into a page.
 - Follow `docs/design/style-guide.md`, which records the tokens and the component rules the app already uses, and `docs/design/wireframes.md`, which shows where everything sits on each screen.
 - Form controls come from `components/ui/FormField.jsx`, which owns each field's label, required marker, hint and error. Do not hand-roll an input: the error wiring is the part that gets forgotten.
 

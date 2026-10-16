@@ -121,10 +121,17 @@ export default function PropertyForm({ property, onSave, onCancel }) {
     });
   }
 
-  /** Put the cursor in one field by id, if it is there and can take focus. */
+  /**
+   * Put the cursor in one field by id, if it is there and can take focus. A district typed
+   * through "Other district…" has its own box, which is where its error shows (FR-ADD-03).
+   */
   function focusField(field) {
     if (!field) return;
-    formRef.current?.querySelector(`#${field}`)?.focus();
+    const form = formRef.current;
+    const target =
+      (field === 'district' && form?.querySelector('#districtOther')) ||
+      form?.querySelector(`#${field}`);
+    target?.focus();
   }
 
   /** A district belongs to one city, so a new city keeps it only if the city has it too. */

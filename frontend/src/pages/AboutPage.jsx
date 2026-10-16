@@ -104,12 +104,12 @@ export default function AboutPage() {
               Credits
             </h2>
             <p className={styles.note}>
-              Sample data comes from{' '}
+              The rent suggestion is learned from{' '}
               <a href={DATASET.url} rel="noreferrer noopener" target="_blank">
                 {DATASET.name}
               </a>
-              , published on {DATASET.source} in {DATASET.year}. The properties
-              shown are a cleaned sample of it; tenant names are invented.
+              , published on {DATASET.source} in {DATASET.year}. The sample
+              properties and their tenants are invented.
             </p>
             <p className={styles.note}>
               Built with the help of {AI_TOOLS.join(', ')}. Which tool produced

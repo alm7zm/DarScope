@@ -246,6 +246,20 @@ describe('PropertyFormPage: AC-03 reject invalid input (FR-ADD-03)', () => {
     expect(field('Size (m²)')).toHaveValue('5');
   });
 
+  it('focuses the "Other district" box when the name typed there fails its check', async () => {
+    const { user } = await renderForm('/properties/new');
+
+    // One letter, typed through "Other district…" because the list lacks it (FR-ADD-14).
+    await fillValidForm(user, { District: 'A' });
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    const other = field('Other district');
+    expect(other).toHaveFocus();
+    expect(other).toHaveAccessibleDescription(
+      new RegExp(FIELD_ERRORS.districtLength),
+    );
+  });
+
   it('links each error to its field, so it is read with the field (NFR-ACC-03)', async () => {
     const { user } = await renderForm('/properties/new');
 
