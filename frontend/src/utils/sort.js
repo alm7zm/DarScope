@@ -34,10 +34,12 @@ function optionFor(key) {
 }
 
 /**
- * Compare two values of one field. Text is compared with `localeCompare`, so Arabic district and
- * city names order sensibly rather than by code point. A missing value sorts last either way.
+ * Compare two values of one field, in the direction given by `sign` (1 ascending, -1
+ * descending). Text is compared with `localeCompare`, so Arabic district and city names order
+ * sensibly rather than by code point. A missing value sorts last either way, so `sign` is applied
+ * only once both values are present.
  */
-function compareValues(left, right, text) {
+function compareValues(left, right, text, sign) {
   const leftMissing = left === null || left === undefined || left === '';
   const rightMissing = right === null || right === undefined || right === '';
   if (leftMissing || rightMissing) {
@@ -45,8 +47,8 @@ function compareValues(left, right, text) {
     return leftMissing ? 1 : -1;
   }
 
-  if (text) return String(left).localeCompare(String(right));
-  return Number(left) - Number(right);
+  if (text) return String(left).localeCompare(String(right)) * sign;
+  return (Number(left) - Number(right)) * sign;
 }
 
 /**
@@ -66,8 +68,9 @@ export function sortProperties(properties, sort = DEFAULT_SORT) {
       left[option.field],
       right[option.field],
       option.text,
+      sign,
     );
-    if (compared !== 0) return compared * sign;
+    if (compared !== 0) return compared;
     return String(left.id).localeCompare(String(right.id));
   });
 }
