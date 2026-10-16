@@ -3,7 +3,12 @@
  * bookmarked (FR-SRC-12). Pure functions: the URL is read and written in one place, and the hook
  * above them never parses a parameter itself.
  */
-import { AMENITY_KEYS, CITIES, PROPERTY_TYPES, STATUSES } from '../constants/options.js';
+import {
+  AMENITY_KEYS,
+  CITIES,
+  PROPERTY_TYPES,
+  STATUSES,
+} from '../constants/options.js';
 import { EMPTY_FILTERS } from './search.js';
 import { DEFAULT_SORT, PAGE_SIZES, SORT_OPTIONS } from './sort.js';
 
