@@ -7,6 +7,7 @@ import {
 } from '../test/fixtures.js';
 import {
   EMPTY_FILTERS,
+  activeFilterChips,
   isSearchActive,
   matchesFilters,
   matchesKeywords,
@@ -224,6 +225,65 @@ describe('matchesFilters (FR-SRC-04)', () => {
 
     expect(matchesFilters(property, impossible)).toBe(false);
     expect(matchesFilters(property, impossible, { rent: true })).toBe(true);
+  });
+
+  it('keeps only a property with every ticked amenity (FR-SRC-10)', () => {
+    const withPoolAndGarage = makeProperty({
+      amenities: { ...emptyAmenities(), pool: true, garage: true },
+    });
+    const ticked = (amenities) =>
+      matchesFilters(withPoolAndGarage, { ...EMPTY_FILTERS, amenities });
+
+    expect(ticked(['pool'])).toBe(true);
+    expect(ticked(['pool', 'garage'])).toBe(true);
+    expect(ticked(['pool', 'elevator'])).toBe(false);
+    expect(ticked([])).toBe(true);
+  });
+});
+
+describe('activeFilterChips (FR-SRC-13)', () => {
+  it('has no chip when no filter is set', () => {
+    expect(activeFilterChips()).toEqual([]);
+    expect(activeFilterChips(EMPTY_FILTERS)).toEqual([]);
+  });
+
+  it('gives one chip per active filter, naming what dismissing it removes', () => {
+    const chips = activeFilterChips({
+      ...EMPTY_FILTERS,
+      cities: ['Riyadh', 'Jeddah'],
+      amenities: ['pool'],
+      propertyType: 'Villa',
+      rentFrom: '50000',
+    });
+    const chip = (name) => chips.find((each) => each.name === name);
+
+    expect(chips).toHaveLength(5);
+    // A filter with several values loses one value per chip.
+    expect(
+      chips.filter((each) => each.name === 'cities').map((each) => each.value),
+    ).toEqual(['Riyadh', 'Jeddah']);
+    expect(chip('amenities')).toMatchObject({ value: 'pool', label: 'Pool' });
+    // A single-value filter is cleared whole.
+    expect(chip('propertyType').value).toBeNull();
+    expect(chip('propertyType').label).toContain('Villa');
+    expect(chip('rentFrom').label).toContain('50000');
+  });
+
+  it('gives every chip its own id', () => {
+    const chips = activeFilterChips({
+      cities: ['Riyadh'],
+      statuses: ['Vacant'],
+      amenities: ['pool', 'garage'],
+      propertyType: 'Villa',
+      rentFrom: '1000',
+      rentTo: '5000',
+      sizeFrom: '100',
+      sizeTo: '900',
+      minBedrooms: '3',
+    });
+
+    expect(chips).toHaveLength(10);
+    expect(new Set(chips.map((chip) => chip.id)).size).toBe(10);
   });
 });
 
