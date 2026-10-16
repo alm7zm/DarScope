@@ -336,6 +336,9 @@ before commit `af9b312`, so they are not findings below.
 
 The team decides each finding: **Fixed**, or **Accepted** with the team's reason.
 
+On 16 October 2026 the team chose to fix the three Medium findings first. The Low findings
+wait for the team's decision.
+
 | ID | Severity | Decision | Reason |
 | --- | --- | --- | --- |
 | CR-01 | Low | | |
@@ -343,15 +346,15 @@ The team decides each finding: **Fixed**, or **Accepted** with the team's reason
 | CR-03 | Low | | |
 | CR-04 | Low | | |
 | CR-05 | Low | | |
-| CR-06 | Medium | | |
-| CR-07 | Medium | | |
+| CR-06 | Medium | Fixed | Commit `4d55010`: the About page and the footer credit the dataset for the rent suggestion and say the sample properties are invented |
+| CR-07 | Medium | Fixed | Commit `4d55010`: focus goes to the "Other district" box, with a test |
 | CR-08 | Low | | |
 | CR-09 | Low | | |
 | CR-10 | Low | | |
 | CR-11 | Low | | |
 | CR-12 | Low | | |
 | CR-13 | Low | | |
-| CR-14 | Medium | | |
+| CR-14 | Medium | Fixed | Commit `4d55010`: `ButtonLink`, `EmptyState` and `LoadError` replace the copies, and each button variant keeps its text colour on hover |
 | CR-15 | Low | | |
 | CR-16 | Low | | |
 | CR-17 | Low | | |

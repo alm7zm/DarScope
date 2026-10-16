@@ -1,7 +1,7 @@
 # Architecture
 
 Part of deliverable PD-04 (SRS section 12), with [features.md](features.md) and the
-[README](../README.md). It describes the code as it is on 16 October 2026, at commit `af9b312`
+[README](../README.md). It describes the code as it is on 16 October 2026, at commit `4d55010`
 on the `ml-model` branch, not the plans in the SRS. Where a planned part is missing, it says so.
 
 ## 1. Overview
@@ -55,7 +55,7 @@ flowchart TD
 | `routes/` | `routes.jsx` maps each URL to its page inside `AppLayout`, with `ErrorPage` as the error boundary. `paths.js` holds every URL. |
 | `layouts/` | The header with the menu, the one message strip that screen readers announce, and the footer. |
 | `pages/` | One thin component per URL. Each reads state through a hook and arranges components. |
-| `components/` | The building blocks, one folder per feature, with shared pieces in `ui/`: `Button`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`. |
+| `components/` | The building blocks, one folder per feature, with shared pieces in `ui/`: `Button` and `ButtonLink`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`, `EmptyState` and `LoadError`. |
 | `hooks/` | `usePortfolio` gives a component the properties and the actions that change them. `usePropertySearch` holds the search box and filters, and works out the matching properties. |
 | `context/` | `PortfolioProvider` loads the portfolio, runs the actions and clears each message after 5 seconds. `portfolioReducer` is the pure function that applies each change. |
 | `services/propertyService.js` | The data service: the only code that reads or writes properties. Part 2 replaces this one file (section 4). |
@@ -192,7 +192,7 @@ libraries in `ai-model/requirements.txt`: pandas 2.3.3, matplotlib 3.10.6 and sc
 | `components/dashboard/` | The summary cards, the city table and the Needs attention list |
 | `components/properties/` | The table, the detail view, the form, the District field, the rent suggestion, the delete dialog and "Property not found" |
 | `components/search/` | The search box and the filters |
-| `components/ui/` | The shared pieces: `Button`, `Badge`, `Dialog`, `FormField`, `Message`, `Page` and `Placeholder` |
+| `components/ui/` | The shared pieces: `Button` and `ButtonLink`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`, `EmptyState` and `LoadError` (`PageStates.jsx`), and `Placeholder` |
 | `constants/` | `options.js` (choices and ranges), `messages.js` (every message), `market.js` (rounding and the mistyped-rent factor), `team.js` (team and course) |
 | `context/` | The portfolio context, its provider and its reducer |
 | `data/` | The seed portfolio, the rent model's weights and the district list, plus a README on where they come from |

@@ -41,5 +41,6 @@ Deliverable PD-07 (SRS section 12): which AI tool produced each deliverable. Add
 | 16 Oct 2026 | Visual design (PD-03) | `docs/design/wireframes.md`: a wireframe for every screen in SRS 9.1, drawn from the screens as built, at desktop and phone widths | Claude Code (Claude Opus 5.5) |
 | 16 Oct 2026 | Documentation (PD-04) | `docs/architecture.md` and `docs/features.md`, written from the code, and `README.md` corrected: the AI features, the data credit and the state of each area | Claude Code (Claude Opus 5.5) |
 | 16 Oct 2026 | Tests (PD-05) | `docs/test-report.md`: the output of `npm test` and `npm run coverage`, the coverage of the SRS test areas and the acceptance scenarios. The manual checks are left for the team | Claude Code (Claude Opus 5.5) |
+| 16 Oct 2026 | Source code and tests (PD-01, PD-05) | The fixes for the three Medium findings the team chose from the code review: the About page and footer credits (CR-06), focus on the "Other district" box (CR-07), and `ButtonLink`, `EmptyState` and `LoadError` in place of copied styles (CR-14), with 1 new test and 2 updated ones, 448 in all. The test report was run again on the fixed code | Claude Code (Claude Opus 5.5) |
 
 Still to record by the team: the tool that produced the SRS itself (PD-02) and the tool configuration under `.claude/`.

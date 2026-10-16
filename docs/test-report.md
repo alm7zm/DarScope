@@ -8,8 +8,8 @@ commands is at the end, as printed.
 
 | | |
 | --- | --- |
-| Date and time | 16 October 2026, 22:33 Arabia Standard Time (UTC+3) |
-| Code | Commit `af9b312` on the `ml-model` branch. Only documents changed after it. |
+| Date and time | 16 October 2026, 23:01 Arabia Standard Time (UTC+3) |
+| Code | Commit `4d55010` on the `ml-model` branch, with the fixes for code review findings CR-06, CR-07 and CR-14. Only documents changed after it. |
 | Node.js | v22.20.0 |
 | npm | 11.3.0 |
 | Operating system | Windows 11 Pro |
@@ -21,27 +21,27 @@ commands is at the end, as printed.
 | | `npm test` | `npm run coverage` |
 | --- | --- | --- |
 | Test files | 30 passed, of 30 | 30 passed, of 30 |
-| Tests | 447 passed, of 447 | 447 passed, of 447 |
+| Tests | 448 passed, of 448 | 448 passed, of 448 |
 | Failed | 0 | 0 |
 | Skipped | 0 | 0 |
-| Duration | 22.82 s | 34.09 s |
+| Duration | 27.67 s | 35.94 s |
 | Exit code | 0 | 0 |
 
 ## Coverage
 
 | Measure | Covered | Total | Coverage |
 | --- | --- | --- | --- |
-| Statements | 766 | 793 | **96.59%** |
-| Branches | 544 | 591 | 92.04% |
-| Functions | 268 | 277 | 96.75% |
-| Lines | 706 | 724 | 97.51% |
+| Statements | 771 | 799 | **96.49%** |
+| Branches | 550 | 597 | 92.12% |
+| Functions | 271 | 281 | 96.44% |
+| Lines | 711 | 730 | 97.39% |
 
 NFR-TST-06 asks for at least **70%** of the statements under `src/`, leaving out the language-model
-wrapper. The run reaches **96.59%**. The wrapper, `src/services/embeddingService.js`, does not
+wrapper. The run reaches **96.49%**. The wrapper, `src/services/embeddingService.js`, does not
 exist yet, and `vite.config.js` already leaves it out.
 
-The coverage tool measured 56 files. 35 have every statement, branch and function covered, so
-the table in the raw output leaves them out and lists the other 21.
+The coverage tool measured 57 files. 35 have every statement, branch and function covered, so
+the table in the raw output leaves them out and lists the other 22.
 
 The five least-covered files, by statements:
 
@@ -49,9 +49,9 @@ The five least-covered files, by statements:
 | --- | --- | --- | --- |
 | `src/App.jsx` | 0% | 6 to 10 | Create the browser router. The tests render the same routes with a memory router (`src/test/render.jsx`). |
 | `src/main.jsx` | 0% | 7 | Mount the app in the page |
+| `src/components/ui/PageStates.jsx` | 50% | 25 | Show `LoadError`, which appears only when the portfolio fails to load. No test makes it fail (code review CR-10). |
 | `src/pages/ErrorPage.jsx` | 50% | 11 | The Reload button reloading the page |
 | `src/services/rentModelService.js` | 66.67% | 19 to 20 | Let a later form try again after the rent model failed to load |
-| `src/components/dashboard/CityTable.jsx` | 75% | 11 | Render nothing for no cities. The Dashboard never passes it an empty list. |
 
 ## Coverage of the SRS
 
@@ -144,11 +144,11 @@ For the team to fill in: who checked each one, when, and what they saw.
 
 
  Test Files  30 passed (30)
-      Tests  447 passed (447)
-   Start at  22:33:41
-   Duration  22.82s (environment 52%, tests 31%, setup 9%, transform 4%, import 4%)
+      Tests  448 passed (448)
+   Start at  23:01:06
+   Duration  27.67s (environment 49%, tests 33%, setup 10%, transform 5%, import 4%)
 
-Environment  jsdom was created 30 times · 76.87s total, 52% of tracked time
+Environment  jsdom was created 30 times · 81.52s total, 49% of tracked time
              create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
              learn more: https://vitest.dev/guide/improving-performance#test-environments
 ```
@@ -165,11 +165,11 @@ Environment  jsdom was created 30 times · 76.87s total, 52% of tracked time
 
 
  Test Files  30 passed (30)
-      Tests  447 passed (447)
-   Start at  22:34:05
-   Duration  34.09s (environment 46%, tests 36%, setup 10%, transform 4%, import 3%, worker 1%)
+      Tests  448 passed (448)
+   Start at  23:01:35
+   Duration  35.94s (environment 45%, tests 37%, setup 9%, transform 4%, import 3%, worker 1%)
 
-Environment  jsdom was created 30 times · 86.37s total, 46% of tracked time
+Environment  jsdom was created 30 times · 83.76s total, 45% of tracked time
              create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
              learn more: https://vitest.dev/guide/improving-performance#test-environments
 
@@ -177,7 +177,7 @@ Environment  jsdom was created 30 times · 86.37s total, 46% of tracked time
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   96.59 |    92.04 |   96.75 |   97.51 |                   
+All files          |   96.49 |    92.12 |   96.44 |   97.39 |                   
  src               |       0 |      100 |       0 |       0 |                   
   App.jsx          |       0 |      100 |       0 |       0 | 6-10              
   main.jsx         |       0 |      100 |     100 |       0 | 7                 
@@ -185,12 +185,13 @@ All files          |   96.59 |    92.04 |   96.75 |   97.51 |
   PersonCard.jsx   |     100 |    78.57 |     100 |     100 | 6-10,87-104       
  ...ents/dashboard |    87.5 |       90 |     100 |     100 |                   
   CityTable.jsx    |      75 |       50 |     100 |     100 | 11                
- ...nts/properties |   92.62 |    88.17 |   94.44 |    93.8 |                   
+ ...nts/properties |   92.74 |    88.54 |   94.44 |   93.91 |                   
   ...rtyDialog.jsx |    87.5 |       50 |     100 |    87.5 | 35                
-  PropertyForm.jsx |   88.23 |    75.75 |   90.32 |   90.32 | 164-168,343-352   
- src/components/ui |   97.82 |     92.3 |     100 |     100 |                   
+  PropertyForm.jsx |   88.57 |    77.77 |   90.32 |   90.62 | 171-175,350-359   
+ src/components/ui |      96 |    92.59 |   96.66 |   97.91 |                   
   Dialog.jsx       |   92.85 |     90.9 |     100 |     100 | 34                
   FormField.jsx    |     100 |     90.9 |     100 |     100 | 131,184,235-240   
+  PageStates.jsx   |      50 |      100 |      50 |      50 | 25                
  src/constants     |   97.29 |      100 |    90.9 |   97.14 |                   
   messages.js      |      90 |      100 |      75 |      90 | 34                
  src/context       |   96.22 |    82.35 |   94.11 |   97.95 |                   
@@ -198,7 +199,7 @@ All files          |   96.59 |    92.04 |   96.75 |   97.51 |
  src/hooks         |   96.96 |    66.66 |   93.33 |   96.55 |                   
   ...ertySearch.js |   96.55 |       50 |   92.85 |      96 | 46                
  src/pages         |   94.44 |    94.73 |      95 |   94.33 |                   
-  ...boardPage.jsx |   85.71 |    83.33 |     100 |   85.71 | 25                
+  ...boardPage.jsx |   85.71 |    83.33 |     100 |   85.71 | 26                
   ErrorPage.jsx    |      50 |      100 |      50 |      50 | 11                
   ...yListPage.jsx |   91.66 |       90 |     100 |   91.66 | 30                
  src/services      |   97.01 |       85 |   95.65 |   96.77 |                   
@@ -213,9 +214,9 @@ All files          |   96.59 |    92.04 |   96.75 |   97.51 |
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
-Statements   : 96.59% ( 766/793 )
-Branches     : 92.04% ( 544/591 )
-Functions    : 96.75% ( 268/277 )
-Lines        : 97.51% ( 706/724 )
+Statements   : 96.49% ( 771/799 )
+Branches     : 92.12% ( 550/597 )
+Functions    : 96.44% ( 271/281 )
+Lines        : 97.39% ( 711/730 )
 ================================================================================
 ```
