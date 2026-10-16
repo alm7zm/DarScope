@@ -4,10 +4,9 @@ Part of deliverable PD-03 (SRS section 12), with the [style guide](style-guide.m
 wireframe for every screen in SRS section 9.1. A wireframe shows what each screen holds and where
 it sits. Colour, type and spacing are in the style guide.
 
-They were drawn on 16 October 2026 from the screens as built at commit `af9b312`, so they match
-the app. Anything marked **planned** belongs to a Should or Could requirement that is not built
-yet, and is named by its ID. Market insights is planned as a whole: its address shows a
-placeholder today.
+They were drawn on 16 October 2026 from the screens as built that day, so they match the app.
+Anything marked **planned** belongs to a Should or Could requirement that is not built yet, and is
+named by its ID. Market insights is planned as a whole: its address shows a placeholder today.
 
 ## How to read them
 
@@ -422,10 +421,10 @@ own figures. Today this address shows a placeholder, and the page is not in the 
 │ │                                             │ │                                              │ │
 │ └─────────────────────────────────────────────┘ └──────────────────────────────────────────────┘ │
 │ ┌─ HOW IT IS BUILT ───────────────────────────┐ ┌─ CREDITS ────────────────────────────────────┐ │
-│ │ (React …) (Vite) (React Router) (Context …) │ │ The data comes from (the Kaggle dataset).    │ │
-│ │ (CSS Modules …) (Vitest …) (ESLint …)       │ │ Built with the help of the AI tools named    │ │
-│ │ The code is on (GitHub). No server, no      │ │ here; docs/ai-usage.md records which         │ │
-│ │ database: changes last until a reload.      │ │ tool produced each part.                     │ │
+│ │ (React …) (Vite) (React Router) (Context …) │ │ The rent suggestion is learned from (the     │ │
+│ │ (CSS Modules …) (Vitest …) (ESLint …)       │ │ Kaggle dataset). The sample properties       │ │
+│ │ The code is on (GitHub). No server, no      │ │ are invented. The AI tools, and              │ │
+│ │ database: changes last until a reload.      │ │ docs/ai-usage.md for which did what.         │ │
 │ └─────────────────────────────────────────────┘ └──────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```

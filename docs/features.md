@@ -1,7 +1,7 @@
 # Features
 
 Part of deliverable PD-04 (SRS section 12), with [architecture.md](architecture.md) and the
-[README](../README.md). It lists what works in the app on 16 October 2026, at commit `af9b312` on
+[README](../README.md). It lists what works in the app on 16 October 2026, at commit `4d55010` on
 the `ml-model` branch, with the code behind each feature and the SRS requirements it meets.
 Paths are under `frontend/src/`. Section 13 lists what is not built yet.
 
