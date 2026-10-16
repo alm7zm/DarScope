@@ -1,8 +1,9 @@
-import { Link } from 'react-router';
 import CityTable from '../components/dashboard/CityTable.jsx';
 import NeedsAttentionList from '../components/dashboard/NeedsAttentionList.jsx';
 import SummaryCards from '../components/dashboard/SummaryCards.jsx';
+import { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
+import { EmptyState, LoadError } from '../components/ui/PageStates.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
 import { PATHS } from '../routes/paths.js';
@@ -24,9 +25,7 @@ export default function DashboardPage() {
   if (loadError) {
     return (
       <Page title="Dashboard">
-        <p className={styles.error} role="alert">
-          The portfolio could not be loaded. {loadError}
-        </p>
+        <LoadError reason={loadError} />
       </Page>
     );
   }
@@ -41,9 +40,7 @@ export default function DashboardPage() {
       description="The portfolio at a glance."
       actions={
         /* FR-DSH-07. */
-        <Link to={PATHS.properties} className={styles.shortcut}>
-          View all properties
-        </Link>
+        <ButtonLink to={PATHS.properties}>View all properties</ButtonLink>
       }
     >
       <SummaryCards summary={summary} />
@@ -51,12 +48,11 @@ export default function DashboardPage() {
       {/* FR-DSH-04: an empty portfolio still shows its zeros above, then asks for a first
           property rather than printing empty tables. */}
       {summary.total === 0 ? (
-        <div className={styles.empty}>
-          <p className={styles.emptyText}>{TEXT.emptyPortfolio}</p>
-          <Link to={PATHS.addProperty} className={styles.emptyAction}>
+        <EmptyState message={TEXT.emptyPortfolio}>
+          <ButtonLink variant="primary" to={PATHS.addProperty}>
             Add property
-          </Link>
-        </div>
+          </ButtonLink>
+        </EmptyState>
       ) : (
         <div className={styles.panels}>
           <CityTable rows={byCity(properties)} />

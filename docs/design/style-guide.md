@@ -133,7 +133,12 @@ Two sizes: `medium` (44px tall, the default) and `small` (32px, for dense table 
 `className`, but the size belongs to the component.
 
 **A button acts; a link navigates.** View and Edit in a table row are links, so Ctrl-click and
-middle-click work. Delete is a button, because it does something.
+middle-click work. Delete is a button, because it does something. A link that should look like a
+button, such as Edit on the detail page or Add property in an empty list, is a `ButtonLink` from
+the same file: it takes the same variants and sizes, and stays a link.
+
+An empty page shows `EmptyState` from `components/ui/PageStates.jsx`: a dashed box with the
+message and one action. A portfolio that failed to load shows `LoadError` from the same file.
 
 ### Form fields
 

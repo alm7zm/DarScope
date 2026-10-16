@@ -9,6 +9,8 @@
   font-weight: var(--font-weight-bold);
   line-height: 1;
   white-space: nowrap;
+  /* A ButtonLink is an <a>, which a browser underlines. */
+  text-decoration: none;
   cursor: pointer;
   /* Properties are listed one by one: `transition: all` would animate layout too. */
   transition:
@@ -42,8 +44,11 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Each hover sets its text colour again: on a ButtonLink, `a:hover` in global.css would otherwise
+   turn the text the colour of the background. */
 .primary:hover:not(:disabled) {
   background: var(--color-primary-strong);
+  color: var(--color-on-accent);
 }
 
 .secondary {
@@ -56,6 +61,7 @@
 .secondary:hover:not(:disabled) {
   border-color: var(--color-text-muted);
   background: var(--color-surface-sunken);
+  color: var(--color-text);
 }
 
 .danger {
@@ -66,6 +72,7 @@
 
 .danger:hover:not(:disabled) {
   background: var(--color-danger-strong);
+  color: var(--color-on-accent);
 }
 
 /* Active state reads stronger than hover, which reads stronger than rest. */

@@ -3,7 +3,7 @@ import { Link, generatePath, useNavigate, useParams } from 'react-router';
 import DeletePropertyDialog from '../components/properties/DeletePropertyDialog.jsx';
 import PropertyDetail from '../components/properties/PropertyDetail.jsx';
 import PropertyNotFound from '../components/properties/PropertyNotFound.jsx';
-import Button from '../components/ui/Button.jsx';
+import Button, { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
@@ -45,12 +45,12 @@ export default function PropertyDetailPage() {
       actions={
         /* FR-DET-02: Edit, Delete and Back to list. */
         <div className={styles.actions}>
-          <Link
+          <ButtonLink
+            variant="primary"
             to={generatePath(PATHS.editProperty, { id: property.id })}
-            className={styles.primaryAction}
           >
             Edit
-          </Link>
+          </ButtonLink>
           <Button variant="danger" onClick={() => setConfirmingDelete(true)}>
             Delete
           </Button>
