@@ -8,7 +8,8 @@ Everything here is defined once, in
 variables and never write a raw colour, size or spacing value (UI-06). If a value below and the
 token file disagree, **the token file is right** and this document is out of date.
 
-> **Still to do:** the wireframes. This covers the style half of PD-03 only.
+This is the style half of PD-03. The other half, a wireframe for every screen, is in
+[wireframes.md](wireframes.md).
 
 ## Principles
 
@@ -132,7 +133,12 @@ Two sizes: `medium` (44px tall, the default) and `small` (32px, for dense table 
 `className`, but the size belongs to the component.
 
 **A button acts; a link navigates.** View and Edit in a table row are links, so Ctrl-click and
-middle-click work. Delete is a button, because it does something.
+middle-click work. Delete is a button, because it does something. A link that should look like a
+button, such as Edit on the detail page or Add property in an empty list, is a `ButtonLink` from
+the same file: it takes the same variants and sizes, and stays a link.
+
+An empty page shows `EmptyState` from `components/ui/PageStates.jsx`: a dashed box with the
+message and one action. A portfolio that failed to load shows `LoadError` from the same file.
 
 ### Form fields
 
@@ -144,10 +150,26 @@ be wired up wrongly by accident.
 - Labels sit **above** the control, hints **below** it. A hint above pushes its input down and the
   inputs on a row stop lining up.
 - Required is the **word** "(required)", not an asterisk and not a colour.
-- Number fields are text inputs with `inputMode="numeric"`, not `type="number"`: a number input
-  discards what it cannot parse, and FR-ADD-03 says everything the user typed must survive a
-  failed save.
+- Number fields are text inputs with `inputMode="numeric"`, not `type="number"`, which lets "e"
+  and minus signs through and changes its value under the mouse wheel. They take only digits and
+  one decimal point, and no more digits than the field's largest value has (FR-ADD-12).
 - Units go in the label: "Size (m²)", "Yearly rent (SAR)", "Age (years)" (UI-03).
+
+### Rent suggestion
+
+The rent model's suggestion sits beside Yearly rent, in the rest of its row, and drops under it
+on one column (FR-ADD-13). Its label "Suggested rent" is set like a field label, and its panel
+starts level with the rent input, so the typed rent and the suggested one read as a pair.
+
+- The panel is `--color-surface-sunken` with `--radius`. The amount is its one large figure:
+  `--font-size-2xl`, `--color-primary-strong`, tabular figures. "Use this rent" is a small
+  secondary button at the panel's far end.
+- A new amount settles in from just below (`settle`, twice `--duration`), so ticking an amenity
+  is seen to move it. Reduced motion turns this off.
+- The mistyped-rent warning (FR-RNT-07) uses the same amber box as the form's other warning. The
+  notes under a hairline rule are 12px muted.
+- With nothing to suggest yet, the panel is the dashed empty state, exactly the input's height,
+  with the reason in muted text, so it never reads as a disabled field.
 
 ### Cards and tables
 

@@ -30,6 +30,15 @@
   }
 }
 
+/* The rent model's suggestion takes the rest of Yearly rent's row, so the two figures sit side by
+   side (FR-ADD-13) and the fields after it start a new row. On one column it drops under the
+   field. */
+@media (min-width: 36rem) {
+  .suggestion {
+    grid-column: 2 / -1;
+  }
+}
+
 .amenities {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
