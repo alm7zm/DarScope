@@ -88,7 +88,11 @@ describe('AppLayout', () => {
     const footer = screen.getByRole('contentinfo');
 
     expect(footer).toHaveTextContent('SE411');
-    expect(footer).toHaveTextContent('Saudi Arabia Real Estate (AQAR)');
+    expect(footer).toHaveTextContent(
+      'Rent model data: Saudi Arabia Real Estate (AQAR), Kaggle, 2021.',
+    );
+    // The sample properties are written by hand, not taken from the dataset.
+    expect(footer).not.toHaveTextContent('Sample data');
     expect(footer).toHaveTextContent(
       /changes are kept only until the page reloads/i,
     );

@@ -150,11 +150,18 @@ describe('AboutPage: credits (FR-ABT-05)', () => {
     ).toBeInTheDocument();
   });
 
-  it('says the tenant names are invented, since they are', () => {
+  it('credits the dataset for the rent suggestion, and says the sample properties are invented', () => {
     renderAbout();
+
+    const credits = panel('Credits');
     expect(
-      panel('Credits').getByText(/tenant names are invented/),
+      credits.getByText(/rent suggestion is learned from/),
     ).toBeInTheDocument();
+    expect(
+      credits.getByText(/sample properties and their tenants are invented/),
+    ).toBeInTheDocument();
+    // The seed is written by hand, so the page must not say it comes from the dataset.
+    expect(credits.queryByText(/cleaned sample/)).not.toBeInTheDocument();
   });
 
   it('names the AI tools used to build the app', () => {

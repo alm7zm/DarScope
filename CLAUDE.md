@@ -40,20 +40,23 @@ darscope/
 │       │               folder per feature: properties/, dashboard/, market/, search/
 │       ├── context/    portfolio context, reducer and provider
 │       ├── hooks/      shared hooks: usePortfolio, usePropertySearch
-│       ├── services/   propertyService.js, marketService.js, embeddingService.js
-│       ├── utils/      validation, search, sort, arabic, format, stats, similarity, estimate
+│       ├── services/   propertyService.js, marketService.js, embeddingService.js,
+│       │               rentModelService.js
+│       ├── utils/      validation, search, sort, arabic, format, stats, similarity, estimate,
+│       │               rentModel
 │       ├── constants/  choices, thresholds, messages, team details
 │       ├── styles/     tokens.css, global.css
-│       ├── data/       portfolio.seed.json, market.reference.json
+│       ├── data/       portfolio.seed.json, market.reference.json, rent-model.json,
+│       │               districts.json
 │       ├── assets/     team/: the team photos, any size; the build crops and shrinks them
 │       └── test/       setup.js, shared fixtures and helpers
-├── ai-model/           rent-prediction model, trained outside the app (not started)
+├── ai-model/           rent-prediction model, trained outside the app; feeds the rent suggestion
 └── backend/            Part 2, hand-coded later
 ```
 
 The layout is layered: each folder under `src/` holds one kind of code. A folder appears when its first file is written, so not all of them exist yet. The open tasks, most important first, are in `docs/tasks.md`.
 
-`ai-model/` holds a rent-prediction model that the team trains on the dataset. It is not part of the React app: nothing under `frontend/src/` imports from it, and the SRS has no requirements for it yet. Read `ai-model/README.md` before working there.
+`ai-model/` holds the rent-prediction model that the team trains on the dataset, in `ai-model/prepare.ipynb`. The app uses only what the notebook exports: the weights in `frontend/src/data/rent-model.json`, for the rent suggestion on the Add and Edit forms (FR-ADD-13, SRS 7.6), and the district list in `frontend/src/data/districts.json`, for the District dropdown (FR-ADD-14). Nothing under `frontend/src/` imports from `ai-model/` itself. Read `ai-model/README.md` before working there.
 
 Each test file sits beside the module it tests and ends in `.test.js` or `.test.jsx`.
 
@@ -98,7 +101,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 5. The interface text is English. Property data may be Arabic or English, so render data text with `dir="auto"` and never assume left-to-right.
 6. Render user-entered text as text. Never use `dangerouslySetInnerHTML`.
 7. The AI features are optional extras. No Must requirement may depend on them, and each one must fail safely.
-8. Never commit the raw Kaggle CSV, model files, `.env` files or `node_modules`.
+8. Never commit the raw Kaggle CSV, language-model files, `.env` files or `node_modules`. The one model file that is committed is `frontend/src/data/rent-model.json`, the rent model's weights, which hold no rows of the dataset (the team's decision of 16 October 2026).
 9. Never invent team names or student IDs. They live in `frontend/src/constants/team.js`: leave placeholders and ask the user.
 10. Tell the user before you add a dependency, and say why it is needed.
 
@@ -146,7 +149,7 @@ Each one loads when you open a file it covers. When you start in an area that ha
 The brief asks for all of these in the repository by the deadline (SRS section 12):
 
 - Requirements: `docs/SRS.md`
-- Visual design: wireframes and a style guide in `docs/design/`. The style guide is written; the wireframes are not.
+- Visual design: `docs/design/style-guide.md` and `docs/design/wireframes.md`
 - Documentation: `docs/architecture.md`, `docs/features.md`, `README.md`
 - Tests, and proof they ran: test files plus `docs/test-report.md`
 - Code review of security, performance, code quality and code reuse: `docs/code-review.md`
@@ -159,6 +162,5 @@ Do not assume an answer to any of these. Ask the user when a task depends on one
 - Whether changes must survive a page reload.
 - Whether TypeScript, or a particular test, styling or build tool, is required or forbidden.
 - Whether the app must be deployed online.
-- Whether the dataset's licence allows publishing data derived from it. Tell the user before generated data files are committed.
+- Whether the dataset's licence allows publishing data derived from it. Tell the user before generated data files are committed. The rent model's weights are the one exception the team has already accepted.
 - Whether every non-duplex listing in the dataset is a villa (assumption A-06).
-- Where the rent-prediction model in `ai-model/` runs, and how the app shows its prediction beside the fair-rent estimate. Neither is in the SRS yet.
