@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
 import DeletePropertyDialog from '../components/properties/DeletePropertyDialog.jsx';
 import PropertyTable from '../components/properties/PropertyTable.jsx';
 import SearchControls from '../components/search/SearchControls.jsx';
-import Button from '../components/ui/Button.jsx';
+import Button, { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
+import { EmptyState, LoadError } from '../components/ui/PageStates.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
 import { usePropertySearch } from '../hooks/usePropertySearch.js';
@@ -29,9 +29,7 @@ export default function PropertyListPage() {
   if (loadError) {
     return (
       <Page title="Properties">
-        <p className={styles.error} role="alert">
-          The portfolio could not be loaded. {loadError}
-        </p>
+        <LoadError reason={loadError} />
       </Page>
     );
   }
@@ -88,19 +86,18 @@ export default function PropertyListPage() {
  */
 function NothingToShow({ searching, onClearAll }) {
   return (
-    <div className={styles.empty}>
-      <p className={styles.emptyText}>
-        {searching ? TEXT.noSearchMatches : TEXT.emptyPortfolio}
-      </p>
+    <EmptyState
+      message={searching ? TEXT.noSearchMatches : TEXT.emptyPortfolio}
+    >
       {searching ? (
         <Button variant="primary" onClick={onClearAll}>
           Clear all
         </Button>
       ) : (
-        <Link to={PATHS.addProperty} className={styles.emptyAction}>
+        <ButtonLink variant="primary" to={PATHS.addProperty}>
           Add property
-        </Link>
+        </ButtonLink>
       )}
-    </div>
+    </EmptyState>
   );
 }

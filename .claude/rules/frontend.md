@@ -51,6 +51,9 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 ## Forms
 
 - One `PropertyForm` component serves both Add and Edit.
+- Wherever the values are fixed, the field is a dropdown, so they cannot be mistyped: city, district, front, type, age, the room counts and status. District lists the chosen city's districts in the 2021 data by their English names, with "Other district…" for any other (`DistrictField.jsx`, FR-ADD-14). Age and the room counts list the whole numbers in their ranges (FR-ADD-15). Only size, rent and the free-text fields are typed.
+- Number fields take only digits and one decimal point, turning Arabic-Indic digits into 0 to 9, and no more digits than the field's largest value has (`maxDigits` in `constants/options.js`). The decimal point stays so the validator reports it (FR-ADD-12).
+- The rent model's suggestion sits beside Yearly rent on Add and Edit (under it on one column) and follows the values as they change. It fills the field only through "Use this rent", and warns when the entered rent looks mistyped (FR-ADD-13, FR-RNT-07).
 - Group the fields under Location, Building, Amenities, Rent and tenancy, Description. Put labels above inputs, mark required fields, and show the unit (m², SAR, years) beside number fields (UI-03, UI-04, FR-ADD-02).
 - Validate on Save with `src/utils/validation.js`. If any check fails: save nothing, show each error beside its field, move focus to the first invalid field, and keep everything the user typed (FR-ADD-03).
 - Enable tenant name and lease dates only when Status is Occupied (FR-ADD-07).
@@ -89,8 +92,8 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 
 - Use CSS Modules, with each `.module.css` file beside its component. Colours, spacing and type sizes are defined once as CSS variables in `src/styles/tokens.css`: use only those tokens in components (UI-06). `src/styles/global.css` styles plain elements only.
 - The layout works from 360 px to 1920 px wide without the page scrolling sideways. Wide tables scroll inside their own frame (NFR-USE-02). **A grid or flex item holding a table needs `min-width: 0`**, or it sizes itself to the table and pushes the page wide instead of scrolling.
-- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`, and its `size="small"` for dense table rows. Never style a button from outside by element selector.
-- Follow `docs/design/style-guide.md`, which records the tokens and the component rules the app already uses. The wireframes are still to come.
+- Primary actions look different from secondary ones, and Delete uses a warning style (UI-05). Use the `primary`, `secondary` and `danger` variants of `components/ui/Button.jsx`, and its `size="small"` for dense table rows. A link that should look like a button is a `ButtonLink` from the same file. Never style a button from outside by element selector, and never copy its styles into a page.
+- Follow `docs/design/style-guide.md`, which records the tokens and the component rules the app already uses, and `docs/design/wireframes.md`, which shows where everything sits on each screen.
 - Form controls come from `components/ui/FormField.jsx`, which owns each field's label, required marker, hint and error. Do not hand-roll an input: the error wiring is the part that gets forgotten.
 
 ## Accessibility

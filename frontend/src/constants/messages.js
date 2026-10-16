@@ -26,7 +26,7 @@ export const FIELD_ERRORS = {
   sizeFilterOrder: 'The smallest size cannot be above the largest.',
 };
 
-/** Fixed messages that name a property by ID (SRS Appendix C.2). */
+/** Fixed messages with a variable part (SRS Appendix C.2). */
 export const MESSAGES = {
   added: (id) => `Property ${id} added`,
   updated: (id) => `Property ${id} updated`,
@@ -51,6 +51,16 @@ export const TEXT = {
   tooFewComparables: 'Not enough market data',
   estimateDisclaimer:
     'Based on 2021 listings. Indicative only, not a valuation.',
+  rentSuggestionNeedsFields:
+    'Enter the city, size, age and room counts to get a suggestion.',
+  rentSuggestionOutsideData:
+    'The 2021 data has no houses of this size, so no rent is suggested.',
+  rentSuggestionUnknownDistrict:
+    'This district is not in the 2021 data, so the suggestion is less precise.',
+  rentSuggestionUnavailable:
+    'The rent suggestion could not be loaded. Enter the rent yourself.',
+  rentFarFromSuggestion:
+    'This rent is far from the suggestion. Check it for a typing mistake.',
 };
 
 /** How long a confirmation message stays on screen, in milliseconds (FR-FBK-01). */

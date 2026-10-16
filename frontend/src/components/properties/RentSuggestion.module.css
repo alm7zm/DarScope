@@ -1,0 +1,106 @@
+/* FR-ADD-13: the rent model's suggestion, beside Yearly rent. Its label sits where a field's
+   label sits and its panel starts level with the rent input, so the entered rent and the
+   suggested one read as a pair. The amount is the one large figure; the rest stays quiet. */
+.suggestion {
+  display: flex;
+  flex-direction: column;
+  /* The same gap as between a field's label and its control. */
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* Set like a field label, so the two labels line up. */
+.label {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Its first line is as tall as the rent input, so an empty panel is exactly the input's height. */
+.panel {
+  --first-line: calc(var(--target-min) - 2 * var(--space-1));
+
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius);
+  background-color: var(--color-surface-sunken);
+}
+
+/* The amount sits level with the rent typed beside it, "Use this rent" at the far end. When the
+   panel is narrow the button drops under the amount. */
+.figure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  min-height: var(--first-line);
+}
+
+.amount {
+  margin: 0;
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--line-height-tight);
+  /* Each new amount settles into place, so a ticked amenity is seen to move it. global.css
+     turns this off for anyone who asked for reduced motion. */
+  animation: settle calc(var(--duration) * 2) var(--ease);
+}
+
+@keyframes settle {
+  from {
+    opacity: 0.35;
+    transform: translateY(0.15em);
+  }
+}
+
+/* FR-RNT-07. A warning, not an error: Save still works. It looks like the form's other warning
+   (FR-UPD-07), and its words say what is wrong, so the colour is never the only sign. */
+.warning {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-status-maintenance-text);
+  border-left-width: var(--border-width-thick);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-status-maintenance-bg);
+  color: var(--color-status-maintenance-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* The fine print: the unknown-district note and the FR-EST-05 note. */
+.notes {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-top: var(--border-width) solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.notes p {
+  margin: 0;
+}
+
+/* No suggestion yet: the app's dashed empty state, so the panel never reads as a disabled field.
+   The padding gives back the border's width, so the panel stays the input's height. */
+.waiting {
+  padding-block: calc(var(--space-1) - var(--border-width));
+  border: var(--border-width) dashed var(--color-border-strong);
+  background-color: var(--color-surface);
+}
+
+/* Why there is no suggestion, in the amount's place, so the panel never jumps in or out. */
+.none {
+  display: flex;
+  align-items: center;
+  min-height: var(--first-line);
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-wrap: pretty;
+}

@@ -1,3 +1,4 @@
+import { textDirection } from '../../utils/arabic.js';
 import styles from './FormField.module.css';
 
 /**
@@ -5,10 +6,29 @@ import styles from './FormField.module.css';
  * its error, and links the error to the control with `aria-describedby`, so no caller can wire a
  * field up wrongly (NFR-ACC-03, FR-ADD-02).
  *
- * Number fields are text inputs with a numeric keypad rather than `type="number"`. A number input
- * throws away input it cannot parse, and FR-ADD-03 says every value the user entered must still
- * be there after a failed save. `utils/validation.js` decides what counts as a whole number.
+ * Number fields are text inputs with a numeric keypad rather than `type="number"`, which lets "e"
+ * and minus signs through, changes its value under the mouse wheel and has no digit limit.
+ * `utils/validation.js` decides what counts as a whole number in range.
  */
+
+/**
+ * What a number field keeps of what was typed (FR-ADD-12): digits, with Arabic-Indic ones turned
+ * into 0 to 9, and the decimal point. Letters, spaces and thousands separators are dropped. The
+ * decimal point stays so that 312.5 is reported by the validator, never silently turned into 3125.
+ */
+function numberInput(value) {
+  return value
+    .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x0660))
+    .replace(/٫/g, '.')
+    .replace(/[^\d.]/g, '');
+}
+
+/** True when a number field may hold this: one decimal point at most, and `maxDigits` digits. */
+function fitsNumberField(value, maxDigits) {
+  return (
+    value.split('.').length <= 2 && value.replace('.', '').length <= maxDigits
+  );
+}
 
 /** The id of the element holding a field's error message. */
 function errorId(id) {
@@ -64,11 +84,13 @@ function Wrapper({ id, label, required = false, hint, error, children }) {
 }
 
 /**
- * A single-line text field. `numeric` shows a numeric keypad on a phone.
+ * A single-line text field. `numeric` shows a numeric keypad on a phone and lets only digits and
+ * a decimal point in, Arabic-Indic digits becoming 0 to 9. A keystroke or paste that would leave
+ * more than `maxDigits` digits is refused, so the field keeps what it had.
  * @param {{
  *   id: string, label: string, value: string, onChange: (value: string) => void,
- *   required?: boolean, hint?: string, error?: string, numeric?: boolean, type?: string,
- *   disabled?: boolean,
+ *   required?: boolean, hint?: string, error?: string, numeric?: boolean, maxDigits?: number,
+ *   type?: string, disabled?: boolean,
  * }} props
  */
 export function TextField({
@@ -80,9 +102,19 @@ export function TextField({
   hint,
   error,
   numeric = false,
+  maxDigits = Infinity,
   type = 'text',
   disabled = false,
 }) {
+  function handleChange(typed) {
+    if (!numeric) {
+      onChange(typed);
+      return;
+    }
+    const kept = numberInput(typed);
+    if (fitsNumberField(kept, maxDigits)) onChange(kept);
+  }
+
   return (
     <Wrapper
       id={id}
@@ -97,7 +129,7 @@ export function TextField({
         type={type}
         className={`${styles.control} ${error ? styles.invalid : ''}`}
         value={value ?? ''}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => handleChange(event.target.value)}
         disabled={disabled}
         // These are property records, not the person's own details, so the browser should not
         // offer to fill them in or flag districts as misspelt.
@@ -115,11 +147,14 @@ export function TextField({
 }
 
 /**
- * A choice from a fixed list. An optional field offers a blank first option.
+ * A choice from a fixed list. An optional field offers a blank first option. An option is a
+ * string, shown as it is, or a `{ value, label }` pair when the two differ. Arabic options are
+ * marked as Arabic, so they read right-to-left (NFR-ACC-07).
  * @param {{
- *   id: string, label: string, value: string, options: string[],
+ *   id: string, label: string, value: string,
+ *   options: Array<string | { value: string, label: string }>,
  *   onChange: (value: string) => void, required?: boolean, hint?: string, error?: string,
- *   placeholder?: string,
+ *   placeholder?: string, disabled?: boolean,
  * }} props
  */
 export function SelectField({
@@ -132,6 +167,7 @@ export function SelectField({
   hint,
   error,
   placeholder,
+  disabled = false,
 }) {
   return (
     <Wrapper
@@ -147,17 +183,28 @@ export function SelectField({
         className={`${styles.control} ${error ? styles.invalid : ''}`}
         value={value ?? ''}
         onChange={(event) => onChange(event.target.value)}
+        disabled={disabled}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, { hint, error })}
       >
         {placeholder !== undefined ? (
           <option value="">{placeholder}</option>
         ) : null}
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
+        {options.map((option) => {
+          const choice =
+            typeof option === 'string'
+              ? { value: option, label: option }
+              : option;
+          return (
+            <option
+              key={choice.value}
+              value={choice.value}
+              {...textDirection(choice.label)}
+            >
+              {choice.label}
+            </option>
+          );
+        })}
       </select>
     </Wrapper>
   );

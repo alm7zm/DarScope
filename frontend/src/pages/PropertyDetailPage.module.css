@@ -5,25 +5,6 @@
   gap: var(--space-3);
 }
 
-.primaryAction {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--target-min);
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius);
-  background-color: var(--color-primary);
-  color: var(--color-on-accent);
-  font-weight: var(--font-weight-bold);
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  transition: background-color var(--duration) var(--ease);
-}
-
-.primaryAction:hover {
-  background-color: var(--color-primary-strong);
-  color: var(--color-on-accent);
-}
-
 .back {
   display: inline-flex;
   align-items: center;
