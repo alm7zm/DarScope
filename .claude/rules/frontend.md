@@ -51,6 +51,9 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 ## Forms
 
 - One `PropertyForm` component serves both Add and Edit.
+- Wherever the values are fixed, the field is a dropdown, so they cannot be mistyped: city, district, front, type, age, the room counts and status. District lists the chosen city's districts in the 2021 data by their English names, with "Other district…" for any other (`DistrictField.jsx`, FR-ADD-14). Age and the room counts list the whole numbers in their ranges (FR-ADD-15). Only size, rent and the free-text fields are typed.
+- Number fields take only digits and one decimal point, turning Arabic-Indic digits into 0 to 9, and no more digits than the field's largest value has (`maxDigits` in `constants/options.js`). The decimal point stays so the validator reports it (FR-ADD-12).
+- The rent model's suggestion sits beside Yearly rent on Add and Edit (under it on one column) and follows the values as they change. It fills the field only through "Use this rent", and warns when the entered rent looks mistyped (FR-ADD-13, FR-RNT-07).
 - Group the fields under Location, Building, Amenities, Rent and tenancy, Description. Put labels above inputs, mark required fields, and show the unit (m², SAR, years) beside number fields (UI-03, UI-04, FR-ADD-02).
 - Validate on Save with `src/utils/validation.js`. If any check fails: save nothing, show each error beside its field, move focus to the first invalid field, and keep everything the user typed (FR-ADD-03).
 - Enable tenant name and lease dates only when Status is Occupied (FR-ADD-07).
