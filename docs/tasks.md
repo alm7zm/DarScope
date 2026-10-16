@@ -13,10 +13,14 @@ In `main`:
 - A URL and a placeholder for every page, plus the "Page not found" and error screens.
 - The data layer, the property list, the detail page, the add and edit form, delete with
   confirmation, search and filters, and the interface rework (merged through pull request #12).
+- The Dashboard and the About page with the team photos (merged through pull request #13).
 
-On `dev`, not yet merged into `main`: the Dashboard, the About page with the team photos, and the
-document updates. Together that is **every Must requirement of Part 1 except task 1, the sample
-data.**
+Together that is **every Must requirement of Part 1 except task 1, the sample data, and two
+student IDs.**
+
+On `ml-model`, not yet merged: the rent model and its suggestion on the form, the dropdowns that
+keep typing mistakes out, tests for sorting and the URL state, and the documents the brief asks
+for (see Documents to hand in).
 
 ## Stage 1: main pages and features
 
@@ -26,9 +30,8 @@ Build only the **Must** requirements of each SRS section at this stage. The Shou
 
 ### Built
 
-**Every Must requirement of stage 1 is built.** Tasks 2 to 8 and the interface rework are in
-`main`. Tasks 9 and 10, the Dashboard and the About page, are on `dev` and reach `main` with its
-next merge.
+**Every Must requirement of stage 1 is built.** Tasks 2 to 10 and the interface rework are in
+`main`.
 
 They were first built as ten stacked pull requests, one per task. On 15 October 2026 the team
 moved to two branches (see How we work) and closed pull requests #2 to #11. Nothing was lost:
@@ -92,11 +95,13 @@ Start these only when everything in stage 1 works. They are the Should requireme
 
 ## Stage 3: bonus
 
-Only if time remains. These are the Could requirements in the SRS: bulk delete, CSV export, a dark theme, charts, a "Suggest rent" button, highlighted search matches and plain-language input.
+Only if time remains. These are the Could requirements in the SRS: bulk delete, CSV export, a dark theme, charts, a rent suggestion in the form (built on `ml-model`), highlighted search matches and plain-language input.
 
 ## AI model
 
 A rent-prediction model in the `ai-model/` folder. It goes beyond the course brief, so it must not delay stage 1. [ai-model/README.md](../ai-model/README.md) has the rules for it.
+
+**Built on the `ml-model` branch, not merged yet:** all four steps below. The Add and Edit forms show the model's rent suggestion as they are filled in (FR-ADD-13, SRS 7.6), and District is a dropdown of the districts the model knows, by their English names (FR-ADD-14). On 304 test houses, its suggestions are off by 23.1% of the rent on average.
 
 | Step | Owner |
 | --- | --- |
@@ -110,26 +115,29 @@ A rent-prediction model in the `ai-model/` folder. It goes beyond the course bri
 | Document | How | State | Owner |
 | --- | --- | --- | --- |
 | Style guide in `docs/design/` | Written from the tokens the app uses | ✔ written | |
-| Wireframes in `docs/design/` | With an AI tool | Not started | |
-| Architecture and features | Run `/project-docs` | Not started | |
-| Test report | Run `/test-report` | Not started | |
-| Code review | Run `/code-review-report` | Not started | |
+| Wireframes in `docs/design/` | With an AI tool | ✔ written on `ml-model` | |
+| Architecture and features | Run `/project-docs` | ✔ written on `ml-model` | |
+| Test report | Run `/test-report` | ✔ written on `ml-model`; the manual checks are open | |
+| Code review | Run `/code-review-report` | ✔ written on `ml-model`; the team's decisions are open | |
 | AI usage record in `docs/ai-usage.md` | Add a row each time an AI tool produces something | Kept up to date | Everyone |
 | The repository URL | Submit it on or before 17 October | | |
 
-The last three reports are worth running **after** `dev` is merged into `main`, so they describe
-the code that is submitted.
+The reports describe the code on `ml-model`, which is what `main` will hold once `ml-model` is
+merged into `dev` and `dev` into `main`. If the code changes after that, run `/test-report`
+again so the report matches what is submitted.
 
 ## Team to-dos
 
 - [ ] Add the other two student IDs to `frontend/src/constants/team.js`. Until then, the About page shows "Student ID to add" under each of those two names.
-- [ ] Review `dev` and merge it into `main`: the Dashboard and the About page are not in `main` yet.
+- [x] Review `dev` and merge it into `main` (pull request #13).
+- [ ] Review `ml-model`, merge it into `dev`, then merge `dev` into `main`, so the rent model and the documents are submitted.
+- [ ] Decide each finding in `docs/code-review.md`: Fixed, or Accepted with the team's reason.
+- [ ] Fill in the manual checks in `docs/test-report.md`: AC-16, AC-17, AC-23 and the browsers.
 - [ ] Optional: the other two members' photos. Put each in `frontend/src/assets/team/` at any size and write its file name in `frontend/src/constants/team.js`.
-- [ ] Download the Kaggle CSV into `frontend/data-raw/`. Git ignores that folder: never commit the file. Task 1 and the AI model wait for it.
+- [ ] Download the Kaggle CSV into `frontend/data-raw/` for task 1. The AI model keeps its own copy in `ai-model/data-raw/`. Git ignores both folders: never commit the file.
 - [ ] Ask the instructor the open questions in SRS section 15.3, above all whether the dataset may be published and whether changes must survive a page reload. Until the dataset question is answered, do not commit the data files that task 1 produces.
 - [ ] Copy the new SRS section 11.2 into the team's master SRS document.
-- [ ] Walk AC-16 (keyboard only) and AC-23 (360 px) by hand in a real browser. No test can make these two, and the test report has to list them as manual checks.
-
+- [ ] Copy FR-ADD-12 to FR-ADD-15, the new SRS section 7.6 and the six new messages in Appendix C.2 into the team's master SRS document.
 ## Dates
 
 | Dates in October | Goal |

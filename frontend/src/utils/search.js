@@ -11,6 +11,7 @@ import { toWholeNumber } from './validation.js';
 export const EMPTY_FILTERS = {
   cities: [],
   statuses: [],
+  amenities: [],
   propertyType: '',
   rentFrom: '',
   rentTo: '',
@@ -119,12 +120,20 @@ export function matchesFilters(property, filters = EMPTY_FILTERS, skip = {}) {
     return false;
   }
 
+  // Every ticked amenity must be present, not just one of them (FR-SRC-10).
+  if (
+    filters.amenities?.length > 0 &&
+    !filters.amenities.every((key) => property.amenities?.[key])
+  ) {
+    return false;
+  }
+
   return true;
 }
 
 /**
  * The properties that satisfy the search box and every filter at once (FR-SRC-05). The order of
- * the input is kept; sorting is FR-SRC-09 and belongs to stage 2.
+ * the input is kept: sorting is a separate step, in `utils/sort.js` (FR-SRC-09).
  *
  * @param {Array<Record<string, unknown>>} properties
  * @param {{ query?: string, filters?: typeof EMPTY_FILTERS, skip?: { rent?: boolean, size?: boolean } }} [options]
@@ -154,4 +163,54 @@ export function isSearchActive({ query = '', filters = EMPTY_FILTERS } = {}) {
     if (Array.isArray(empty)) return (value?.length ?? 0) > 0;
     return (value ?? '') !== '';
   });
+}
+
+/** How each single-value filter is worded on its chip (FR-SRC-13). */
+const CHIP_LABELS = {
+  propertyType: (value) => `Type: ${value}`,
+  minBedrooms: (value) => `Bedrooms: ${value}+`,
+  rentFrom: (value) => `Rent from ${value} SAR`,
+  rentTo: (value) => `Rent to ${value} SAR`,
+  sizeFrom: (value) => `Size from ${value} m²`,
+  sizeTo: (value) => `Size to ${value} m²`,
+};
+
+/**
+ * One chip per filter that is set, so the user can see and undo each one without opening the
+ * filter panel (FR-SRC-13). The search text is not a chip: it is visible in the search box.
+ *
+ * @param {typeof EMPTY_FILTERS} filters
+ * @returns {Array<{ id: string, label: string, name: string, value: string | null }>} `name` is
+ *   the filter to change and `value` the one entry to remove, or null to clear the whole filter.
+ */
+export function activeFilterChips(filters = EMPTY_FILTERS) {
+  /** @type {Array<{ id: string, label: string, name: string, value: string | null }>} */
+  const chips = [];
+
+  for (const name of ['cities', 'statuses']) {
+    for (const value of filters[name] ?? []) {
+      chips.push({ id: `${name}-${value}`, label: value, name, value });
+    }
+  }
+
+  for (const key of filters.amenities ?? []) {
+    const amenity = AMENITIES.find((each) => each.key === key);
+    if (amenity) {
+      chips.push({
+        id: `amenities-${key}`,
+        label: amenity.label,
+        name: 'amenities',
+        value: key,
+      });
+    }
+  }
+
+  for (const [name, label] of Object.entries(CHIP_LABELS)) {
+    const value = filters[name] ?? '';
+    if (value !== '') {
+      chips.push({ id: name, label: label(value), name, value: null });
+    }
+  }
+
+  return chips;
 }

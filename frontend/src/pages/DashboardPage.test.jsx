@@ -90,12 +90,12 @@ describe('DashboardPage: AC-14 the figures follow a change (FR-DSH-03)', () => {
       );
 
     await user.selectOptions(field('City'), 'Riyadh');
-    await user.type(field('District'), 'Al Rabwah');
+    await user.selectOptions(field('District'), 'Al Rabwah');
     await user.type(field('Size (m²)'), '400');
-    await user.type(field('Age (years)'), '3');
-    await user.type(field('Bedrooms'), '5');
-    await user.type(field('Bathrooms'), '4');
-    await user.type(field('Living rooms'), '2');
+    await user.selectOptions(field('Age (years)'), '3');
+    await user.selectOptions(field('Bedrooms'), '5');
+    await user.selectOptions(field('Bathrooms'), '4');
+    await user.selectOptions(field('Living rooms'), '2');
     await user.type(field('Yearly rent (SAR)'), '60000');
     await user.selectOptions(field('Status'), 'Occupied');
     await user.type(field('Tenant name'), 'Sara Al Otaibi');
