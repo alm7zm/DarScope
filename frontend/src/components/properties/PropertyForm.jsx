@@ -10,12 +10,17 @@ import { TEXT } from '../../constants/messages.js';
 import {
   AMENITIES,
   CITIES,
+  DISTRICTS,
   FRONTS,
   PROPERTY_TYPES,
   STATUSES,
   emptyAmenities,
+  maxDigits,
+  numberChoices,
 } from '../../constants/options.js';
 import { validateProperty } from '../../utils/validation.js';
+import DistrictField from './DistrictField.jsx';
+import RentSuggestion from './RentSuggestion.jsx';
 import styles from './PropertyForm.module.css';
 
 /**
@@ -122,6 +127,14 @@ export default function PropertyForm({ property, onSave, onCancel }) {
     formRef.current?.querySelector(`#${field}`)?.focus();
   }
 
+  /** A district belongs to one city, so a new city keeps it only if the city has it too. */
+  function setCity(city) {
+    setField('city', city);
+    if (values.district && !(DISTRICTS[city] ?? []).includes(values.district)) {
+      setField('district', '');
+    }
+  }
+
   function setAmenity(key, checked) {
     setValues((current) => ({
       ...current,
@@ -172,13 +185,10 @@ export default function PropertyForm({ property, onSave, onCancel }) {
             options={CITIES}
             placeholder="Choose a city"
             error={errors.city}
-            onChange={(value) => setField('city', value)}
+            onChange={setCity}
           />
-          <TextField
-            id="district"
-            label="District"
-            required
-            hint="2 to 60 characters, in Arabic or English"
+          <DistrictField
+            city={values.city}
             value={values.district}
             error={errors.district}
             onChange={(value) => setField('district', value)}
@@ -212,44 +222,50 @@ export default function PropertyForm({ property, onSave, onCancel }) {
             label="Size (m²)"
             required
             numeric
+            maxDigits={maxDigits('sizeSqm')}
             hint="20 to 100,000"
             value={values.sizeSqm}
             error={errors.sizeSqm}
             onChange={(value) => setField('sizeSqm', value)}
           />
-          <TextField
+          {/* FR-ADD-15: whole numbers from a list, so none can be mistyped. */}
+          <SelectField
             id="propertyAgeYears"
             label="Age (years)"
             required
-            numeric
-            hint="0 to 100; 0 means new"
+            hint="0 means new"
+            placeholder="Choose"
+            options={numberChoices('propertyAgeYears')}
             value={values.propertyAgeYears}
             error={errors.propertyAgeYears}
             onChange={(value) => setField('propertyAgeYears', value)}
           />
-          <TextField
+          <SelectField
             id="bedrooms"
             label="Bedrooms"
             required
-            numeric
+            placeholder="Choose"
+            options={numberChoices('bedrooms')}
             value={values.bedrooms}
             error={errors.bedrooms}
             onChange={(value) => setField('bedrooms', value)}
           />
-          <TextField
+          <SelectField
             id="bathrooms"
             label="Bathrooms"
             required
-            numeric
+            placeholder="Choose"
+            options={numberChoices('bathrooms')}
             value={values.bathrooms}
             error={errors.bathrooms}
             onChange={(value) => setField('bathrooms', value)}
           />
-          <TextField
+          <SelectField
             id="livingRooms"
             label="Living rooms"
             required
-            numeric
+            placeholder="Choose"
+            options={numberChoices('livingRooms')}
             value={values.livingRooms}
             error={errors.livingRooms}
             onChange={(value) => setField('livingRooms', value)}
@@ -280,11 +296,19 @@ export default function PropertyForm({ property, onSave, onCancel }) {
             label="Yearly rent (SAR)"
             required
             numeric
+            maxDigits={maxDigits('yearlyRentSar')}
             hint="1,000 to 10,000,000"
             value={values.yearlyRentSar}
             error={errors.yearlyRentSar}
             onChange={(value) => setField('yearlyRentSar', value)}
           />
+          {/* FR-ADD-13: the rent suggestion sits beside Yearly rent, on Add and Edit. */}
+          <div className={styles.suggestion}>
+            <RentSuggestion
+              values={values}
+              onUse={(rent) => setField('yearlyRentSar', String(rent))}
+            />
+          </div>
           <SelectField
             id="status"
             label="Status"
