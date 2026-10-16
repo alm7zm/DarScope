@@ -8,7 +8,8 @@ Everything here is defined once, in
 variables and never write a raw colour, size or spacing value (UI-06). If a value below and the
 token file disagree, **the token file is right** and this document is out of date.
 
-> **Still to do:** the wireframes. This covers the style half of PD-03 only.
+This is the style half of PD-03. The other half, a wireframe for every screen, is in
+[wireframes.md](wireframes.md).
 
 ## Principles
 

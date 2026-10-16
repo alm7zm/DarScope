@@ -149,7 +149,7 @@ Each one loads when you open a file it covers. When you start in an area that ha
 The brief asks for all of these in the repository by the deadline (SRS section 12):
 
 - Requirements: `docs/SRS.md`
-- Visual design: wireframes and a style guide in `docs/design/`. The style guide is written; the wireframes are not.
+- Visual design: `docs/design/style-guide.md` and `docs/design/wireframes.md`
 - Documentation: `docs/architecture.md`, `docs/features.md`, `README.md`
 - Tests, and proof they ran: test files plus `docs/test-report.md`
 - Code review of security, performance, code quality and code reuse: `docs/code-review.md`
