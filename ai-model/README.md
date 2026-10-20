@@ -2,7 +2,7 @@
 
 A model that predicts the yearly rent of a rental house from its attributes: city, district, size, rooms, age and amenities. It is trained on the public Kaggle dataset [Saudi Arabia Real Estate (AQAR)](https://www.kaggle.com/datasets/lama122/saudi-arabia-real-estate-aqar), which holds rental listings from 2021.
 
-**Status: built.** `prepare.ipynb` explores and cleans the data, compares models, takes the final test and exports the chosen model. The app shows its suggestion beside Yearly rent on the Add and Edit forms (FR-ADD-13, SRS 7.6), and its district list, with an English name for each district, fills the form's District dropdown (FR-ADD-14). `plan.md` lists every step and what it found.
+**Status: built.** `prepare.ipynb` explores and cleans the data, compares models, takes the final test and exports the chosen model. The app shows its suggestion beside Yearly rent on the Add and Edit forms (FR-ADD-13, SRS 7.6), and its district list, with an English name for each district, fills the form's District dropdown (FR-ADD-14). `plan.md` lists every step and what it found, and [`prediction model.md`](prediction%20model.md) is the full write-up: the exploration, the cleaning, every model tried and its scores.
 
 ## Results
 
@@ -19,6 +19,7 @@ The score holds for yearly rents between 10,000 and 500,000 SAR in the 2021 mark
 1. Download the CSV into `ai-model/data-raw/` (`plan.md`, step 1). Git ignores that folder.
 2. Install the libraries: `pip install -r requirements.txt`.
 3. Open `prepare.ipynb` and click Run All. Step 19 rewrites `frontend/src/data/rent-model.json` and `frontend/src/data/districts.json`. Then copy the two rents it prints into `frontend/src/utils/rentModel.test.js`.
+4. Step 19 also saves the trained model for Python, as `models/rent-model.joblib`: `joblib.load("models/rent-model.joblib").predict(houses)` gives rents without training again. Git ignores the `models/` folder. Load only a file you made yourself, with scikit-learn 1.7.2.
 
 ## Rules that keep the result honest
 
