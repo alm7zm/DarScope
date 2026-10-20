@@ -53,14 +53,33 @@ update and delete, is read out by screen readers, and clears itself after 5 seco
 - The current page's menu item is a filled pill and carries `aria-current="page"` (FR-NAV-04).
   Market insights joins the menu once its page is built (FR-NAV-02).
 - The first Tab shows a "Skip to content" link above the header.
-- On a phone the menu wraps onto a second line. **Planned (FR-NAV-08):** below 768 px it folds
-  behind a Menu button.
+- Below 768 px the menu folds behind a Menu button (FR-NAV-08). The button opens the items as a
+  panel under the header; choosing an item or pressing Esc closes it, and Esc puts focus back
+  on the button.
 
 ```text
 ┌─ every page, 360 px ───────────────┐
-│ [D] Darscope                       │
-│ (Dashboard)  (Properties)          │
-│ (Add property)  (About)            │
+│ [D] Darscope              [≡ Menu] │
+│ ────────────────────────────────── │
+│ Page title                         │
+│ One line about the page            │
+│   … one column …                   │
+│ ────────────────────────────────── │
+│ SE411 · Fall 2026-27 · Part 1      │
+│ Data credit                        │
+│ Changes are kept only until        │
+│ the page reloads.                  │
+└────────────────────────────────────┘
+```
+
+```text
+┌─ menu open, 360 px ────────────────┐
+│ [D] Darscope              [≡ Menu] │
+│ ────────────────────────────────── │
+│ Dashboard                          │
+│ (Properties)                       │
+│ Add property                       │
+│ About                              │
 │ ────────────────────────────────── │
 │ Page title                         │
 │ One line about the page            │

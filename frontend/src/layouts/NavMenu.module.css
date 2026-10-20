@@ -1,10 +1,84 @@
+/* Below 768 px the menu folds behind the Menu button and opens as a panel under the header
+   (FR-NAV-08). The sticky header is the panel's containing block. From 768 px the button goes
+   and the items sit in one row. */
+.nav {
+  margin-left: auto;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: var(--color-surface-sunken);
+}
+
+/* Three bars drawn from one element: the bar itself and a shadow above and below it. */
+.bars {
+  width: 1rem;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  box-shadow:
+    0 -5px 0 currentColor,
+    0 5px 0 currentColor;
+}
+
 .list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
+  display: none;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.list[data-open='true'] {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+@media (min-width: 48rem) {
+  .nav {
+    margin-left: 0;
+  }
+
+  .toggle {
+    display: none;
+  }
+
+  /* The open state is ignored here, so a menu left open on a phone cannot stay a panel after
+     the window widens. */
+  .list,
+  .list[data-open='true'] {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
 }
 
 .link {
