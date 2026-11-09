@@ -5,16 +5,27 @@ import SearchControls from '../components/search/SearchControls.jsx';
 import Button, { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
 import { EmptyState, LoadError } from '../components/ui/PageStates.jsx';
+import Pager from '../components/ui/Pager.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
 import { usePropertySearch } from '../hooks/usePropertySearch.js';
+import { useServerPage } from '../hooks/useServerPage.js';
 import { PATHS } from '../routes/paths.js';
+import { paginate, sortProperties } from '../utils/sort.js';
 import styles from './PropertyListPage.module.css';
 
-/** Find and browse properties (SRS 4.3 and 6). */
+/**
+ * Find and browse properties (SRS 4.3 and 6), a page at a time (FR-LST-10).
+ *
+ * With nothing searched, each page comes from the Spring server (Part 2 brief, requirement 4).
+ * The search and filters work in the browser on the whole portfolio, Arabic matching included,
+ * so while one is active the browser cuts the matches into pages itself. Both orders are newest
+ * first (FR-SRC-09).
+ */
 export default function PropertyListPage() {
   const { properties, loading, loadError } = usePortfolio();
   const search = usePropertySearch(properties);
+  const server = useServerPage(search.page, search.perPage, !search.active);
   /** The property awaiting a confirmed delete, or null (FR-DEL-02). */
   const [pendingDelete, setPendingDelete] = useState(null);
 
@@ -26,15 +37,24 @@ export default function PropertyListPage() {
     );
   }
 
-  if (loadError) {
+  if (loadError || server.error) {
     return (
       <Page title="Properties">
-        <LoadError reason={loadError} />
+        <LoadError reason={loadError ?? server.error} />
       </Page>
     );
   }
 
   const { matching } = search;
+  const shown = search.active
+    ? {
+        ...paginate(sortProperties(matching), {
+          page: search.page,
+          perPage: search.perPage,
+        }),
+        total: matching.length,
+      }
+    : server.result;
 
   return (
     // No "Add property" action in the header: FR-NAV-01 already puts one in the menu, and a
@@ -63,8 +83,22 @@ export default function PropertyListPage() {
 
       {matching.length === 0 ? (
         <NothingToShow searching={search.active} onClearAll={search.clearAll} />
+      ) : shown === null ? (
+        <p>Loading properties…</p>
       ) : (
-        <PropertyTable properties={matching} onDelete={setPendingDelete} />
+        <>
+          <PropertyTable properties={shown.items} onDelete={setPendingDelete} />
+          <Pager
+            page={shown.page}
+            pageCount={shown.pageCount}
+            from={shown.from}
+            to={shown.to}
+            total={shown.total}
+            perPage={search.perPage}
+            onPageChange={search.setPage}
+            onPerPageChange={search.setPerPage}
+          />
+        </>
       )}
 
       {/* ponytail: after a confirmed delete the row that opened the dialog is gone, so the

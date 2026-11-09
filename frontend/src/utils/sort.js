@@ -99,5 +99,11 @@ export function paginate(items, { page = 1, perPage = 10 } = {}) {
   };
 }
 
-/** How many properties a page may show (FR-LST-10). The first is the default. */
-export const PAGE_SIZES = [10, 25, 50];
+/**
+ * How many properties a page may show (FR-LST-10). FR-LST-10 lists 10, 25 and 50; Part 2 added 5,
+ * so a small portfolio such as the 8 starting properties still shows more than one page.
+ */
+export const PAGE_SIZES = [5, 10, 25, 50];
+
+/** The page size the list starts with (FR-LST-10). */
+export const DEFAULT_PAGE_SIZE = 10;
