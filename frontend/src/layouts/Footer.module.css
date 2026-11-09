@@ -14,9 +14,3 @@
   margin: 0 auto;
   padding: var(--space-5);
 }
-
-/* The reload notice is the one line here a user may need to act on (FR-DAT-06). */
-.notice {
-  color: var(--color-text);
-  font-weight: var(--font-weight-medium);
-}

@@ -31,12 +31,13 @@ export const MESSAGES = {
   added: (id) => `Property ${id} added`,
   updated: (id) => `Property ${id} updated`,
   deleted: (id) => `Property ${id} deleted`,
-  restored: (id) => `Property ${id} restored`,
 };
 
 /** Fixed messages with no variable part (SRS Appendix C.2). */
 export const TEXT = {
-  demoDataReset: 'Demo data restored',
+  // Part 2: the data lives on the Spring server. Not in Appendix C, which predates the server.
+  serverUnavailable:
+    'The Darscope server could not be reached. Check that it is running, then try again.',
   noSearchMatches: 'No properties match your search.',
   emptyPortfolio: 'No properties yet. Add your first property.',
   propertyNotFound: 'Property not found',

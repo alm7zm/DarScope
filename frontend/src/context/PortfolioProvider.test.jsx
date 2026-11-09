@@ -26,7 +26,6 @@ function Probe() {
     addProperty,
     updateProperty,
     deleteProperty,
-    resetDemoData,
     clearMessage,
   } = usePortfolio();
 
@@ -50,9 +49,6 @@ function Probe() {
       </button>
       <button type="button" onClick={() => deleteProperty('RP-0001')}>
         remove
-      </button>
-      <button type="button" onClick={() => resetDemoData()}>
-        reset
       </button>
       <button type="button" onClick={clearMessage}>
         dismiss
@@ -115,24 +111,6 @@ describe('PortfolioProvider', () => {
     );
     expect(screen.getByTestId('message')).toHaveTextContent(
       MESSAGES.deleted('RP-0001'),
-    );
-  });
-
-  it('restores the seed on reset (FR-DAT-05)', async () => {
-    const user = await renderProbe();
-    const before = Number(screen.getByTestId('count').textContent);
-
-    await user.click(screen.getByRole('button', { name: 'remove' }));
-    await waitFor(() =>
-      expect(Number(screen.getByTestId('count').textContent)).toBe(before - 1),
-    );
-
-    await user.click(screen.getByRole('button', { name: 'reset' }));
-    await waitFor(() =>
-      expect(Number(screen.getByTestId('count').textContent)).toBe(before),
-    );
-    expect(screen.getByTestId('message')).toHaveTextContent(
-      'Demo data restored',
     );
   });
 

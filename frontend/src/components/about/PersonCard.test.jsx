@@ -15,6 +15,7 @@ function makePerson(overrides = {}) {
     bio: 'Builds the search and the filters.',
     photo: 'sara.jpg',
     email: 'sara@example.com',
+    website: 'https://sara.example.com',
     linkedin: 'https://www.linkedin.com/in/sara-example',
     github: 'https://github.com/sara-example',
     ...overrides,
@@ -61,12 +62,20 @@ describe('PersonCard', () => {
     expect(screen.getByText('SQ')).toBeInTheDocument();
   });
 
-  it('links the email, LinkedIn and GitHub, each naming the person', () => {
+  it('links the email, portfolio, LinkedIn and GitHub, each naming the person', () => {
     render(<PersonCard person={makePerson()} />);
 
     expect(
       screen.getByRole('link', { name: 'sara@example.com' }),
     ).toHaveAttribute('href', 'mailto:sara@example.com');
+    const portfolio = screen.getByRole('link', {
+      name: 'Portfolio of Sara Al Qahtani',
+    });
+    expect(portfolio).toHaveAttribute('href', 'https://sara.example.com');
+    expect(portfolio).toHaveTextContent('Portfolio');
+    // Opens in a new tab without giving the other site a handle on this one.
+    expect(portfolio).toHaveAttribute('target', '_blank');
+    expect(portfolio).toHaveAttribute('rel', 'noreferrer noopener');
     expect(
       screen.getByRole('link', { name: 'LinkedIn profile of Sara Al Qahtani' }),
     ).toHaveAttribute('href', 'https://www.linkedin.com/in/sara-example');
@@ -78,7 +87,13 @@ describe('PersonCard', () => {
   it('leaves out whatever is empty, rather than showing a dead link', () => {
     render(
       <PersonCard
-        person={{ name: 'Sara Al Qahtani', bio: '', email: '', github: '' }}
+        person={{
+          name: 'Sara Al Qahtani',
+          bio: '',
+          email: '',
+          website: '',
+          github: '',
+        }}
       />,
     );
 
