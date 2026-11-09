@@ -3,7 +3,6 @@ import PersonCard from '../components/about/PersonCard.jsx';
 import TeamGallery from '../components/about/TeamGallery.jsx';
 import Page from '../components/ui/Page.jsx';
 import {
-  AI_TOOLS,
   COURSE,
   DATASET,
   INSTRUCTOR,
@@ -65,10 +64,6 @@ export default function AboutPage() {
                 <dt className={styles.factLabel}>Term</dt>
                 <dd className={styles.factValue}>{COURSE.term}</dd>
               </div>
-              <div className={styles.fact}>
-                <dt className={styles.factLabel}>Submission</dt>
-                <dd className={styles.factValue}>{COURSE.part}</dd>
-              </div>
             </dl>
           </section>
         </ViewTransition>
@@ -92,8 +87,8 @@ export default function AboutPage() {
               >
                 GitHub
               </a>
-              . Part 1 runs entirely in the browser: there is no server and no
-              database, so changes are kept only until the page reloads.
+              . Part 1 is the React app. Part 2 adds a Java Spring server, which
+              keeps the properties in its database.
             </p>
           </section>
         </ViewTransition>
@@ -110,11 +105,6 @@ export default function AboutPage() {
               </a>
               , published on {DATASET.source} in {DATASET.year}. The sample
               properties and their tenants are invented.
-            </p>
-            <p className={styles.note}>
-              Built with the help of {AI_TOOLS.join(', ')}. Which tool produced
-              each part is recorded in{' '}
-              <code className={styles.code}>docs/ai-usage.md</code>.
             </p>
           </section>
         </ViewTransition>
