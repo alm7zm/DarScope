@@ -7,9 +7,9 @@ Darscope is a web app that manages one company's rental villas and duplexes in R
 | Part | Folder | What it is | Who writes the code |
 | --- | --- | --- | --- |
 | 1 | `frontend/` | React single-page app. Data is a collection of objects held in memory. Due 17 October 2026. | You, reviewed by the team |
-| 2 | `backend/` | Backend that replaces the in-memory data service. | The team, by hand |
+| 2 | `backend/` | Java Spring server whose REST API replaces the in-memory data service. Brief: `docs/part-2-brief.md`. Due 14 November 2026. | The team, by hand |
 
-**Never write or change code under `backend/` on your own.** The course requires Part 2 to be coded by hand. If a request needs backend code, say so and stop until the user confirms that the course rules allow it.
+**Never write or change code under `backend/` on your own.** The Part 1 brief says the backend "will be manually coded in part2", and the Part 2 brief does not change that. If a request needs backend code, say so and stop until the user confirms that the course rules allow it.
 
 ## Where the truth lives
 
@@ -25,8 +25,8 @@ darscope/
 ├── CLAUDE.md, README.md
 ├── .gitignore, .gitattributes
 ├── .claude/            rules, settings, skills
-├── docs/               SRS.md, tasks.md, design/, architecture.md, features.md,
-│                       test-report.md, code-review.md, ai-usage.md
+├── docs/               SRS.md, part-2-brief.md, tasks.md, design/, architecture.md,
+│                       features.md, test-report.md, code-review.md, ai-usage.md
 ├── frontend/           Part 1
 │   ├── package.json, index.html, vite.config.js, eslint.config.js
 │   ├── public/         favicon.svg
@@ -51,7 +51,7 @@ darscope/
 │       ├── assets/     team/: the team photos, any size; the build crops and shrinks them
 │       └── test/       setup.js, shared fixtures and helpers
 ├── ai-model/           rent-prediction model, trained outside the app; feeds the rent suggestion
-└── backend/            Part 2, hand-coded later
+└── backend/            Part 2: the Java Spring server, hand-coded by the team
 ```
 
 The layout is layered: each folder under `src/` holds one kind of code. A folder appears when its first file is written, so not all of them exist yet. The open tasks, most important first, are in `docs/tasks.md`.
@@ -155,6 +155,8 @@ The brief asks for all of these in the repository by the deadline (SRS section 1
 - Code review of security, performance, code quality and code reuse: `docs/code-review.md`
 - A record of which AI tool produced each deliverable: `docs/ai-usage.md`. Update it when you produce one.
 
+Part 2 adds, by 14 November 2026: the Spring server integrated with the frontend, a JUnit and Mockito test suite for the whole backend, and a two-slide presentation (the architecture, and a REST route table like the one in lab 14), followed by a demo and questions about the code.
+
 ## Still undecided
 
 Do not assume an answer to any of these. Ask the user when a task depends on one (SRS section 15.3).
@@ -164,3 +166,4 @@ Do not assume an answer to any of these. Ask the user when a task depends on one
 - Whether the app must be deployed online.
 - Whether the dataset's licence allows publishing data derived from it. Tell the user before generated data files are committed. The rent model's weights are the one exception the team has already accepted.
 - Whether every non-duplex listing in the dataset is a villa (assumption A-06).
+- Whether the Part 2 server keeps its data in a database or in memory. The brief asks for neither.
