@@ -60,6 +60,15 @@ export const TEAM = [
     linkedin: '',
     github: 'https://github.com/221110415-oss',
   },
+  {
+    name: 'Salman Almadi',
+    studentId: '223110051',
+    bio: 'Software Engineering senior at Prince Sultan University',
+    photo: '',
+    email: 'salman.almadi@gmail.com',
+    linkedin: 'www.linkedin.com/in/salman-almadi',
+    github: 'https://github.com/Salman-Almadi',
+  },
 ];
 
 /**
