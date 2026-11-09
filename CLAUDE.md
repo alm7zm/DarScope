@@ -1,6 +1,6 @@
 # Darscope
 
-Darscope is a web app that manages one company's rental villas and duplexes in Riyadh, Jeddah, Dammam and Al Khobar. The name joins *dar* (Arabic for "house") and *scope*. It is the SE411 course project (Fall 2026-27) of a three-student team, and this repository is public.
+Darscope is a web app that manages one company's rental villas and duplexes in Riyadh, Jeddah, Dammam and Al Khobar. The name joins *dar* (Arabic for "house") and *scope*. It is the SE411 course project (Fall 2026-27) of a four-student team (a fourth member joined in Part 2 and adds his own entry to `frontend/src/constants/team.js`), and this repository is public.
 
 ## Two parts, one repository
 
@@ -25,31 +25,32 @@ darscope/
 ├── CLAUDE.md, README.md
 ├── .gitignore, .gitattributes
 ├── .claude/            rules, settings, skills
-├── docs/               SRS.md, part-2-brief.md, tasks.md, design/, architecture.md,
-│                       features.md, test-report.md, code-review.md, ai-usage.md
+├── docs/               SRS.md, part-2-brief.md, backend-plan.md, tasks.md, design/,
+│                       architecture.md, features.md, test-report.md, code-review.md,
+│                       ai-usage.md
 ├── frontend/           Part 1
 │   ├── package.json, index.html, vite.config.js, eslint.config.js
 │   ├── public/         favicon.svg
-│   ├── scripts/        prepare-data.mjs
+│   ├── scripts/        prepare-data.mjs, not written yet (for market.reference.json)
 │   └── src/
 │       ├── main.jsx, App.jsx
 │       ├── routes/     routes.jsx (the URL to page table), paths.js
 │       ├── layouts/    AppLayout, NavMenu, Footer
 │       ├── pages/      one component per URL
-│       ├── components/ ui/ (Button, Badge, Dialog, FormField, Message, Page), then one
-│       │               folder per feature: properties/, dashboard/, market/, search/
+│       ├── components/ ui/ (Button, Badge, Dialog, FormField, Message, Page, Pager), then
+│       │               one folder per feature: properties/, dashboard/, market/, search/
 │       ├── context/    portfolio context, reducer and provider
-│       ├── hooks/      shared hooks: usePortfolio, usePropertySearch
+│       ├── hooks/      shared hooks: usePortfolio, usePropertySearch, useServerPage
 │       ├── services/   propertyService.js, marketService.js, embeddingService.js,
 │       │               rentModelService.js
 │       ├── utils/      validation, search, sort, arabic, format, stats, similarity, estimate,
 │       │               rentModel
 │       ├── constants/  choices, thresholds, messages, team details
 │       ├── styles/     tokens.css, global.css
-│       ├── data/       portfolio.seed.json, market.reference.json, rent-model.json,
-│       │               districts.json
+│       ├── data/       rent-model.json, districts.json (market.reference.json once built)
 │       ├── assets/     team/: the team photos, any size; the build crops and shrinks them
-│       └── test/       setup.js, shared fixtures and helpers
+│       └── test/       setup.js, shared fixtures and helpers, and the in-memory stand-in
+│                       for the server: fakePropertyService.js, portfolio.seed.json
 ├── ai-model/           rent-prediction model, trained outside the app; feeds the rent suggestion
 └── backend/            Part 2: the Java Spring server, hand-coded by the team
 ```
@@ -73,7 +74,8 @@ Run these inside `frontend/`. If `frontend/package.json` does not exist, the app
 | `npm run lint` | Check the code with ESLint |
 | `npm run format` | Format the code with Prettier |
 | `npm run build` | Build static files into `frontend/dist/` |
-| `npm run prepare-data` | Rebuild the two JSON data files from the raw CSV |
+
+`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` (H2), the same with `-Dspring-boot.run.profiles=supabase`, and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
 
 The team works on Windows. Every npm script must also run on macOS and Linux, so use Node scripts instead of shell commands such as `rm`, `cp` or `VAR=value command`.
 
@@ -87,6 +89,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 - Vitest with React Testing Library. ESLint and Prettier.
 - `@huggingface/transformers` version 4 or later, loaded only when search by meaning is first turned on.
 - `vite-imagetools`, a development dependency added on 15 October 2026, which crops and shrinks the team photos when the app is built.
+- Part 2, chosen by the team on 9 November 2026: Java 21, Spring Boot 4.1 with Maven, Spring Data JDBC and Bean Validation, as in lab 14; Supabase Postgres, with H2 for local runs; JUnit and Mockito. The contract is in `docs/backend-plan.md`.
 
 ## Branches
 
@@ -94,10 +97,10 @@ These are the defaults from SRS section 11. Ask before you swap one.
 
 ## Rules that never bend
 
-1. Part 1 is frontend only: no server code, no database, no API keys, no secrets, no analytics, no cookies.
+1. The frontend holds no server code, no database, no API keys, no secrets, no analytics and no cookies. The Supabase password lives only in each person's git-ignored `backend/.env`.
 2. The app manages one kind of asset: rental houses.
-3. The portfolio is a collection of objects in memory, loaded from the seed file. Changes are lost when the page reloads. Do not add `localStorage` or any other persistence unless the user says the instructor asked for it.
-4. Components never import the data files or change the collection themselves. Every read and write goes through `frontend/src/services/propertyService.js`, whose functions return Promises. Part 2 replaces that one module.
+3. The portfolio lives in the Spring server's database. The frontend keeps only what the server returned, in the portfolio context. Do not add `localStorage` or any other browser persistence unless the user says the instructor asked for it.
+4. Components never import data files or change the collection themselves. Every read and write goes through `frontend/src/services/propertyService.js`, whose functions return Promises and call the server's REST routes (`docs/backend-plan.md`). In tests, `src/test/setup.js` swaps it for `src/test/fakePropertyService.js`. If a route or its JSON has to change, change the contract in `docs/backend-plan.md` first and tell the user: the team codes against it.
 5. The interface text is English. Property data may be Arabic or English, so render data text with `dir="auto"` and never assume left-to-right.
 6. Render user-entered text as text. Never use `dangerouslySetInnerHTML`.
 7. The AI features are optional extras. No Must requirement may depend on them, and each one must fail safely.
@@ -161,9 +164,7 @@ Part 2 adds, by 14 November 2026: the Spring server integrated with the frontend
 
 Do not assume an answer to any of these. Ask the user when a task depends on one (SRS section 15.3).
 
-- Whether changes must survive a page reload.
 - Whether TypeScript, or a particular test, styling or build tool, is required or forbidden.
 - Whether the app must be deployed online.
 - Whether the dataset's licence allows publishing data derived from it. Tell the user before generated data files are committed. The rent model's weights are the one exception the team has already accepted.
 - Whether every non-duplex listing in the dataset is a villa (assumption A-06).
-- Whether the Part 2 server keeps its data in a database or in memory. The brief asks for neither.
