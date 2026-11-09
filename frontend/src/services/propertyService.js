@@ -1,22 +1,17 @@
 /**
- * The only code that reads or writes properties (FR-DAT-03), and the only module Part 2 replaces.
- * Part 1 keeps the portfolio in a module-level variable, seeded from `portfolio.seed.json`
- * (FR-DAT-02). Every operation returns a Promise, so the pages already treat a write the way they
- * will treat an HTTP call.
+ * The only code that reads or writes properties (FR-DAT-03). Since Part 2 it calls the team's
+ * Spring server, whose routes are in `docs/backend-plan.md`. During development Vite forwards
+ * `/api` to the server on port 8080 (`vite.config.js`).
+ *
+ * The server keeps the shape of lab 14: a numeric ID, the 13 amenities as flat fields, and null
+ * for an empty field. The app keeps its own shape: `RP-0007`, an `amenities` object, and empty
+ * text. `fromServer` and `toServer` translate between the two, so no page sees the difference.
  */
-import seed from '../data/portfolio.seed.json';
 import { TEXT } from '../constants/messages.js';
+import { AMENITY_KEYS } from '../constants/options.js';
 import { normaliseValues, validateProperty } from '../utils/validation.js';
 
-/** The live portfolio. Replaced, never mutated in place (NFR-REL-04). */
-let portfolio = [];
-
-/**
- * The highest ID number issued this session. It only ever goes up, so the ID of a deleted
- * property is never given to a new one (FR-DEL-06, FR-DAT-04). Never derive the next ID from the
- * collection's length: deleting RP-0003 would then make the next new property RP-0003 again.
- */
-let highestIdIssued = 0;
+const BASE_URL = '/api/v1/properties';
 
 /** Thrown when a check in SRS Appendix C fails. `errors` holds one message per invalid field. */
 export class ValidationError extends Error {
@@ -38,45 +33,110 @@ export class NotFoundError extends Error {
   }
 }
 
-/** Read the number out of an ID such as `RP-0007`. Returns 0 for anything else. */
-function idNumber(id) {
+/** The server's number for an ID such as `RP-0007`. Returns 0 for anything else. */
+export function idNumber(id) {
   const match = /^RP-(\d+)$/.exec(String(id ?? ''));
   return match ? Number(match[1]) : 0;
 }
 
-/** `RP-` plus four digits, one higher than any ID issued so far (FR-ADD-04). */
-function nextId() {
-  highestIdIssued += 1;
-  return `RP-${String(highestIdIssued).padStart(4, '0')}`;
-}
-
-/** A deep copy, so a caller can never reach into the stored collection. */
-function copy(value) {
-  return structuredClone(value);
-}
-
-/** Load the seed into memory and set the ID counter above every seeded ID (FR-DAT-01). */
-function loadSeed() {
-  portfolio = copy(seed);
-  highestIdIssued = portfolio.reduce(
-    (highest, property) => Math.max(highest, idNumber(property.id)),
-    0,
-  );
-}
-
-loadSeed();
-
-/** Find a property's position, or -1. */
-function indexOf(id) {
-  return portfolio.findIndex((property) => property.id === id);
+/** The ID the app shows for the server's number: 7 becomes `RP-0007` (FR-ADD-04). */
+export function formatId(number) {
+  return `RP-${String(number).padStart(4, '0')}`;
 }
 
 /**
- * Every property in the portfolio.
- * @returns {Promise<Array<Record<string, unknown>>>} Never fails.
+ * A property as the server sends it, turned into the app's shape.
+ * @param {Record<string, unknown>} row
+ * @returns {Record<string, unknown>}
  */
-export function list() {
-  return Promise.resolve(copy(portfolio));
+export function fromServer(row) {
+  const property = {};
+  const amenities = {};
+  for (const [key, value] of Object.entries(row)) {
+    if (AMENITY_KEYS.includes(key)) amenities[key] = Boolean(value);
+    else property[key] = value ?? '';
+  }
+  return { ...property, id: formatId(row.id), amenities };
+}
+
+/**
+ * The form's values, checked and tidied, in the shape the server expects.
+ * @param {Record<string, unknown>} values Values that `validateProperty` accepted.
+ * @returns {Record<string, unknown>}
+ */
+export function toServer(values) {
+  const { amenities, ...fields } = normaliseValues(values);
+  const body = { ...amenities };
+  for (const [key, value] of Object.entries(fields)) {
+    body[key] = value === '' ? null : value;
+  }
+  return body;
+}
+
+/**
+ * One call to the server. Resolves with the parsed JSON, or null for an empty answer.
+ * @param {string} path Added to `/api/v1/properties`.
+ * @param {{ method?: string, body?: unknown, id?: string }} [options] `id` names the property a
+ *   404 is about.
+ */
+async function request(path, { method = 'GET', body, id } = {}) {
+  let response;
+  try {
+    response = await fetch(BASE_URL + path, {
+      method,
+      headers:
+        body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } catch {
+    // The server is not running, or the network is down.
+    throw new Error(TEXT.serverUnavailable);
+  }
+
+  if (response.ok) {
+    return response.status === 204 ? null : response.json();
+  }
+
+  const answer = await response.json().catch(() => ({}));
+  if (response.status === 400 && answer?.errors) {
+    throw new ValidationError(answer.errors);
+  }
+  if (response.status === 404) throw new NotFoundError(id);
+  // Vite's proxy also answers 5xx when the Spring server is not running.
+  throw new Error(TEXT.serverUnavailable);
+}
+
+/**
+ * Every property, for the Dashboard, the detail page and the search.
+ * @returns {Promise<Array<Record<string, unknown>>>}
+ */
+export async function list() {
+  // ponytail: one request of up to 1000. Loop over pages if the portfolio ever grows past that.
+  const answer = await request('?page=0&size=1000');
+  return answer.content.map(fromServer);
+}
+
+/**
+ * One page of properties, newest first, as the server cuts it (Part 2 brief, requirement 4).
+ * @param {number} page Counted from 1, as the user sees it. The server counts from 0.
+ * @param {number} perPage
+ * @returns {Promise<{ items: Array<Record<string, unknown>>, page: number, pageCount: number,
+ *   from: number, to: number, total: number }>} The same shape as `paginate` in `utils/sort.js`,
+ *   plus `total`.
+ */
+export async function listPage(page, perPage) {
+  const answer = await request(`?page=${page - 1}&size=${perPage}`);
+  const items = answer.content.map(fromServer);
+  const total = answer.page.totalElements;
+  const start = (page - 1) * perPage;
+  return {
+    items,
+    page,
+    pageCount: Math.max(1, answer.page.totalPages),
+    from: items.length === 0 ? 0 : start + 1,
+    to: start + items.length,
+    total,
+  };
 }
 
 /**
@@ -84,124 +144,51 @@ export function list() {
  * @param {string} id
  * @returns {Promise<Record<string, unknown>>} Rejects with NotFoundError when no property has it.
  */
-export function getById(id) {
-  const index = indexOf(id);
-  if (index === -1) return Promise.reject(new NotFoundError(id));
-  return Promise.resolve(copy(portfolio[index]));
+export async function getById(id) {
+  if (idNumber(id) === 0) throw new NotFoundError(id);
+  return fromServer(await request(`/${idNumber(id)}`, { id }));
 }
 
 /**
- * Add a property. The app sets the ID and both timestamps (FR-ADD-04).
+ * Add a property. The server sets the ID and both timestamps (FR-ADD-04).
  * @param {Record<string, unknown>} values Field values, without `id` or timestamps.
  * @returns {Promise<Record<string, unknown>>} Rejects with ValidationError when a check fails.
  */
-export function create(values) {
+export async function create(values) {
+  // Checked here first, so a mistake never costs a round trip. The server checks again.
   const errors = validateProperty(values);
-  if (Object.keys(errors).length > 0) {
-    return Promise.reject(new ValidationError(errors));
-  }
-
-  const now = new Date().toISOString();
-  const property = {
-    id: nextId(),
-    ...normaliseValues(values),
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  portfolio = [...portfolio, property];
-  return Promise.resolve(copy(property));
+  if (Object.keys(errors).length > 0) throw new ValidationError(errors);
+  return fromServer(
+    await request('', { method: 'POST', body: toServer(values) }),
+  );
 }
 
 /**
- * Change a property. `id` and `createdAt` never change; `updatedAt` is set on every save
- * (FR-UPD-03).
+ * Change a property. The server keeps `id` and `createdAt` and sets `updatedAt` (FR-UPD-03).
  * @param {string} id
  * @param {Record<string, unknown>} values
  * @returns {Promise<Record<string, unknown>>} Rejects when the ID is unknown or a check fails.
  */
-export function update(id, values) {
-  const index = indexOf(id);
-  if (index === -1) return Promise.reject(new NotFoundError(id));
-
+export async function update(id, values) {
+  if (idNumber(id) === 0) throw new NotFoundError(id);
   const errors = validateProperty(values);
-  if (Object.keys(errors).length > 0) {
-    return Promise.reject(new ValidationError(errors));
-  }
-
-  const existing = portfolio[index];
-  const property = {
-    ...normaliseValues(values),
-    id: existing.id,
-    createdAt: existing.createdAt,
-    updatedAt: new Date().toISOString(),
-  };
-
-  portfolio = portfolio.with(index, property);
-  return Promise.resolve(copy(property));
+  if (Object.keys(errors).length > 0) throw new ValidationError(errors);
+  return fromServer(
+    await request(`/${idNumber(id)}`, {
+      method: 'PUT',
+      body: toServer(values),
+      id,
+    }),
+  );
 }
 
 /**
- * Remove a property and return it, so that Undo can put it back (FR-DEL-03, FR-DEL-07).
+ * Delete a property (FR-DEL-03).
  * @param {string} id
- * @returns {Promise<Record<string, unknown>>} Rejects with NotFoundError when the ID is unknown.
+ * @returns {Promise<{ id: string }>} Rejects with NotFoundError when the ID is unknown.
  */
-export function remove(id) {
-  const index = indexOf(id);
-  if (index === -1) return Promise.reject(new NotFoundError(id));
-
-  const removed = portfolio[index];
-  portfolio = portfolio.filter((property) => property.id !== id);
-  return Promise.resolve(copy(removed));
-}
-
-/**
- * Put back a property that `remove` returned, with the same ID and values (FR-DEL-07).
- * @param {Record<string, unknown>} property
- * @returns {Promise<Record<string, unknown>>} Rejects when a property with that ID already exists.
- */
-export function restore(property) {
-  if (!property || indexOf(property.id) !== -1) {
-    return Promise.reject(
-      new Error(`A property with the ID ${property?.id} already exists.`),
-    );
-  }
-
-  // Put it back where its ID belongs, so the list does not jump the row to the end.
-  const restored = copy(property);
-  const position = portfolio.findIndex(
-    (existing) => idNumber(existing.id) > idNumber(restored.id),
-  );
-  portfolio =
-    position === -1
-      ? [...portfolio, restored]
-      : portfolio.toSpliced(position, 0, restored);
-
-  return Promise.resolve(copy(restored));
-}
-
-/**
- * Restore the seed (FR-DAT-05). The ID counter is left alone, so an ID issued this session is
- * still never reissued.
- * @returns {Promise<Array<Record<string, unknown>>>} Never fails.
- */
-export function reset() {
-  const seeded = copy(seed);
-  portfolio = seeded;
-  highestIdIssued = Math.max(
-    highestIdIssued,
-    seeded.reduce(
-      (highest, property) => Math.max(highest, idNumber(property.id)),
-      0,
-    ),
-  );
-  return Promise.resolve(copy(portfolio));
-}
-
-/**
- * Put the service back to its starting state. For tests only, so that each one begins from a fresh
- * copy of the seed with the ID counter where it started (testing rules).
- */
-export function __resetForTests() {
-  loadSeed();
+export async function remove(id) {
+  if (idNumber(id) === 0) throw new NotFoundError(id);
+  await request(`/${idNumber(id)}`, { method: 'DELETE', id });
+  return { id };
 }

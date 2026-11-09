@@ -2,7 +2,7 @@
  * How the portfolio state changes. A pure function with no React in it, so every transition can be
  * tested on its own (NFR-MNT-01). The provider owns the side effects; this owns the rules.
  */
-import { MESSAGES, TEXT } from '../constants/messages.js';
+import { MESSAGES } from '../constants/messages.js';
 
 /** @typedef {{ properties: Array<Record<string, unknown>>, loading: boolean, loadError: string | null, message: string | null }} PortfolioState */
 
@@ -58,13 +58,6 @@ export function portfolioReducer(state, action) {
           (property) => property.id !== action.id,
         ),
         message: MESSAGES.deleted(action.id),
-      };
-
-    case 'portfolio/reset':
-      return {
-        ...state,
-        properties: action.properties,
-        message: TEXT.demoDataReset,
       };
 
     case 'message/clear':

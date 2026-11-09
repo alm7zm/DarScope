@@ -10,8 +10,7 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "prepare-data": "node scripts/prepare-data.mjs"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "react": "^19.2.8",

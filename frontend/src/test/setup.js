@@ -1,6 +1,16 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
+import { __resetForTests } from './fakePropertyService.js';
+
+// The app reaches the Spring server through services/propertyService.js. Every test except that
+// service's own gets an in-memory stand-in instead, so no test touches the network, and each one
+// starts from a fresh copy of the seed.
+vi.mock(
+  '../services/propertyService.js',
+  () => import('./fakePropertyService.js'),
+);
+beforeEach(__resetForTests);
 
 // Vitest runs without global test functions here, so React Testing Library cannot register its
 // own cleanup. Unmount after every test so that tests never see each other's output.

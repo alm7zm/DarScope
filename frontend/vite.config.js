@@ -13,6 +13,11 @@ export default defineConfig(({ mode }) => ({
         include: /^[^?]+\.(avif|gif|heif|jpeg|jpg|png|tiff|webp)(\?.*)?$/i,
       }),
   ],
+  // `npm run dev` forwards every /api call to the Spring server (docs/backend-plan.md), so the
+  // browser sees one address and the server needs no CORS settings.
+  server: {
+    proxy: { '/api': 'http://localhost:8080' },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.js',
