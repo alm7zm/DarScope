@@ -33,6 +33,15 @@ export default function TeamGallery({ team }) {
   return (
     <ul
       className={`${styles.gallery} ${openIndex === null ? '' : styles.spotlight}`}
+      // One column per person, and one strip row per person not chosen, however many there are.
+      // On a phone, up to three fit side by side; more go in two rows (four make 2 × 2), so a
+      // name is never squeezed into a column too narrow for it.
+      style={{
+        '--members': team.length,
+        '--narrow-columns':
+          team.length <= 3 ? team.length : Math.ceil(team.length / 2),
+        '--others': Math.max(team.length - 1, 1),
+      }}
     >
       {team.map((member, index) => {
         const open = index === openIndex;

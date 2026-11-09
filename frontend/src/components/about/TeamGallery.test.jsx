@@ -114,6 +114,41 @@ describe('TeamGallery', () => {
     expect(screen.queryByText('Builds the search and the filters.')).toBeNull();
   });
 
+  it('makes room for a fourth member with no change to the layout', async () => {
+    const user = userEvent.setup();
+    const four = [
+      ...TEAM,
+      {
+        name: 'Khalid Al Otaibi',
+        studentId: '222000004',
+        bio: '',
+        photo: '',
+        email: '',
+        linkedin: '',
+        github: '',
+      },
+    ];
+    render(<TeamGallery team={four} />);
+
+    const gallery = screen.getByRole('list');
+    expect(screen.getAllByRole('listitem')).toHaveLength(4);
+    // One column per member (2 × 2 on a phone), and one strip row for each member not chosen.
+    expect(gallery.style.getPropertyValue('--members')).toBe('4');
+    expect(gallery.style.getPropertyValue('--narrow-columns')).toBe('2');
+    expect(gallery.style.getPropertyValue('--others')).toBe('3');
+
+    await user.click(photo('Khalid Al Otaibi'));
+
+    expect(photo('Khalid Al Otaibi')).toHaveAttribute('aria-expanded', 'true');
+    for (const name of [
+      'Sara Al Qahtani',
+      'Faisal Al Harbi',
+      'Noura Al Saud',
+    ]) {
+      expect(photo(name)).toHaveAttribute('aria-expanded', 'false');
+    }
+  });
+
   it('opens and closes from the keyboard (NFR-ACC-01)', async () => {
     const user = renderGallery();
 
