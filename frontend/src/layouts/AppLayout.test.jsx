@@ -82,7 +82,7 @@ describe('AppLayout', () => {
     expect(focusable[0]).toHaveAccessibleName('Skip to content');
   });
 
-  it('states the course, the data credit and the reload notice in the footer (UI-01, FR-DAT-06)', () => {
+  it('states the course and the data credit in the footer, and nothing about saving (UI-01)', () => {
     renderLayout();
 
     const footer = screen.getByRole('contentinfo');
@@ -93,8 +93,8 @@ describe('AppLayout', () => {
     );
     // The sample properties are written by hand, not taken from the dataset.
     expect(footer).not.toHaveTextContent('Sample data');
-    expect(footer).toHaveTextContent(
-      /changes are kept only until the page reloads/i,
-    );
+    // Part 2 keeps changes on the server, and the team chose to show no notice about it.
+    expect(footer).not.toHaveTextContent(/until the page reloads/i);
+    expect(footer).not.toHaveTextContent(/Darscope server/i);
   });
 });

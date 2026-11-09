@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { makeProperty } from '../test/fixtures.js';
 import {
+  DEFAULT_PAGE_SIZE,
   DEFAULT_SORT,
   PAGE_SIZES,
   SORT_OPTIONS,
@@ -136,8 +137,10 @@ describe('paginate (FR-LST-10)', () => {
     return Array.from({ length: to - from + 1 }, (_, index) => from + index);
   }
 
-  it('offers 10, 25 or 50 properties per page, 10 by default', () => {
-    expect(PAGE_SIZES).toEqual([10, 25, 50]);
+  it('offers 5, 10, 25 or 50 properties per page, 10 by default', () => {
+    // FR-LST-10 lists 10, 25 and 50. Part 2 added 5, so a small portfolio still has pages.
+    expect(PAGE_SIZES).toEqual([5, 10, 25, 50]);
+    expect(DEFAULT_PAGE_SIZE).toBe(10);
     expect(paginate(items).items).toEqual(numbers(1, 10));
   });
 

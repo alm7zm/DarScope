@@ -9,8 +9,11 @@ import { PortfolioContext } from '../context/portfolioContext.js';
  * @returns {import('../context/portfolioReducer.js').PortfolioState & {
  *   addProperty: (values: Record<string, unknown>) => Promise<Record<string, unknown>>,
  *   updateProperty: (id: string, values: Record<string, unknown>) => Promise<Record<string, unknown>>,
- *   deleteProperty: (id: string) => Promise<Record<string, unknown>>,
- *   resetDemoData: () => Promise<Array<Record<string, unknown>>>,
+ *   deleteProperty: (id: string) => Promise<{ id: string }>,
+ *   loadPage: (page: number, perPage: number) => Promise<{
+ *     items: Array<Record<string, unknown>>, page: number, pageCount: number,
+ *     from: number, to: number, total: number,
+ *   }>,
  *   clearMessage: () => void,
  * }}
  */

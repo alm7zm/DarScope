@@ -10,7 +10,9 @@ This file condenses `docs/SRS.md` section 3.4 and Appendix A. The SRS wins if th
 
 ## What the script does
 
-`frontend/scripts/prepare-data.mjs` runs with `npm run prepare-data`. It turns the raw Kaggle CSV, "Saudi Arabia Real Estate (AQAR)", into the two JSON files in `frontend/src/data/`. It is a one-off tool, not part of the app.
+`frontend/scripts/prepare-data.mjs` turns the raw Kaggle CSV, "Saudi Arabia Real Estate (AQAR)", into the two JSON files in `frontend/src/data/`. It is a one-off tool, not part of the app.
+
+**Part 2 changed this.** The script was never written, and its `npm run prepare-data` entry was removed on 9 November 2026. The portfolio now comes from the Spring server's `data.sql` (`docs/backend-plan.md`), so only `market.reference.json` would still come from this script. Whoever writes it adds the `prepare-data` script back to `frontend/package.json`.
 
 - Keep the raw CSV in `frontend/data-raw/`, and keep that folder in `.gitignore`. Never commit the raw file.
 - The app never reads the raw CSV. It loads only the two JSON files.

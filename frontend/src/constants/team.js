@@ -2,7 +2,6 @@
 export const COURSE = {
   code: 'SE411',
   term: 'Fall 2026-27',
-  part: 'Project Part 1',
 };
 
 /** Where the code lives, linked from the About page (FR-ABT-04). */
@@ -10,6 +9,10 @@ export const REPOSITORY_URL = 'https://github.com/alm7zm/DarScope';
 
 /**
  * Team members listed on the About page (FR-ABT-02, FR-ABT-06).
+ *
+ * To add yourself: copy an entry, fill in your own details, put your photo in
+ * `frontend/src/assets/team/`, and leave out `pending`. The page lays out however many people
+ * are listed, so nothing else needs to change.
  *
  * `pending: true` marks a row nobody has filled in yet. The About page shows those rows as
  * clearly unfinished rather than printing an invented name, so an incomplete submission is
@@ -21,6 +24,7 @@ export const REPOSITORY_URL = 'https://github.com/alm7zm/DarScope';
  *   size or shape will do: the build crops it to a square around the face and shrinks it. Only
  *   the file name counts, in any letter case. With none, the page shows the person's initials.
  * - `email`: an address, with no `mailto:`.
+ * - `website`: a personal site or portfolio, the full URL, starting with `https://`.
  * - `linkedin`, `github`: the full profile URL, starting with `https://`.
  *
  * This repository is public, so anything written here is published, and so is every photo in
@@ -33,6 +37,7 @@ export const TEAM = [
     bio: 'A Software Engineering student at Prince Sultan University, passionate about building intelligent systems and pursuing a career in Agentic AI. Through personal projects, coursework, and national programming competitions, I have developed a strong interest in software engineering and machine learning. I aim to specialize in Agentic AI by graduation in 2027, building systems that can reason, make decisions, and act autonomously.',
     photo: 'Hussam Aldossary.jpeg',
     email: 'h.s.m.d.23@gmail.com',
+    website: 'https://hussam.software',
     linkedin: 'https://www.linkedin.com/in/hussam-aldossary',
     github: 'https://github.com/alm7zm',
   },
@@ -48,13 +53,12 @@ export const TEAM = [
   },
   {
     name: 'Omar Alrajhi',
-    studentId: '',
-    bio: '',
-    photo: '',
-    email: '',
+    studentId: '221110415',
+    bio: 'Software Engineering senior at Prince Sultan University',
+    photo: 'Omar Alrajhi.jpg',
+    email: 'omarexample123@gmail.com',
     linkedin: '',
-    github: '',
-    pending: true,
+    github: 'https://github.com/221110415-oss',
   },
 ];
 
@@ -93,6 +97,3 @@ export const TECHNOLOGIES = [
   'Vitest with React Testing Library',
   'ESLint and Prettier',
 ];
-
-/** The AI tools that helped build the app (FR-ABT-05). The full record is docs/ai-usage.md. */
-export const AI_TOOLS = ['Claude Code (Claude Opus 5 and 5.5)'];

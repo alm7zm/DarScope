@@ -28,7 +28,7 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 ## Routing and layout
 
 - Use React Router with the URLs in `.claude/rules/product.md`. Navigation never reloads the whole app, and Back and Forward work (FR-NAV-03, FR-NAV-06).
-- Every page shares one layout: a header with the app name and menu, the page content, and a footer with the course, the data credit and the notice that changes last only until the page reloads (UI-01, FR-DAT-06).
+- Every page shares one layout: a header with the app name and menu, the page content, and a footer with the course and the data credit (UI-01). Since Part 2 the footer has no notice about saving: the team dropped FR-DAT-06's reload notice and chose not to replace it.
 - Mark the current menu item visually and with `aria-current="page"` (FR-NAV-04).
 - Each page has exactly one `h1` that names it, and sets the tab title in the form "Properties · Darscope" (UI-02, FR-NAV-09). Wrap the page in `components/ui/Page.jsx`, which does both.
 - Below 768 px the menu collapses behind a toggle button (FR-NAV-08).

@@ -90,22 +90,22 @@ describe('AboutPage: the instructor', () => {
 });
 
 describe('AboutPage: the course (FR-ABT-03)', () => {
-  it('shows the course code, the term and the submission', () => {
+  it('shows the course code and the term', () => {
     renderAbout();
 
     expect(panel('Course').getByText(COURSE.code)).toBeInTheDocument();
     expect(panel('Course').getByText(COURSE.term)).toBeInTheDocument();
-    expect(panel('Course').getByText(COURSE.part)).toBeInTheDocument();
   });
 
-  it('AC-15 shows all three together with the names', () => {
+  it('AC-15 shows the course and term together with the names, and no longer "Project Part 1"', () => {
     renderAbout();
 
     const main = within(screen.getByRole('main'));
     expect(main.getByText('SE411')).toBeInTheDocument();
     expect(main.getByText('Fall 2026-27')).toBeInTheDocument();
-    expect(main.getByText('Project Part 1')).toBeInTheDocument();
     expect(main.getByText(TEAM[0].name)).toBeInTheDocument();
+    // The app now spans both parts of the project, so the About page names neither.
+    expect(screen.queryByText(/Project Part 1/)).not.toBeInTheDocument();
   });
 });
 
@@ -164,8 +164,9 @@ describe('AboutPage: credits (FR-ABT-05)', () => {
     expect(credits.queryByText(/cleaned sample/)).not.toBeInTheDocument();
   });
 
-  it('names the AI tools used to build the app', () => {
+  it('leaves the AI tools to docs/ai-usage.md rather than the page', () => {
     renderAbout();
-    expect(panel('Credits').getByText(/Claude Code/)).toBeInTheDocument();
+    expect(panel('Credits').queryByText(/Claude Code/)).not.toBeInTheDocument();
+    expect(panel('Credits').queryByText(/ai-usage/)).not.toBeInTheDocument();
   });
 });

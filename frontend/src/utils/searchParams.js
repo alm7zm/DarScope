@@ -10,7 +10,12 @@ import {
   STATUSES,
 } from '../constants/options.js';
 import { EMPTY_FILTERS } from './search.js';
-import { DEFAULT_SORT, PAGE_SIZES, SORT_OPTIONS } from './sort.js';
+import {
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_SORT,
+  PAGE_SIZES,
+  SORT_OPTIONS,
+} from './sort.js';
 
 /**
  * The parameter name for each filter that accepts several values. Short names, because they end
@@ -65,7 +70,7 @@ export function readSearchState(params) {
   }
 
   const sortKey = params.get('sort');
-  const perPage = readNumber(params.get('per'), PAGE_SIZES[0]);
+  const perPage = readNumber(params.get('per'), DEFAULT_PAGE_SIZE);
 
   return {
     query: params.get('q') ?? '',
@@ -77,7 +82,7 @@ export function readSearchState(params) {
       direction: params.get('dir') === 'asc' ? 'asc' : 'desc',
     },
     page: Math.max(1, readNumber(params.get('page'), 1)),
-    perPage: PAGE_SIZES.includes(perPage) ? perPage : PAGE_SIZES[0],
+    perPage: PAGE_SIZES.includes(perPage) ? perPage : DEFAULT_PAGE_SIZE,
   };
 }
 
@@ -93,7 +98,7 @@ export function writeSearchState({
   filters = EMPTY_FILTERS,
   sort = DEFAULT_SORT,
   page = 1,
-  perPage = PAGE_SIZES[0],
+  perPage = DEFAULT_PAGE_SIZE,
 } = {}) {
   const params = new URLSearchParams();
 
@@ -113,7 +118,7 @@ export function writeSearchState({
     params.set('dir', sort.direction);
   }
   if (page > 1) params.set('page', String(page));
-  if (perPage !== PAGE_SIZES[0]) params.set('per', String(perPage));
+  if (perPage !== DEFAULT_PAGE_SIZE) params.set('per', String(perPage));
 
   return params;
 }

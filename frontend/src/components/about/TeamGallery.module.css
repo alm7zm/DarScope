@@ -1,7 +1,9 @@
-/* Three people side by side at every width, in equal columns (FR-ABT-02). */
+/* Everyone side by side, in equal columns (FR-ABT-02). TeamGallery.jsx sets `--members`, the
+   team's size, and `--narrow-columns`, how many fit across a phone, so a new member needs no
+   change here. */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--narrow-columns, 3), minmax(0, 1fr));
   align-items: start;
   gap: var(--space-3);
   margin: 0;
@@ -11,6 +13,7 @@
 
 @media (min-width: 40rem) {
   .gallery {
+    grid-template-columns: repeat(var(--members, 3), minmax(0, 1fr));
     gap: var(--space-6);
   }
 }
@@ -62,16 +65,17 @@
   }
 }
 
-/* The member chosen takes the main column, and the other two shrink into a strip beside it. The
-   strip's 3rem floor keeps each photo above the 44 px target size at 360 px. */
+/* The member chosen takes the main column, and the others shrink into a strip beside it, one row
+   each. The last row takes the spare height, so the strip stays at the top. The strip's 3rem
+   floor keeps each photo above the 44 px target size at 360 px. */
 .spotlight {
   grid-template-columns: minmax(0, 1fr) clamp(3rem, 18%, 8rem);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: repeat(var(--others, 2), auto) 1fr;
 }
 
 .open {
   grid-column: 1;
-  grid-row: 1 / span 2;
+  grid-row: 1 / -1;
 }
 
 /* With room to spare, the details sit beside the photo instead of under it. */

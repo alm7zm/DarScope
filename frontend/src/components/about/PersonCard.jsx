@@ -67,12 +67,15 @@ export function PersonSummary({ person, detail, pendingLabel }) {
  * empty is left out, so a person with neither shows nothing here.
  *
  * @param {{
- *   person: { name: string, bio?: string, email?: string, linkedin?: string, github?: string },
+ *   person: {
+ *     name: string, bio?: string, email?: string, website?: string, linkedin?: string,
+ *     github?: string,
+ *   },
  * }} props
  */
 export function PersonMore({ person }) {
-  const { name, bio, email, linkedin, github } = person;
-  const hasContact = Boolean(email || linkedin || github);
+  const { name, bio, email, website, linkedin, github } = person;
+  const hasContact = Boolean(email || website || linkedin || github);
 
   return (
     <>
@@ -91,6 +94,16 @@ export function PersonMore({ person }) {
           ) : null}
           {/* Each link names its person, so three "GitHub" links are told apart out of
               context (NFR-ACC-01). */}
+          {website ? (
+            <a
+              href={website}
+              rel="noreferrer noopener"
+              target="_blank"
+              aria-label={`Portfolio of ${name}`}
+            >
+              Portfolio
+            </a>
+          ) : null}
           {linkedin ? (
             <a
               href={linkedin}
@@ -124,8 +137,8 @@ export function PersonMore({ person }) {
  *
  * @param {{
  *   person: {
- *     name: string, bio?: string, photo?: string, email?: string, linkedin?: string,
- *     github?: string, pending?: boolean,
+ *     name: string, bio?: string, photo?: string, email?: string, website?: string,
+ *     linkedin?: string, github?: string, pending?: boolean,
  *   },
  *   detail?: import('react').ReactNode,
  *   pendingLabel?: string,

@@ -45,39 +45,38 @@ A market listing has the descriptive fields of a property, `city` through `descr
 
 | File | Holds | How it is used |
 | --- | --- | --- |
-| `frontend/src/data/portfolio.seed.json` | 40 properties, RP-0001 to RP-0040 | Copied into memory when the app starts |
+| `frontend/src/test/portfolio.seed.json` | 8 hand-written properties, RP-0001 to RP-0008 | The starting data of the tests' in-memory stand-in for the server (`src/test/fakePropertyService.js`). Since Part 2 the app's own starting rows are in the server's `data.sql` |
 | `frontend/src/data/market.reference.json` | About 1,350 listings | Read-only. Load it with a dynamic `import()` the first time a page needs it (FR-DAT-07). |
 | `frontend/src/data/rent-model.json` | The rent model's weights (SRS 7.6), no rows of the dataset | Read-only. Loaded with a dynamic `import()` by `services/rentModelService.js` when a form first shows the suggestion (FR-RNT-02). |
 | `frontend/src/data/districts.json` | Each city's districts in the 2021 data: the English name, paired with the most common Arabic spelling | The District dropdown's choices (FR-ADD-14), read through `DISTRICTS` in `constants/options.js`; the rent model finds a district by the Arabic spelling |
 
-No listing appears in both files. `npm run prepare-data` builds both; do not edit them by hand. `rent-model.json` and `districts.json` come from step 19 of `ai-model/prepare.ipynb` instead, and are never edited by hand either.
+No listing appears in both files. `market.reference.json` is not built yet: see `.claude/rules/data-prep.md`. `rent-model.json` and `districts.json` come from step 19 of `ai-model/prepare.ipynb` instead, and are never edited by hand either.
 
 ## Rules for property data
 
-- **IDs.** The service generates `RP-` plus four digits. An ID is unique for the session, is never edited, and is never reused after a delete (FR-ADD-04, FR-DEL-06, FR-DAT-04). Keep a counter of the highest ID issued. Never derive the next ID from the collection's length.
-- **Timestamps.** `createdAt` is set once. `updatedAt` is set on every save. `id` and `createdAt` never change (FR-UPD-03).
+- **IDs.** The server's database issues a number (an identity column), which is never edited and never reused after a delete (FR-ADD-04, FR-DEL-06, FR-DAT-04). The frontend shows it as `RP-` plus four digits: `formatId` and `idNumber` in `propertyService.js` convert between the two. Never derive an ID from the collection's length.
+- **Timestamps.** The server sets them: `createdAt` once, `updatedAt` on every save. `id` and `createdAt` never change (FR-UPD-03).
 - **Tenancy.** `tenantName` is required when `status` is Occupied. Lease dates are allowed only then. When the status leaves Occupied, clear the tenant and lease fields on save (FR-ADD-07, FR-UPD-07).
 - **Text.** Trim leading and trailing spaces. Number fields accept digits and one decimal point only, and no more digits than their largest value has (FR-ADD-12).
 - **No mutation.** Never change the collection or a property in place. Every change produces new objects (NFR-REL-04).
 - **Derived values are never stored**: the display title ("Villa in {district}, {city}"), comparables, the fair-rent estimate, the market position and embeddings (SRS section 3.5).
-- **One validator.** All field checks live in pure functions in `frontend/src/utils/validation.js`. The form uses them to show errors, and the service uses them again to reject invalid input, so no invalid property can enter the portfolio (NFR-REL-03).
+- **One validator.** All field checks live in pure functions in `frontend/src/utils/validation.js`. The form uses them to show errors, and the service uses them again before it sends anything. The server repeats the same checks with the same messages (`docs/backend-plan.md`, section 5), and the form shows any it returns beside the field (NFR-REL-03).
 
 ## The data service
 
-`frontend/src/services/propertyService.js` is the only code that reads or writes properties, and the only module Part 2 replaces. Every operation returns a Promise.
+`frontend/src/services/propertyService.js` is the only code that reads or writes properties. Since Part 2 it calls the Spring server's REST routes, listed in `docs/backend-plan.md`, section 3. Every operation returns a Promise.
 
-| Operation | Input | Returns | Fails when |
-| --- | --- | --- | --- |
-| `list()` | Nothing | All properties | Never |
-| `getById(id)` | A property ID | That property | No property has the ID |
-| `create(values)` | Field values without `id` or timestamps | The new property | A check in Appendix C fails |
-| `update(id, values)` | A property ID and the changed values | The updated property | No property has the ID, or a check fails |
-| `remove(id)` | A property ID | The removed property | No property has the ID |
-| `restore(property)` | A property that `remove` returned | The restored property, with the same ID and values | A property with that ID already exists |
-| `reset()` | Nothing | The seed properties | Never |
+| Operation | Input | Returns | Fails when | Route |
+| --- | --- | --- | --- | --- |
+| `list()` | Nothing | All properties | The server cannot be reached | `GET ?page=0&size=1000` |
+| `listPage(page, perPage)` | A page counted from 1, and its size | `{ items, page, pageCount, from, to, total }`, the shape of `paginate` in `utils/sort.js` | The server cannot be reached | `GET ?page=&size=` |
+| `getById(id)` | A property ID | That property | No property has the ID | `GET /{n}` |
+| `create(values)` | Field values without `id` or timestamps | The new property | A check in Appendix C fails | `POST` |
+| `update(id, values)` | A property ID and the changed values | The updated property | No property has the ID, or a check fails | `PUT /{n}` |
+| `remove(id)` | A property ID | `{ id }` | No property has the ID | `DELETE /{n}` |
 
-- In Part 1 the service keeps the collection in a module-level variable, seeded from `portfolio.seed.json`.
-- React state holds what the service returned. After a write, update state from the service's return value, as you would with an API response.
-- When a check fails, reject with an error that carries the message for each invalid field.
-- The first five operations are Must. `restore` supports undo (FR-DEL-07) and `reset` supports "Reset demo data" (FR-DAT-05); both are Should.
-- Keep the function names and return shapes stable. Part 2 will implement the same contract over HTTP.
+- The server keeps lab 14's shape: a numeric ID, the 13 amenities as flat fields, and `null` for an empty field. `fromServer` and `toServer` in the service translate to and from the app's shape (`RP-0007`, an `amenities` object, empty text), so no page sees the difference.
+- React state holds what the service returned. After a write, update state from the service's return value.
+- A failed check rejects with `ValidationError`, whose `errors` holds one message per field, whether the form's own check or the server's 400 found it. An unknown ID rejects with `NotFoundError`. A server that cannot be reached, or answers 5xx, rejects with `TEXT.serverUnavailable`.
+- `restore` (undo, FR-DEL-07) and `reset` ("Reset demo data", FR-DAT-05) were removed in Part 2. Nothing on screen used them, and resetting a shared database is risky.
+- Tests never reach the server: `src/test/setup.js` swaps this module for `src/test/fakePropertyService.js`, which keeps the same functions in memory. Only `propertyService.test.js` tests the real module, with `fetch` stubbed.

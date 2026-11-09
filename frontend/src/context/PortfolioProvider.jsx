@@ -60,11 +60,12 @@ export default function PortfolioProvider({ children }) {
     return removed;
   }, []);
 
-  const resetDemoData = useCallback(async () => {
-    const properties = await propertyService.reset();
-    dispatch({ type: 'portfolio/reset', properties });
-    return properties;
-  }, []);
+  // One page as the server cuts it (Part 2 brief, requirement 4). It is not kept in state: the
+  // Properties page asks for the page it shows, through `useServerPage`.
+  const loadPage = useCallback(
+    (page, perPage) => propertyService.listPage(page, perPage),
+    [],
+  );
 
   const clearMessage = useCallback(() => {
     dispatch({ type: 'message/clear' });
@@ -76,7 +77,7 @@ export default function PortfolioProvider({ children }) {
       addProperty,
       updateProperty,
       deleteProperty,
-      resetDemoData,
+      loadPage,
       clearMessage,
     }),
     [
@@ -84,7 +85,7 @@ export default function PortfolioProvider({ children }) {
       addProperty,
       updateProperty,
       deleteProperty,
-      resetDemoData,
+      loadPage,
       clearMessage,
     ],
   );
