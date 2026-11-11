@@ -2,6 +2,7 @@ import { generatePath, useNavigate, useParams } from 'react-router';
 import PropertyForm from '../components/properties/PropertyForm.jsx';
 import PropertyNotFound from '../components/properties/PropertyNotFound.jsx';
 import Page from '../components/ui/Page.jsx';
+import { LoadError } from '../components/ui/PageStates.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
 import { PATHS } from '../routes/paths.js';
@@ -13,7 +14,8 @@ import { PATHS } from '../routes/paths.js';
 export default function PropertyFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { properties, loading, addProperty, updateProperty } = usePortfolio();
+  const { properties, loading, loadError, addProperty, updateProperty } =
+    usePortfolio();
 
   const isEdit = Boolean(id);
   const title = isEdit ? 'Edit property' : 'Add property';
@@ -22,6 +24,15 @@ export default function PropertyFormPage() {
     return (
       <Page title={title}>
         <p>Loading property…</p>
+      </Page>
+    );
+  }
+
+  // Without the portfolio there is nothing to edit, and "Property not found" would mislead.
+  if (isEdit && loadError) {
+    return (
+      <Page title={title}>
+        <LoadError reason={loadError} />
       </Page>
     );
   }

@@ -523,6 +523,18 @@ describe('PropertyFormPage: the Edit form (FR-UPD-01)', () => {
       ).toBeInTheDocument(),
     );
   });
+
+  it('says the server cannot be reached, rather than "Property not found"', async () => {
+    propertyService.__setServerDown(true);
+    renderRoutes(routes, { initialEntries: ['/properties/RP-0001/edit'] });
+
+    expect(
+      await screen.findByText(TEXT.serverUnavailable, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { level: 1, name: TEXT.propertyNotFound }),
+    ).not.toBeInTheDocument();
+  });
 });
 
 describe('PropertyFormPage: AC-05 update a property', () => {

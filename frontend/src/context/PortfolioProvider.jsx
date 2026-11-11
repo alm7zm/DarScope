@@ -67,6 +67,10 @@ export default function PortfolioProvider({ children }) {
     [],
   );
 
+  // One property as the server has it (Part 2 brief, requirement 3), for the detail page,
+  // through `useServerProperty`. Not kept in state either.
+  const loadProperty = useCallback((id) => propertyService.getById(id), []);
+
   const clearMessage = useCallback(() => {
     dispatch({ type: 'message/clear' });
   }, []);
@@ -78,6 +82,7 @@ export default function PortfolioProvider({ children }) {
       updateProperty,
       deleteProperty,
       loadPage,
+      loadProperty,
       clearMessage,
     }),
     [
@@ -86,6 +91,7 @@ export default function PortfolioProvider({ children }) {
       updateProperty,
       deleteProperty,
       loadPage,
+      loadProperty,
       clearMessage,
     ],
   );

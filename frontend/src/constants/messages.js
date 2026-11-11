@@ -35,7 +35,7 @@ export const MESSAGES = {
 
 /** Fixed messages with no variable part (SRS Appendix C.2). */
 export const TEXT = {
-  // Part 2: the data lives on the Spring server. Not in Appendix C, which predates the server.
+  // Part 2: the data lives on the Spring server (SRS version 1.1).
   serverUnavailable:
     'The Darscope server could not be reached. Check that it is running, then try again.',
   noSearchMatches: 'No properties match your search.',
@@ -66,9 +66,6 @@ export const TEXT = {
 
 /** How long a confirmation message stays on screen, in milliseconds (FR-FBK-01). */
 export const MESSAGE_TIMEOUT_MS = 5000;
-
-/** How long a message that offers Undo stays on screen (FR-FBK-01, FR-DEL-07). */
-export const UNDO_TIMEOUT_MS = 8000;
 
 /** How long after the last keystroke the search runs (FR-SRC-03). */
 export const SEARCH_DEBOUNCE_MS = 300;

@@ -14,6 +14,7 @@ import { PortfolioContext } from '../context/portfolioContext.js';
  *     items: Array<Record<string, unknown>>, page: number, pageCount: number,
  *     from: number, to: number, total: number,
  *   }>,
+ *   loadProperty: (id: string) => Promise<Record<string, unknown>>,
  *   clearMessage: () => void,
  * }}
  */

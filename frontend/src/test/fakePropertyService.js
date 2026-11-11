@@ -7,6 +7,7 @@
  * sets both timestamps, and serves pages newest first. It starts from `portfolio.seed.json`.
  */
 import { vi } from 'vitest';
+import { TEXT } from '../constants/messages.js';
 import { DEFAULT_SORT, paginate, sortProperties } from '../utils/sort.js';
 import { normaliseValues, validateProperty } from '../utils/validation.js';
 import seed from './portfolio.seed.json';
@@ -42,8 +43,21 @@ function indexOf(id) {
   return portfolio.findIndex((property) => property.id === id);
 }
 
+/** While true, every call fails the way the real service does when the server is stopped. */
+let serverDown = false;
+
+/** Make every call fail as if the Spring server were stopped. `__resetForTests` turns it off. */
+export function __setServerDown(down) {
+  serverDown = down;
+}
+
+function unreachable() {
+  return Promise.reject(new Error(TEXT.serverUnavailable));
+}
+
 /** Back to the seed, with the ID counter where it started. `setup.js` calls it before each test. */
 export function __resetForTests() {
+  serverDown = false;
   portfolio = copy(seed);
   highestIdIssued = portfolio.reduce(
     (highest, property) => Math.max(highest, idNumber(property.id)),
@@ -54,11 +68,13 @@ export function __resetForTests() {
 __resetForTests();
 
 export function list() {
+  if (serverDown) return unreachable();
   return Promise.resolve(copy(portfolio));
 }
 
 /** One page, newest first, in the same shape as the real `listPage`. */
 export function listPage(page = 1, perPage = 10) {
+  if (serverDown) return unreachable();
   const sorted = sortProperties(portfolio, DEFAULT_SORT);
   return Promise.resolve({
     ...copy(paginate(sorted, { page, perPage })),
@@ -67,12 +83,14 @@ export function listPage(page = 1, perPage = 10) {
 }
 
 export function getById(id) {
+  if (serverDown) return unreachable();
   const index = indexOf(id);
   if (index === -1) return Promise.reject(new NotFoundError(id));
   return Promise.resolve(copy(portfolio[index]));
 }
 
 export function create(values) {
+  if (serverDown) return unreachable();
   const errors = validateProperty(values);
   if (Object.keys(errors).length > 0) {
     return Promise.reject(new ValidationError(errors));
@@ -90,6 +108,7 @@ export function create(values) {
 }
 
 export function update(id, values) {
+  if (serverDown) return unreachable();
   const index = indexOf(id);
   if (index === -1) return Promise.reject(new NotFoundError(id));
 
@@ -110,6 +129,7 @@ export function update(id, values) {
 }
 
 export function remove(id) {
+  if (serverDown) return unreachable();
   const index = indexOf(id);
   if (index === -1) return Promise.reject(new NotFoundError(id));
   portfolio = portfolio.filter((property) => property.id !== id);
