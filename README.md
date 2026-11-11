@@ -8,7 +8,7 @@ This repository holds both parts of the SE411 project (Fall 2026-27):
 | Part | Scope | Status |
 | --- | --- | --- |
 | Part 1 | React frontend. | Done |
-| Part 2 | Java Spring server with a SQL database (Supabase Postgres, or H2 locally), hand-coded by the team. The frontend already calls it. | In progress, due 14 November 2026: [docs/backend-plan.md](docs/backend-plan.md) |
+| Part 2 | Java Spring server with an in-memory H2 database, hand-coded by the team. The frontend already calls it. | In progress, due 14 November 2026: [docs/backend-plan.md](docs/backend-plan.md) |
 
 One AI feature runs entirely in the browser, with no API key: the Add and Edit forms suggest a yearly rent from a model the team trained on 2021 listings. Search by meaning, comparable market listings and a fair-rent estimate are planned.
 
@@ -19,7 +19,7 @@ https://www.kaggle.com/datasets/lama122/saudi-arabia-real-estate-aqar
 
 The app needs both halves running, in two terminals:
 
-1. **The server**, in `backend/`: `mvnw.cmd spring-boot:run` (`./mvnw` on macOS and Linux). It needs JDK 21 or later, and starts on <http://localhost:8080> with an in-memory H2 database. To use the team's Supabase database instead, add `-Dspring-boot.run.profiles=supabase` and see [docs/backend-plan.md](docs/backend-plan.md), section 7.
+1. **The server**, in `backend/`: `mvnw.cmd spring-boot:run` (`./mvnw` on macOS and Linux). It needs JDK 21 or later, and starts on <http://localhost:8080> with an in-memory H2 database. Changes last until the server stops; [docs/backend-plan.md](docs/backend-plan.md), section 7, shows how to look at the data with SQL.
 2. **The app**, in `frontend/`: `npm install` once, then `npm run dev`, and open <http://localhost:5173>. It forwards every `/api` call to the server.
 
 The frontend commands need Node.js 22.13 or later (22 or 24 LTS) and npm. Run them inside `frontend/`. None of the tests needs the server.
@@ -68,19 +68,20 @@ Everything the course brief asks of the app is built and tested: the menu, the p
 detail page, the one form that adds and edits, delete with confirmation, keyword search and
 filters in Arabic and English, the Dashboard and the About page. Since Part 2, the app reads and
 writes its properties through the Spring server, and the property list shows them a page at a
-time. Two student IDs are still to be added (FR-ABT-02).
+time. One team member's student ID is still to be added (FR-ABT-02).
 
 | Area | State |
 | --- | --- |
-| Navigation, layout, About | Done, except two student IDs |
+| Navigation, layout, About | Done, except one student ID |
 | Property list, detail, add, edit, delete | Done |
 | Search and filters | Done |
 | Dashboard | Done |
 | Rent suggestion on the Add and Edit forms | Done |
-| Pages on the property list (10, 25 or 50 a page) | Done: from the server, or in the browser while searching |
+| Pages on the property list (5, 10, 25 or 50 a page) | Done: from the server, or in the browser while searching |
 | Spring server (add, get by ID, paginated list, update, JUnit and Mockito tests) | Being written by the team: [docs/backend-plan.md](docs/backend-plan.md) |
 | Sorting controls, filter chips, search in the URL | Functions written and tested, not on a page yet |
-| Card view, undo delete | Not started |
+| Card view | Not started |
+| Undo delete, Reset demo data | Dropped in Part 2: nothing on screen used them |
 | Market insights, comparables, fair-rent estimate | Not started |
 | Search by meaning | Not started |
 
@@ -95,7 +96,7 @@ copy into `data.sql`.
 | Document | What it holds |
 | --- | --- |
 | [docs/SRS.md](docs/SRS.md) | The requirements (Part 1) |
-| [docs/part-2-brief.md](docs/part-2-brief.md), [docs/backend-plan.md](docs/backend-plan.md) | Part 2: the brief, and the plan for the server: the API contract, who does what, Supabase |
+| [docs/part-2-brief.md](docs/part-2-brief.md), [docs/backend-plan.md](docs/backend-plan.md) | Part 2: the brief, and the plan for the server: the API contract, who does what, the database |
 | [docs/design/style-guide.md](docs/design/style-guide.md), [docs/design/wireframes.md](docs/design/wireframes.md) | The visual design |
 | [docs/architecture.md](docs/architecture.md) | How the app is built, and the technology stack |
 | [docs/features.md](docs/features.md) | What works, where the code is, and what is not built yet |
