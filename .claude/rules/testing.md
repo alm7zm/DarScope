@@ -34,7 +34,7 @@ Statement coverage of `frontend/src/`, excluding the model wrapper `src/services
 - Check that a deleted ID is never issued again (FR-DEL-06, scenario AC-08).
 - Include Arabic input in search tests: a district name in Arabic, and spelling variants that Appendix B.4 says must match.
 - Never load the real language model in a test. Replace the embedding wrapper with a stub that returns fixed vectors, so tests run offline in seconds (NFR-TST-04).
-- Tests must not use the network, the real clock or random values. Use fake timers for the 300 ms search delay and the 8-second undo.
+- Tests must not use the network, the real clock or random values. Use fake timers for the 300 ms search delay and the 5-second confirmation message.
 - Start each test from a fresh copy of the data. Tests must not depend on each other or on their order.
 
 ## Acceptance scenarios

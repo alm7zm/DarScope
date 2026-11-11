@@ -36,9 +36,10 @@ The menu shows Dashboard, Properties, Add property and About on every page, plus
 | Add, update, and delete with confirmation | 5 | Must |
 | Keyword search and filters, in Arabic and English | 6 | Must |
 | About page with team names and student IDs | 8.1 | Must |
-| Confirmation messages, error screen, in-memory data service | 8.2, 8.3 | Must |
+| Confirmation messages, error screen, the data service that calls the server | 8.2, 8.3 | Must |
+| Pages on the property list, cut by the server (Part 2 brief) | 4.3 | Must |
 | Sorting, amenity filters, search state in the URL | 6 | Should |
-| Card view, pagination, undo delete, reset demo data | 4.3, 5.3, 8.3 | Should |
+| Card view | 4.3 | Should |
 | Comparable listings, fair-rent estimate, market insights | 7.2 to 7.4 | Should |
 | Search by meaning | 7.1 | Should |
 | Plain-language input, CSV export, bulk delete, dark theme | 7.5, 8.3, 5.3, 9.1 | Could |
