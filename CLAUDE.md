@@ -75,7 +75,7 @@ Run these inside `frontend/`. If `frontend/package.json` does not exist, the app
 | `npm run format` | Format the code with Prettier |
 | `npm run build` | Build static files into `frontend/dist/` |
 
-`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` (H2), the same with `-Dspring-boot.run.profiles=supabase`, and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
+`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
 
 The team works on Windows. Every npm script must also run on macOS and Linux, so use Node scripts instead of shell commands such as `rm`, `cp` or `VAR=value command`.
 
@@ -89,7 +89,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 - Vitest with React Testing Library. ESLint and Prettier.
 - `@huggingface/transformers` version 4 or later, loaded only when search by meaning is first turned on.
 - `vite-imagetools`, a development dependency added on 15 October 2026, which crops and shrinks the team photos when the app is built.
-- Part 2, chosen by the team on 9 November 2026: Java 21, Spring Boot 4.1 with Maven, Spring Data JDBC and Bean Validation, as in lab 14; Supabase Postgres, with H2 for local runs; JUnit and Mockito. The contract is in `docs/backend-plan.md`.
+- Part 2, chosen by the team on 9 November 2026: Java 21, Spring Boot 4.1 with Maven, Spring Data JDBC and Bean Validation, as in lab 14; an in-memory H2 database, since the team dropped Supabase on 11 November 2026; JUnit and Mockito. The contract is in `docs/backend-plan.md`.
 
 ## Branches
 
@@ -97,7 +97,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 
 ## Rules that never bend
 
-1. The frontend holds no server code, no database, no API keys, no secrets, no analytics and no cookies. The Supabase password lives only in each person's git-ignored `backend/.env`.
+1. The frontend holds no server code, no database, no API keys, no secrets, no analytics and no cookies.
 2. The app manages one kind of asset: rental houses.
 3. The portfolio lives in the Spring server's database. The frontend keeps only what the server returned, in the portfolio context. Do not add `localStorage` or any other browser persistence unless the user says the instructor asked for it.
 4. Components never import data files or change the collection themselves. Every read and write goes through `frontend/src/services/propertyService.js`, whose functions return Promises and call the server's REST routes (`docs/backend-plan.md`). In tests, `src/test/setup.js` swaps it for `src/test/fakePropertyService.js`. If a route or its JSON has to change, change the contract in `docs/backend-plan.md` first and tell the user: the team codes against it.

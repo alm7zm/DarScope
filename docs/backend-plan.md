@@ -8,8 +8,8 @@ The Part 1 brief says the backend "will be manually coded in part2", so **we wri
 
 ```
 Browser, localhost:5173                                     Spring server, localhost:8080              Database
-React pages → PortfolioProvider → propertyService.js ──HTTP──► Controller → Service → Repository ──JDBC──► Supabase Postgres
-                                  (fetch /api/v1/...)          (routes)     (rules)    (Spring Data)        (or H2 on your laptop)
+React pages → PortfolioProvider → propertyService.js ──HTTP──► Controller → Service → Repository ──JDBC──► H2
+                                  (fetch /api/v1/...)          (routes)     (rules)    (Spring Data)        (in memory, inside Spring)
 ```
 
 - **React never touches the database.** It sends an HTTP request such as `GET /api/v1/properties/7`, and Spring answers with JSON. Only Spring talks to the database.
@@ -99,7 +99,7 @@ The form shows each `errors` message beside its field, so **the field names and 
 
 ## 4. The table
 
-One table, `property`. Spring Data JDBC turns `sizeSqm` into the column `size_sqm` by itself. The same SQL must run on H2 and on Postgres, and every type below works on both.
+One table, `property`. Spring Data JDBC turns `sizeSqm` into the column `size_sqm` by itself. Every type below works on H2.
 
 | Column | Type | Java field |
 | --- | --- | --- |
@@ -120,7 +120,7 @@ One table, `property`. Spring Data JDBC turns `sizeSqm` into the column `size_sq
 | `created_at`, `updated_at` | `TIMESTAMP WITH TIME ZONE NOT NULL` | `Instant` each |
 
 - Use `Integer` for the numbers, so a missing one arrives as `null` and `@NotNull` can give its message. Use `boolean` for the amenities, so a missing one is simply false.
-- `data.sql` inserts the starting properties with `DEFAULT` as the ID, as lab 14 does, **never a written number**. On Postgres a written ID does not move the counter on, so the next add would crash on a duplicate key. Inserted in order, the 8 hand-written properties in `frontend/src/test/portfolio.seed.json` keep their numbers 1 to 8.
+- `data.sql` inserts the starting properties with `DEFAULT` as the ID, as lab 14 does, **never a written number**. A written ID may not move the database's counter on, and then the next add crashes on a duplicate key. Inserted in order, the 8 hand-written properties in `frontend/src/test/portfolio.seed.json` keep their numbers 1 to 8.
 - The 8 starting properties are enough for the demo: choose **5 per page** and they make 2 pages. Add more if you like; with 11 or more, even the default 10 per page shows a second page.
 - Save `data.sql` as UTF-8, and set `spring.sql.init.encoding=UTF-8`: some districts and descriptions are Arabic.
 
@@ -162,14 +162,14 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 2. **Person A** generates the project at [start.spring.io](https://start.spring.io), with the same choices as lab 14:
    - Maven, Java 21, Spring Boot 4.1.x.
    - Group `edu.psu.se411`, artifact `darscope`, unzipped into `backend/`.
-   - Dependencies: Spring Web, Spring Data JDBC, Validation, H2 Database, PostgreSQL Driver.
+   - Dependencies: Spring Web, Spring Data JDBC, Validation, H2 Database. For the H2 console, also add `spring-boot-h2console` (section 7).
 3. A adds the `Property` record and an empty `PropertyRepository`, pushes to `dev`, and everyone pulls. B and C need those two files to compile.
 
 ### Then, in parallel
 
 | Person | Owns these files, and only these, so merges never clash | Tests |
 | --- | --- | --- |
-| **A: model and database** | `model/Property.java`, `repository/PropertyRepository.java` (extends `CrudRepository` and `PagingAndSortingRepository`, like lab 14), `schema.sql`, `data.sql`, `application.properties`, `application-supabase.properties`, `pom.xml`; the Supabase project (section 7) | The `contextLoads` test from start.spring.io, which proves the app starts on H2 with the schema and data |
+| **A: model and database** | `model/Property.java`, `repository/PropertyRepository.java` (extends `CrudRepository` and `PagingAndSortingRepository`, like lab 14), `schema.sql`, `data.sql`, `application.properties`, `pom.xml` | The `contextLoads` test from start.spring.io, which proves the app starts on H2 with the schema and data |
 | **B: service** | `service/PropertyService.java`, `exception/ObjectNotFoundException.java`, `exception/InvalidPropertyException.java` | `PropertyServiceTest`, with Mockito (section 9) |
 | **C: controller** | `controller/PropertyController.java` (the five routes), `controller/ApiExceptionHandler.java` (the `@RestControllerAdvice`) | `PropertyControllerTest`, with MockMvc (section 9) |
 | **D: integration and demo** | Reviews and owns the frontend changes, runs the end-to-end check (section 10), writes the README run steps and the two slides (section 11) | The end-to-end checklist |
@@ -186,38 +186,24 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 
 | Day | Goal |
 | --- | --- |
-| Sun 9 Nov | Read the plan. A generates the project and creates the Supabase project. |
+| Sun 9 Nov | Read the plan. A generates the project. |
 | Mon 10 to Wed 12 Nov | Each layer and its tests, in parallel. |
-| Wed 12 Nov | Merge into `dev`. Run end to end on H2, then on Supabase. |
+| Wed 12 Nov | Merge into `dev`. Run end to end. |
 | Thu 13 Nov | Slides. Rehearse the demo. Merge `dev` into `main`. |
 | Fri 14 Nov | Present. |
 
-## 7. Supabase
+## 7. The database: H2 only
 
-### Setting it up (Person A)
+The team dropped Supabase on 11 November 2026. The brief does not ask for a database, and H2 needs no account, no password and no network.
 
-1. Create a free project at [supabase.com](https://supabase.com). Keep the database password private: **this repository is public**.
-2. In the **SQL Editor**, run `schema.sql`, then `data.sql`, then this one line, which belongs to Supabase only:
-   `ALTER TABLE property ENABLE ROW LEVEL SECURITY;`
-   It closes Supabase's own public data API to the table. Spring is not affected, because it connects as the table's owner.
-3. Under **Connect**, copy the **Session pooler** connection details. That one works on any network. The "Direct connection" needs IPv6, which many networks lack.
-4. Each person creates `backend/.env`. The repository's `.gitignore` already keeps every `.env` out of git. It holds three lines:
-   ```
-   DB_URL=jdbc:postgresql://<pooler host>:5432/postgres?sslmode=require
-   DB_USER=postgres.<project ref>
-   DB_PASSWORD=<the password>
-   ```
-5. `application.properties` imports that file with `spring.config.import=optional:file:.env[.properties]`. `application-supabase.properties` sets `spring.datasource.url`, `username` and `password` to `${DB_URL}`, `${DB_USER}` and `${DB_PASSWORD}`.
-6. **Free projects pause after a week without use.** Open the Supabase dashboard on 13 November to be sure it is awake.
-
-On H2, Spring runs `schema.sql` and `data.sql` itself at every start, because H2 is an embedded database. On Supabase it never runs them: the table was made once in step 2, and the data stays between restarts.
-
-### Getting the team in
-
-There are two separate kinds of access:
-
-- **The Supabase website**, where you browse the tables and run SQL. The project owner invites each person by email from *Organization settings → Team*. Each person signs in with their own account, and the invite expires after 24 hours. The free plan has no read-only role, so **anyone can change or delete data**. Agree that only A runs SQL that changes the table's structure.
-- **The Spring server**, which uses the one database password in each person's `.env`, shared in a private chat. **Nobody presses "Reset database password"**: that breaks everyone's `.env` at once.
+- **H2 runs inside the Spring server, in memory.** Because H2 is an embedded database, Spring runs `schema.sql` and then `data.sql` by itself at every start. The app starts from the 8 properties each time.
+- **Changes last until the server stops.** A page reload keeps them. Restarting Spring brings back the starting data. That is fine for the demo, and nobody can break a shared database.
+- **Nothing is secret.** There is no database password and no `.env` file.
+- **To look at the data with SQL,** turn on the H2 console:
+  - Add `org.springframework.boot:spring-boot-h2console` to `pom.xml`. Spring Boot 4 moved the console into this module, and without it `/h2-console` answers 404.
+  - In `application.properties`, set `spring.h2.console.enabled=true`, and `spring.datasource.url=jdbc:h2:mem:darscope` so the address is always the same.
+  - Open <http://localhost:8080/h2-console>. Log in with that JDBC URL, the user `sa` and an empty password. Then run `SELECT * FROM property;`.
+  - The console and the app share one database. A row you change in the console shows in the app after a page reload.
 
 ## 8. Running it
 
@@ -225,8 +211,7 @@ Use two terminals.
 
 | | Command | Then |
 | --- | --- | --- |
-| Server on H2 (no setup) | `cd backend` then `mvnw.cmd spring-boot:run` | open <http://localhost:8080/api/v1/properties?page=0&size=10> to see the JSON |
-| Server on Supabase | `cd backend` then `mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=supabase` | same |
+| Server | `cd backend` then `mvnw.cmd spring-boot:run` | open <http://localhost:8080/api/v1/properties?page=0&size=10> to see the JSON |
 | Backend tests | `cd backend` then `mvnw.cmd test` | |
 | The app | `cd frontend` then `npm run dev` | open <http://localhost:5173> |
 
@@ -270,15 +255,15 @@ If the app shows "The Darscope server could not be reached", Spring is not runni
 Run both servers and work through this list:
 
 - [ ] The list loads. With the search empty and 5 per page chosen, Next sends `GET /api/v1/properties?page=1&size=5` (browser DevTools → Network).
-- [ ] Add a property: the message says `Property RP-00xx added`, and the row appears in Supabase's Table Editor.
-- [ ] Restart Spring on the Supabase profile: the new property is still there.
+- [ ] Add a property: the message says `Property RP-00xx added`, and the row appears in the H2 console (section 7).
+- [ ] Reload the page: the new property is still there (AC-17). Restarting Spring would bring back the 8 starting properties.
 - [ ] Edit it: `updatedAt` changes and `createdAt` does not.
 - [ ] Delete it, then add another: the new ID is a higher number, never the deleted one.
 - [ ] Open `/properties/RP-9999`: "Property not found".
 - [ ] Send a rent of 500 straight to the API, with Postman or the IntelliJ HTTP client: 400, with the exact message.
 - [ ] Search in Arabic: the matches still appear.
 - [ ] Stop Spring: the app shows "The Darscope server could not be reached", not a blank page.
-- [ ] Run everything on the laptop and network you will present from, with the H2 profile ready in case the network fails.
+- [ ] Run everything on the laptop you will present from. Once Maven and npm have downloaded their dependencies, nothing needs the internet.
 
 ## 11. The presentation (two slides)
 
