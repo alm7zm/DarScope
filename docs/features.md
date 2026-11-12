@@ -184,8 +184,9 @@ Only `services/propertyService.js` reads or writes properties, and every operati
 Promise. It calls the Spring server's routes under `/api/v1/properties`, which `npm run dev`
 forwards to port 8080. It checks every property before sending it, translates between the
 server's JSON and the app's shape, and turns each failure into a message the page can show. The
-server issues the IDs and timestamps. Changes are kept in its in-memory H2 database, so they
-survive a page reload but not a restart of the server.
+server issues the IDs and timestamps. Changes survive a page reload. On the `supabase` profile they
+are kept in Supabase Postgres and survive a restart of the server too; on the default H2 profile
+a restart brings back the starting data.
 
 - **Code:** `services/propertyService.js`, `context/PortfolioProvider.jsx`,
   `hooks/useServerPage.js`, `frontend/vite.config.js`; for the tests,

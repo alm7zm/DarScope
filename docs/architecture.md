@@ -8,8 +8,9 @@ SRS. Where a planned part is missing, it says so. Requirement IDs follow SRS ver
 
 Darscope is a single-page React app for one company's rental villas and duplexes in Riyadh,
 Jeddah, Dammam and Al Khobar. The interface runs in the browser. Since Part 2 the portfolio
-lives in the team's Java Spring server, in an H2 database held in the server's memory, and the
-app reads and writes it through that server's REST API. Changes last until the server stops. The browser keeps only what the server returned. It holds no database,
+lives in the team's Java Spring server, in Supabase Postgres (or an H2 database in the server's
+memory for local runs), and the app reads and writes it through that server's REST API. On
+Supabase changes are kept; on H2 they last until the server stops. The browser keeps only what the server returned. It holds no database,
 no cookie, no analytics and no API key. One AI feature is built: the Add and Edit forms suggest
 a yearly rent from the rent model the team trained on 2021 listings. That runs in the browser
 too, from a JSON file of weights loaded the first time a form needs it.
@@ -247,8 +248,9 @@ Versions are from `frontend/package.json`, and the installed ones from `package-
 | Node.js | | 22.20.0 on the team's machine | Running the tools. The README asks for 22.13 or later. |
 
 The server's stack was chosen on 9 November 2026 (`docs/backend-plan.md`, section 6): Maven,
-Java 21, Spring Boot 4.1, Spring Web, Spring Data JDBC, Bean Validation, an in-memory H2
-database, and JUnit with Mockito for its tests. Supabase Postgres was dropped on 11 November 2026. Its code is not in the
+Java 21, Spring Boot 4.1, Spring Web, Spring Data JDBC, Bean Validation, Supabase Postgres
+through the PostgreSQL driver, an in-memory H2 database for local runs and the tests, and JUnit
+with Mockito. Supabase was dropped on 11 November 2026 and brought back on 12 November 2026. Its code is not in the
 repository yet, so this document gives no installed versions for it.
 
 The rent model is trained outside the app, in `ai-model/prepare.ipynb`, with Python and the
