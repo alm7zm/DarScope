@@ -1,8 +1,9 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TEXT } from '../constants/messages.js';
 import { AMENITIES } from '../constants/options.js';
 import * as propertyService from '../services/propertyService.js';
+import { validValues } from '../test/fixtures.js';
 import { renderRoutes } from '../test/render.jsx';
 import { routes } from '../routes/routes.jsx';
 
@@ -178,6 +179,28 @@ describe('PropertyDetailPage: actions (FR-DET-02)', () => {
   });
 });
 
+describe('PropertyDetailPage: search by ID (Part 2 brief, requirement 3)', () => {
+  it("shows the server's copy, even when the list loaded at start is out of date", async () => {
+    const { router } = renderRoutes(routes, {
+      initialEntries: ['/properties'],
+    });
+    await screen.findByRole('table');
+
+    // Changed behind the app's back, so the list it loaded at start no longer matches.
+    await propertyService.update(
+      'RP-0001',
+      validValues({ district: 'Changed on the server' }),
+    );
+    await act(() => router.navigate('/properties/RP-0001'));
+
+    await waitFor(() =>
+      expect(fieldValue('Location', 'District')).toHaveTextContent(
+        'Changed on the server',
+      ),
+    );
+  });
+});
+
 describe('PropertyDetailPage: an unknown ID (FR-DET-03)', () => {
   it('shows "Property not found" with a link back to the list', async () => {
     renderRoutes(routes, { initialEntries: ['/properties/RP-9999'] });
@@ -203,6 +226,18 @@ describe('PropertyDetailPage: an unknown ID (FR-DET-03)', () => {
         screen.getByRole('heading', { level: 1, name: TEXT.propertyNotFound }),
       ).toBeInTheDocument(),
     );
+  });
+
+  it('says the server cannot be reached, rather than "Property not found"', async () => {
+    propertyService.__setServerDown(true);
+    renderRoutes(routes, { initialEntries: ['/properties/RP-0001'] });
+
+    expect(
+      await screen.findByText(TEXT.serverUnavailable, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { level: 1, name: TEXT.propertyNotFound }),
+    ).not.toBeInTheDocument();
   });
 
   it('shows no field groups when there is no property', async () => {

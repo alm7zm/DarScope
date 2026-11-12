@@ -1,10 +1,25 @@
 # Software Requirements Specification: Darscope
 
-Version 1.0 draft, exported 5 October 2026 from the team's SRS document. The two diagrams are given as text.
+Version 1.1, 11 November 2026: updated for Part 2. Version 1.0 was exported on 5 October 2026 from the team's SRS document, which this update does not change. The two diagrams are given as text.
+
+### Changes in version 1.1
+
+Part 2 moved the portfolio to the team's Spring server ([part-2-brief.md](part-2-brief.md), [backend-plan.md](backend-plan.md)). On 9 November 2026 the team also removed undo, Reset demo data, the reload notice and "Project Part 1" (commits `f78e10b` and `51b3a9f`). Every ID is kept: a dropped requirement stays in its table, marked Withdrawn.
+
+| IDs | Change | Source |
+| --- | --- | --- |
+| C-02, A-01, FR-DAT-02, IF-01, IF-02 | The portfolio lives in the Spring server's database, reached through its REST API, so changes survive a reload | Part 2 brief |
+| FR-DAT-01, FR-DAT-04, FR-DEL-06 | The server's database holds the seed and issues the IDs, and never reuses one | Part 2 brief |
+| FR-DAT-03 | The data-service table gains `listPage` and the route of every operation; `restore` and `reset` are removed | Part 2 brief, team |
+| FR-LST-10 | Now Must, because the Part 2 brief asks for paginated results. 5 per page is added, and with no search the server cuts each page | Part 2 brief requirement 4, team |
+| FR-DEL-07, FR-DAT-05, AC-18 | Withdrawn: undo and Reset demo data. Nothing on screen used them, and resetting a shared database is risky | Team |
+| FR-DAT-06 | Withdrawn: the reload notice, which no longer holds | Team |
+| FR-ABT-03, FR-ABT-05, AC-15 | The About page no longer shows "Project Part 1" or names the AI tools; `docs/ai-usage.md` records the tools (PD-07) | Team |
+| FR-DSH-03, FR-FBK-01, UI-01, NFR-REL-04, NFR-USE-03, AC-17, Appendix C.2 | Reworded to match the rows above, and the server-unavailable message added | Follows from the rows above |
 
 ## 1. Introduction
 
-This SRS defines what the Part 1 frontend must do: a React application that manages a company's rental houses, running entirely in the browser.
+This SRS defines what the frontend must do: a React application that manages a company's rental houses. In Part 1 it ran entirely in the browser. Since Part 2 it keeps the portfolio on the team's Spring server, whose design is in [backend-plan.md](backend-plan.md).
 
 ### 1.1 Purpose and readers
 
@@ -58,20 +73,20 @@ Section 15 lists what is out of scope, including the backend that Part 2 adds.
 | Item | Value |
 | --- | --- |
 | Course | SE411, Fall 2026-27 |
-| Project | Part 1 (frontend) |
-| Version | 1.0 draft |
-| Submission deadline | Oct 17, 2026 |
+| Project | Part 1 (frontend) and Part 2 (Spring server) |
+| Version | 1.1 |
+| Submission deadline | Part 1: Oct 17, 2026. Part 2: Nov 14, 2026 |
 | Team member 1 | Name and student ID to add |
 | Team member 2 | Name and student ID to add |
 | Team member 3 | Name and student ID to add |
 
 ## 2. Overall description
 
-Darscope is a standalone single-page app: all data and every AI feature run in the browser, and nothing is stored on a server.
+Darscope is a single-page app. Its interface and every AI feature run in the browser. Since Part 2 the portfolio is stored by the team's Spring server.
 
 ### 2.1 Product perspective
 
-Part 1 delivers the frontend only. Part 2 adds a hand-coded backend, so Part 1 keeps all data access behind one service module (C-07).
+Part 1 delivered the frontend only, with all data access behind one service module (C-07). Part 2 adds the hand-coded Spring server, and that module now calls it.
 
 The app works with two separate collections:
 
@@ -81,16 +96,17 @@ The app works with two separate collections:
 **Architecture, as text.** The original document shows this as a diagram.
 
 - **Pages** (Dashboard, Properties, Add and Edit, Detail, Market insights, About) use three modules:
-  - **Portfolio state**: the property objects, held in memory. Every read and write goes through the data service.
+  - **Portfolio state**: the property objects the server returned. Every read and write goes through the data service.
   - **Market module**: comparables, estimate and insights. It reads the market reference set.
   - **Meaning search**: embeds and ranks properties by meaning. It uses Transformers.js.
-- **Data service**: `list`, `getById`, `create`, `update`, `remove`. Part 2 replaces this module. It loads the seed file (40 property objects) at start.
+- **Data service**: `list`, `listPage`, `getById`, `create`, `update`, `remove`. Since Part 2 it calls the Spring server's REST API.
+- **Spring server** (Part 2, outside the browser): stores the portfolio, which starts from the seed, and answers the data service at `/api/v1/properties`.
 - **Market reference**: read-only listings from 2021, loaded on first use.
 - **Transformers.js**: runs the language model on the device, loaded on request.
-- **Model host** (the only part outside the browser): the Hugging Face hub. About 135 MB, fetched once when the user agrees.
-- Nothing typed or stored in the browser is sent to any server.
+- **Model host** (outside the browser): the Hugging Face hub. About 135 MB, fetched once when the user agrees.
+- The properties go only to the team's Spring server. Nothing else typed or stored in the browser is sent to any server.
 
-Pages read and change the portfolio only through the data service, which Part 2 will replace. The language model is the one thing fetched from outside.
+Pages read and change the portfolio only through the data service, which since Part 2 calls the Spring server. The language model is the one thing fetched from a public host.
 
 ### 2.2 Product functions
 
@@ -101,7 +117,7 @@ Pages read and change the portfolio only through the data service, which Part 2 
 | Display | Browse the property list and open one property | 4.3, 4.4 |
 | Add | Register a new property | 5.1 |
 | Update | Change any detail of a property | 5.2 |
-| Delete | Remove a property, with undo | 5.3 |
+| Delete | Remove a property, after a confirmation | 5.3 |
 | Search | Find properties by keyword, filters and sorting | 6 |
 | Search by meaning | Find properties by describing them in Arabic or English | 7.1 |
 | Comparables and estimate | See similar market listings and a fair-rent estimate | 7.2, 7.3 |
@@ -127,7 +143,7 @@ Part 1 has no login, so every visitor has full access. The instructor evaluates 
 | ID | Constraint | Source |
 | --- | --- | --- |
 | C-01 | The app shall be a React project. | Brief |
-| C-02 | The app shall run entirely in the browser, with no server-side code and no database. | Brief |
+| C-02 | The app's interface shall run in the browser. In Part 1 it had no server-side code and no database; since Part 2 the portfolio is stored by the team's Spring server. | Brief, Part 2 brief |
 | C-03 | Data shall be defined as collections of JavaScript objects. | Brief |
 | C-04 | The app shall manage one kind of asset only: rental houses. | Brief |
 | C-05 | The source code shall be in a public GitHub repository and contain no secrets. | Brief |
@@ -140,7 +156,7 @@ Part 1 has no login, so every visitor has full access. The instructor evaluates 
 
 | ID | Assumption | If it is wrong |
 | --- | --- | --- |
-| A-01 | The instructor accepts that changes are lost when the page reloads. | Add browser storage (open question 1 in section 15). |
+| A-01 | Withdrawn in version 1.1: since Part 2 the server keeps every change, so nothing is lost on reload. | – |
 | A-02 | The public dataset may be used as seed and reference data, with credit. | Replace it with invented data and drop comparables and estimates. |
 | A-03 | The language model stays downloadable from its public host. | Search by meaning falls back to keyword search (FR-AIS-09). |
 | A-04 | Market rents from 2021 are acceptable for a demonstration. | The app already labels them as indicative; no requirement changes. |
@@ -203,7 +219,7 @@ A [published analysis of the dataset](https://turkinass.github.io/Aqar_Real_Esta
 
 | Collection | File | Records | Editable |
 | --- | --- | --- | --- |
-| Portfolio seed | `src/data/portfolio.seed.json` | 40 | Yes, in memory |
+| Portfolio seed | The server's `data.sql` ([backend-plan.md](backend-plan.md), section 4). The tests start from `frontend/src/test/portfolio.seed.json` | 40 | Yes, in the server's database |
 | Market reference | `src/data/market.reference.json` | About 1,350; the script records the exact count | No |
 
 - The portfolio seed is 40 cleaned listings, 10 per city where the data allows, with status, tenant and lease fields added. Tenant names are fictional.
@@ -212,9 +228,8 @@ A [published analysis of the dataset](https://turkinass.github.io/Aqar_Real_Esta
 
 ### 3.5 Data lifecycle
 
-- When the app starts, the portfolio is a copy of the seed.
-- Changes live in memory and are lost when the page reloads (C-02, A-01).
-- "Reset demo data" restores the seed on request (FR-DAT-05).
+- The server's database starts from the seed. When the app starts, it loads the portfolio from the server.
+- Changes are kept in the server's database and survive a page reload (C-02). On Supabase Postgres they also survive a restart of the server. On the local H2 database, which lives in the server's memory, a restart brings back the seed.
 - The market reference never changes while the app runs.
 
 These values are calculated when needed and never stored: the display title ("Villa in {district}, {city}"), comparables, the fair-rent estimate, the market position and embeddings.
@@ -253,7 +268,7 @@ The user reaches every feature from one menu and sees the portfolio three ways: 
 | --- | --- | --- |
 | FR-DSH-01 | The Dashboard shall show: total properties; the number Occupied, Vacant and Under maintenance; the occupancy rate; yearly rent from occupied properties; potential yearly rent from all properties. | Must |
 | FR-DSH-02 | The occupancy rate shall be occupied divided by total, shown as a whole percentage. With no properties it shall show a dash. | Must |
-| FR-DSH-03 | Every figure shall be recalculated at once after an add, update, delete, undo or reset. | Must |
+| FR-DSH-03 | Every figure shall be recalculated at once after an add, update or delete. | Must |
 | FR-DSH-04 | With an empty portfolio, the Dashboard shall show zeros and invite the user to add the first property. | Must |
 | FR-DSH-05 | A table shall show, for each city: properties, occupied properties and total yearly rent. | Should |
 | FR-DSH-06 | A "Needs attention" list shall show every Vacant and Under maintenance property, each linking to its detail page. | Should |
@@ -274,7 +289,7 @@ The user reaches every feature from one menu and sees the portfolio three ways: 
 | FR-LST-07 | Arabic text shall display right-to-left and correctly shaped inside the English layout. | Must |
 | FR-LST-08 | Status shall be shown as a word with a coloured badge, never by colour alone. | Must |
 | FR-LST-09 | The user shall be able to switch between the table and a card view; the choice shall last for the session. | Should |
-| FR-LST-10 | The list shall show 10, 25 or 50 properties per page (default 10) and return to page 1 when the search or filters change. | Should |
+| FR-LST-10 | The list shall show 5, 10, 25 or 50 properties per page (default 10) and return to page 1 when the search, the filters or the page size change. With no search active, the server shall cut each page. | Must |
 | FR-LST-11 | Selecting a row or card shall open that property's detail page. | Should |
 
 ### 4.4 Property detail
@@ -335,8 +350,8 @@ One form adds and edits properties, and every delete is confirmed before it happ
 | FR-DEL-03 | On confirmation, the app shall remove the property. It shall disappear at once from the list, search results and Dashboard figures. | Must |
 | FR-DEL-04 | The app shall show "Property RP-xxxx deleted". | Must |
 | FR-DEL-05 | After a delete from the detail page, the app shall return to the list. | Must |
-| FR-DEL-06 | The ID of a deleted property shall never be given to a new property in the same session. | Must |
-| FR-DEL-07 | The deleted message shall offer Undo for 8 seconds. Undo restores the property with the same ID and values. | Should |
+| FR-DEL-06 | The ID of a deleted property shall never be given to a new property. | Must |
+| FR-DEL-07 | Withdrawn in version 1.1: Undo after a delete. Nothing on screen used it, and the data service no longer offers `restore`. | Withdrawn |
 | FR-DEL-08 | The user shall be able to tick several rows and delete them together after one confirmation that states the count. | Could |
 
 ## 6. Functional requirements: search, filter and sort
@@ -456,7 +471,7 @@ The team trains one model, in `ai-model/prepare.ipynb`: Ridge regression on the 
 
 ## 8. Functional requirements: About, feedback and data
 
-The About page identifies the team, every action gets visible feedback, and all data lives in memory behind one service module.
+The About page identifies the team, every action gets visible feedback, and all data goes through one service module, which calls the Spring server.
 
 ### 8.1 About page
 
@@ -464,16 +479,16 @@ The About page identifies the team, every action gets visible feedback, and all 
 | --- | --- | --- |
 | FR-ABT-01 | The About page shall open from the About menu item. | Must |
 | FR-ABT-02 | The page shall list every team member with full name and student ID. | Must |
-| FR-ABT-03 | The page shall show the course (SE411), the term (Fall 2026-27) and "Project Part 1". | Must |
+| FR-ABT-03 | The page shall show the course (SE411) and the term (Fall 2026-27). | Must |
 | FR-ABT-04 | The page shall describe the app in one paragraph, list the technologies used and link to the GitHub repository. | Should |
-| FR-ABT-05 | The page shall credit the dataset (name, source, year) and name the AI tools used to build the app. | Should |
+| FR-ABT-05 | The page shall credit the dataset (name, source, year). | Should |
 | FR-ABT-06 | Team names and IDs shall be kept in one configuration file. | Should |
 
 ### 8.2 Feedback and errors
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| FR-FBK-01 | Every add, update, delete, undo and reset shall show a confirmation message. It disappears after 5 seconds, or 8 seconds when it offers Undo, and can be dismissed sooner. | Must |
+| FR-FBK-01 | Every add, update and delete shall show a confirmation message. It disappears after 5 seconds and can be dismissed sooner. | Must |
 | FR-FBK-02 | Confirmation and error messages shall be announced to screen readers. | Must |
 | FR-FBK-03 | An unexpected error on a page shall show an error screen with a Reload button, not a blank page. | Must |
 | FR-FBK-04 | Any wait longer than 300 ms shall show a progress indicator. | Should |
@@ -482,38 +497,37 @@ The About page identifies the team, every action gets visible feedback, and all 
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| FR-DAT-01 | At start, the portfolio shall be loaded from the seed collection of at least 30 property objects (3.4). | Must |
-| FR-DAT-02 | The portfolio shall be held in memory as a collection of objects, with no database and no server. | Must |
+| FR-DAT-01 | At start, the app shall load the portfolio from the Spring server, whose database starts from a seed of at least 30 property objects (3.4). | Must |
+| FR-DAT-02 | The portfolio shall be stored in the Spring server's database and reached only through its REST API. The browser shall keep only what the server returned. | Must |
 | FR-DAT-03 | All reading and writing of properties shall go through one data-service module with the operations in the table below, each returning a Promise. | Must |
-| FR-DAT-04 | Every property ID shall be unique within a session. | Must |
-| FR-DAT-05 | "Reset demo data" shall restore the seed after the user confirms. | Should |
-| FR-DAT-06 | The page footer shall state that changes are kept only until the page reloads. | Should |
+| FR-DAT-04 | Every property ID shall be unique and never reused. The server's database issues it. | Must |
+| FR-DAT-05 | Withdrawn in version 1.1: Reset demo data. Resetting a database the team shares is risky, and the data service no longer offers `reset`. | Withdrawn |
+| FR-DAT-06 | Withdrawn in version 1.1: the reload notice. Since Part 2, changes survive a reload. | Withdrawn |
 | FR-DAT-07 | The market reference set shall be loaded only when a page first needs it. | Should |
 | FR-DAT-08 | The user shall be able to download the portfolio as a CSV file. | Could |
 
-The data service is the only code Part 2 has to replace:
+Since Part 2 the data service calls the Spring server's routes ([backend-plan.md](backend-plan.md), section 3):
 
-| Operation | Input | Returns | Fails when |
-| --- | --- | --- | --- |
-| `list()` | Nothing | All properties | Never |
-| `getById(id)` | A property ID | That property | No property has the ID |
-| `create(values)` | Field values without `id` or timestamps | The new property | A check in Appendix C fails |
-| `update(id, values)` | A property ID and the changed values | The updated property | No property has the ID, or a check fails |
-| `remove(id)` | A property ID | The removed property | No property has the ID |
-| `restore(property)` | A property that `remove` returned | The restored property, with the same ID and values | A property with that ID already exists |
-| `reset()` | Nothing | The seed properties | Never |
+| Operation | Input | Returns | Fails when | Route |
+| --- | --- | --- | --- | --- |
+| `list()` | Nothing | All properties | Only when the server cannot be reached | `GET /api/v1/properties?page=0&size=1000` |
+| `listPage(page, perPage)` | A page counted from 1, and its size | That page, newest first, with the totals | Only when the server cannot be reached | `GET /api/v1/properties?page=&size=` |
+| `getById(id)` | A property ID | That property | No property has the ID | `GET /api/v1/properties/{n}` |
+| `create(values)` | Field values without `id` or timestamps | The new property | A check in Appendix C fails | `POST /api/v1/properties` |
+| `update(id, values)` | A property ID and the changed values | The updated property | No property has the ID, or a check fails | `PUT /api/v1/properties/{n}` |
+| `remove(id)` | A property ID | The removed property's ID | No property has the ID | `DELETE /api/v1/properties/{n}` |
 
-The first five operations are Must. `restore` supports undo (FR-DEL-07) and `reset` supports "Reset demo data" (FR-DAT-05); both are Should.
+Every operation also fails when the server cannot be reached. All six are Must. `restore` and `reset` were removed in version 1.1, with FR-DEL-07 and FR-DAT-05.
 
 ## 9. External interface requirements
 
-The browser is the only external interface: the app talks to no backend and fetches one language model from a public host.
+The app talks to two things outside the browser: the team's Spring server, which keeps the portfolio, and a public host for the one language model.
 
 ### 9.1 User interface
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| UI-01 | Every page shall share one layout: a header with the app name and menu, the page content, and a footer with the course, the data credit and the reload notice. | Must |
+| UI-01 | Every page shall share one layout: a header with the app name and menu, the page content, and a footer with the course and the data credit. | Must |
 | UI-02 | Each page shall have one main heading that names it. | Must |
 | UI-03 | Form labels shall sit above their inputs, with units (m², SAR, years) shown beside number fields. | Must |
 | UI-04 | The Add and Edit forms shall group fields under: Location, Building, Amenities, Rent and tenancy, Description. | Must |
@@ -541,6 +555,7 @@ None. The app needs no camera, microphone, location or other device access.
 | Interface | Used for | Notes |
 | --- | --- | --- |
 | Web browser | Running the app | The browsers listed in 2.4 |
+| The team's Spring server | Storing the portfolio (Part 2) | REST routes under `/api/v1/properties`, reached through the development server's `/api` proxy ([backend-plan.md](backend-plan.md)) |
 | Transformers.js (`@huggingface/transformers`) | Running the language model in the browser | Loaded only when search by meaning is first turned on |
 | Model files for Xenova/multilingual-e5-small | Search by meaning | Fetched from the Hugging Face hub over HTTPS; MIT licence |
 | Chrome Prompt API | Plain-language input (7.5) | Optional; present only in some Chrome installations |
@@ -549,8 +564,8 @@ None. The app needs no camera, microphone, location or other device access.
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| IF-01 | The app shall make HTTPS GET requests only: for its own files and, once the user agrees, for the language model and its runtime files. | Must |
-| IF-02 | The app shall send no property data, search text or personal data to any server. | Must |
+| IF-01 | Apart from its calls to the team's Spring server, the app shall make HTTPS GET requests only: for its own files and, once the user agrees, for the language model and its runtime files. | Must |
+| IF-02 | The app shall send property data only to the team's Spring server, and no search text to any server. | Must |
 | IF-03 | The app shall use no cookies, analytics or third-party trackers. | Must |
 | IF-04 | Model files shall be fetched from their public host at run time and never committed to the repository. | Should |
 
@@ -576,7 +591,7 @@ The app must stay fast without the AI model, work by keyboard alone, and keep se
 | --- | --- | --- |
 | NFR-USE-01 | Add, edit, delete and search shall each be reachable within 2 clicks from any page. | Must |
 | NFR-USE-02 | The layout shall work from 360 px to 1920 px wide without the page scrolling sideways. Wide tables may scroll inside their own frame. | Must |
-| NFR-USE-03 | Every destructive action shall need a confirmation (FR-DEL-02, FR-DAT-05). | Must |
+| NFR-USE-03 | Every destructive action shall need a confirmation (FR-DEL-02). | Must |
 | NFR-USE-04 | Error messages shall say what is wrong and how to fix it, in plain words (Appendix C). | Must |
 | NFR-USE-05 | The same word shall name the same thing on every page: always "property" for a portfolio item and "listing" for a market reference item. | Should |
 
@@ -602,7 +617,7 @@ The target is WCAG 2.2 level AA for the points below.
 | NFR-REL-01 | The acceptance scenarios in section 14 shall run with no uncaught error in the browser console. | Must |
 | NFR-REL-02 | A failure in any AI feature shall not stop any Must feature from working. | Must |
 | NFR-REL-03 | No invalid property shall ever enter the portfolio. The data service shall apply the Appendix C checks itself and not rely on the form. | Must |
-| NFR-REL-04 | The portfolio in memory shall never be changed in place; every change shall produce a new collection. | Should |
+| NFR-REL-04 | The portfolio state shall never be changed in place; every change shall produce a new collection. | Should |
 
 ### 10.5 Security and privacy
 
@@ -708,8 +723,9 @@ darscope/
 │       ├── utils/             validation, search, sort, arabic, similarity, estimate
 │       ├── constants/         choices, thresholds, labels, team details
 │       ├── styles/            tokens.css, global.css
-│       ├── data/              portfolio.seed.json, market.reference.json
-│       └── test/              setup and shared fixtures
+│       ├── data/              rent-model.json, districts.json, market.reference.json
+│       └── test/              setup, shared fixtures, and the in-memory stand-in for
+│                              the server with its seed, portfolio.seed.json
 └── backend/               Part 2: hand-coded, added later
 ```
 
@@ -778,10 +794,10 @@ The app is accepted when every Must scenario below passes in a current desktop b
 | AC-12 | **No results.** Type `zzzz`. | A "no properties match" message and a Clear all button appear. | FR-LST-05 | Must |
 | AC-13 | **Invalid range.** Set Yearly rent from 200000 to 100000. | A message explains that the range is invalid. The list is unchanged. | FR-SRC-07 | Must |
 | AC-14 | **Dashboard figures.** Note the Dashboard figures. Add one Occupied property with rent 60000. Return to the Dashboard. | Total and Occupied each rise by 1. Rent from occupied properties rises by 60,000. The occupancy rate is recalculated. | FR-DSH-01 to 03 | Must |
-| AC-15 | **About page.** Choose About. | Three names with student IDs, SE411, Fall 2026-27 and "Project Part 1" are shown. | FR-ABT-01 to 03 | Must |
+| AC-15 | **About page.** Choose About. | Every team member's name with student ID, SE411 and Fall 2026-27 are shown. | FR-ABT-01 to 03 | Must |
 | AC-16 | **Keyboard only.** Using only the keyboard, add a property and then delete it. | Every control is reachable with a visible focus indicator. The delete dialog closes on Esc. | NFR-ACC-01; FR-DEL-02 | Must |
-| AC-17 | **Reload.** Add a property. Reload the page. | The portfolio is back to the 40 seed properties. | FR-DAT-01, 02 | Must |
-| AC-18 | **Undo a delete.** Delete a property. Choose Undo within 8 seconds. | The property returns with the same ID and values, and the counts are restored. | FR-DEL-07 | Should |
+| AC-17 | **Reload.** Add a property. Reload the page. | The new property is still there, because the server kept it. | FR-DAT-01, 02 | Must |
+| AC-18 | Withdrawn in version 1.1, with FR-DEL-07. | – | FR-DEL-07 | Withdrawn |
 | AC-19 | **Comparables and estimate.** Open a Riyadh property. | Up to 5 Riyadh market listings appear with similarity percentages. An estimate, a range, a market position and the 2021 note are shown. | FR-CMP-01 to 04; FR-EST-01 to 05 | Should |
 | AC-20 | **Not enough market data.** Add a property of 90,000 m² and open it. | The panel says "Not enough market data" and shows no estimate. | FR-CMP-05 | Should |
 | AC-21 | **Search by meaning.** Turn on Search by meaning and agree to the download. Type `family house with a swimming pool`. | Progress is shown during the download. Then up to 20 properties are listed, closest first, each with a relevance bar. If the seed holds a property with a pool, one appears in the first 5. | FR-AIS-01 to 06 | Should |
@@ -820,7 +836,7 @@ Part 1 stops at the browser. The main risks are the deadline and the size of the
 
 ### 15.3 Open questions for the instructor
 
-- [ ] 1\. Is it acceptable that changes are lost when the page reloads, or should the app use browser storage?
+- [x] 1\. Is it acceptable that changes are lost when the page reloads, or should the app use browser storage? No longer applies: since Part 2 the server keeps every change.
 - [ ] 2\. Does "remove data, delete" in the brief mean one delete feature?
 - [ ] 3\. May a public Kaggle dataset be used as seed data, with credit? The team must also read the licence on the dataset's page.
 - [ ] 4\. Are any testing, styling or build tools required or forbidden?
@@ -1040,9 +1056,10 @@ The form and the data service apply the same checks, in this order, and show the
 | --- | --- |
 | Property added | Property RP-xxxx added |
 | Property updated | Property RP-xxxx updated |
-| Property deleted | Property RP-xxxx deleted (with Undo) |
-| Delete undone | Property RP-xxxx restored |
-| Demo data reset | Demo data restored |
+| Property deleted | Property RP-xxxx deleted |
+| Delete undone | Withdrawn in version 1.1, with FR-DEL-07 |
+| Demo data reset | Withdrawn in version 1.1, with FR-DAT-05 |
+| Server cannot be reached | The Darscope server could not be reached. Check that it is running, then try again. |
 | Search has no matches | No properties match your search. |
 | Portfolio is empty | No properties yet. Add your first property. |
 | Unknown property ID | Property not found |

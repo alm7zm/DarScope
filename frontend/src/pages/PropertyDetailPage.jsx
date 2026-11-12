@@ -5,35 +5,45 @@ import PropertyDetail from '../components/properties/PropertyDetail.jsx';
 import PropertyNotFound from '../components/properties/PropertyNotFound.jsx';
 import Button, { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
+import { LoadError } from '../components/ui/PageStates.jsx';
 import { TEXT } from '../constants/messages.js';
-import { usePortfolio } from '../hooks/usePortfolio.js';
+import { useServerProperty } from '../hooks/useServerProperty.js';
 import { PATHS } from '../routes/paths.js';
 import { displayTitle } from '../utils/format.js';
 import styles from './PropertyDetailPage.module.css';
 
-/** Read one property in full (SRS 4.4). The property's ID is the `:id` part of the URL. */
+/**
+ * Read one property in full (SRS 4.4). The property's ID is the `:id` part of the URL, and the
+ * page asks the server for it by that ID (Part 2 brief, requirement 3).
+ */
 export default function PropertyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { properties, loading } = usePortfolio();
+  const { property, notFound, error } = useServerProperty(id);
   /** True while the delete is awaiting confirmation (FR-DEL-02). */
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
-  if (loading) {
+  if (error) {
     return (
       <Page title="Property">
-        <p>Loading property…</p>
+        <LoadError reason={error} />
       </Page>
     );
   }
 
-  const property = properties.find((candidate) => candidate.id === id);
-
   // An ID that never existed and one that was just deleted read the same way (FR-DET-03).
-  if (!property) {
+  if (notFound) {
     return (
       <Page title={TEXT.propertyNotFound}>
         <PropertyNotFound id={id} />
+      </Page>
+    );
+  }
+
+  if (!property) {
+    return (
+      <Page title="Property">
+        <p>Loading property…</p>
       </Page>
     );
   }

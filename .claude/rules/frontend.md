@@ -37,7 +37,7 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 
 - Show total properties; the number Occupied, Vacant and Under maintenance; the occupancy rate; yearly rent from occupied properties; and potential yearly rent from all properties (FR-DSH-01).
 - Occupancy rate is occupied divided by total, as a whole percentage. With no properties, show a dash (FR-DSH-02).
-- Recalculate every figure at once after an add, update, delete, undo or reset (FR-DSH-03).
+- Recalculate every figure at once after an add, update or delete (FR-DSH-03).
 
 ## List and detail
 
@@ -84,7 +84,7 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 ## Messages
 
 - Use the exact wording in SRS Appendix C for field errors and fixed messages. Do not rephrase them.
-- Show a confirmation message after every add, update, delete, undo and reset. It disappears after 5 seconds, or 8 seconds when it offers Undo, and can be dismissed sooner (FR-FBK-01).
+- Show a confirmation message after every add, update and delete. It disappears after 5 seconds and can be dismissed sooner (FR-FBK-01).
 - Announce messages to screen readers with a live region (FR-FBK-02).
 - Wrap the routes in an error boundary that shows an error screen with a Reload button, never a blank page (FR-FBK-03). The route table does this with `errorElement` and `pages/ErrorPage.jsx`.
 

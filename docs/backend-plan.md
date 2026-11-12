@@ -162,7 +162,7 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 2. **Person A** generates the project at [start.spring.io](https://start.spring.io), with the same choices as lab 14:
    - Maven, Java 21, Spring Boot 4.1.x.
    - Group `edu.psu.se411`, artifact `darscope`, unzipped into `backend/`.
-   - Dependencies: Spring Web, Spring Data JDBC, Validation, H2 Database, PostgreSQL Driver.
+   - Dependencies: Spring Web, Spring Data JDBC, Validation, H2 Database, PostgreSQL Driver. For the H2 console, also add `spring-boot-h2console` (section 7).
 3. A adds the `Property` record and an empty `PropertyRepository`, pushes to `dev`, and everyone pulls. B and C need those two files to compile.
 
 ### Then, in parallel
@@ -186,13 +186,23 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 
 | Day | Goal |
 | --- | --- |
-| Sun 9 Nov | Read the plan. A generates the project and creates the Supabase project. |
+| Sun 9 Nov | Read the plan. A generates the project. |
 | Mon 10 to Wed 12 Nov | Each layer and its tests, in parallel. |
-| Wed 12 Nov | Merge into `dev`. Run end to end on H2, then on Supabase. |
-| Thu 13 Nov | Slides. Rehearse the demo. Merge `dev` into `main`. |
-| Fri 14 Nov | Present. |
+| Thu 12 Nov | A creates the Supabase project (section 7). Merge into `dev`. Run end to end on H2, then on Supabase. |
+| Fri 13 Nov | Slides. Rehearse the demo on Supabase, and once on H2 as the fallback. Merge `dev` into `main`. |
+| Sat 14 Nov | Present. |
 
-## 7. Supabase
+## 7. The database: Supabase, with H2 as the fallback
+
+Supabase was dropped on 11 November 2026 and brought back on 12 November 2026, agreed by the team. The brief does not ask for a database, so Supabase is the extra the demo shows: a property added in the app is still there after Spring restarts. H2 stays the default, so the tests, a fresh laptop and a bad network all still work with no setup.
+
+| | H2 (default profile) | Supabase (`supabase` profile) |
+| --- | --- | --- |
+| Where the data lives | In memory, inside Spring | Postgres in the cloud |
+| `schema.sql` and `data.sql` | Run by Spring at every start | Run once, by hand, in step 2 below |
+| After a restart | Back to the 8 starting properties | Everything kept |
+| Needs | Nothing | `backend/.env` and a network that allows port 5432 |
+| Used by the tests | Yes | Never |
 
 ### Setting it up (Person A)
 
@@ -208,9 +218,19 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
    DB_PASSWORD=<the password>
    ```
 5. `application.properties` imports that file with `spring.config.import=optional:file:.env[.properties]`. `application-supabase.properties` sets `spring.datasource.url`, `username` and `password` to `${DB_URL}`, `${DB_USER}` and `${DB_PASSWORD}`.
-6. **Free projects pause after a week without use.** Open the Supabase dashboard on 13 November to be sure it is awake.
+6. **Free projects pause after a week without use.** Open the Supabase dashboard on 13 November, and again on the morning of 14 November, to be sure it is awake.
+7. **Never point the tests at Supabase.** `mvnw.cmd test` runs on the default profile, so the tests use H2 and mocks and never change the shared data.
 
 On H2, Spring runs `schema.sql` and `data.sql` itself at every start, because H2 is an embedded database. On Supabase it never runs them: the table was made once in step 2, and the data stays between restarts.
+
+### Looking at the data
+
+- **On Supabase,** open the project's **Table Editor**, or run SQL in the **SQL Editor**.
+- **On H2,** turn on the H2 console:
+  - Add `org.springframework.boot:spring-boot-h2console` to `pom.xml`. Spring Boot 4 moved the console into this module, and without it `/h2-console` answers 404.
+  - In `application.properties`, set `spring.h2.console.enabled=true`, and `spring.datasource.url=jdbc:h2:mem:darscope` so the address is always the same. The `supabase` profile overrides that URL.
+  - Open <http://localhost:8080/h2-console>. Log in with that JDBC URL, the user `sa` and an empty password. Then run `SELECT * FROM property;`.
+  - The console and the app share one database. A row you change in the console shows in the app after a page reload.
 
 ### Getting the team in
 
@@ -271,7 +291,8 @@ Run both servers and work through this list:
 
 - [ ] The list loads. With the search empty and 5 per page chosen, Next sends `GET /api/v1/properties?page=1&size=5` (browser DevTools → Network).
 - [ ] Add a property: the message says `Property RP-00xx added`, and the row appears in Supabase's Table Editor.
-- [ ] Restart Spring on the Supabase profile: the new property is still there.
+- [ ] Reload the page: the new property is still there (AC-17).
+- [ ] Restart Spring on the Supabase profile: the new property is still there. On H2 a restart brings back the 8 starting properties.
 - [ ] Edit it: `updatedAt` changes and `createdAt` does not.
 - [ ] Delete it, then add another: the new ID is a higher number, never the deleted one.
 - [ ] Open `/properties/RP-9999`: "Property not found".
