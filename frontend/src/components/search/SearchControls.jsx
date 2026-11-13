@@ -1,6 +1,12 @@
+import { useState } from 'react';
 import Button from '../ui/Button.jsx';
 import { SelectField, TextField } from '../ui/FormField.jsx';
-import { CITIES, PROPERTY_TYPES, STATUSES } from '../../constants/options.js';
+import {
+  AMENITIES,
+  CITIES,
+  PROPERTY_TYPES,
+  STATUSES,
+} from '../../constants/options.js';
 import styles from './SearchControls.module.css';
 
 /**
@@ -28,6 +34,10 @@ export default function SearchControls({
   onClearAll,
   rangeErrors,
 }) {
+  // Open from the start only when the page was reached with an amenity already ticked, such as
+  // from a shared link. After that the user owns it: unticking the last box must not fold it up.
+  const [amenitiesOpen] = useState(() => filters.amenities?.length > 0);
+
   return (
     <form
       className={styles.panel}
@@ -109,6 +119,20 @@ export default function SearchControls({
           onChange={onFilterChange}
         />
       </div>
+
+      {/* FR-SRC-10. Thirteen more tick boxes would bury the filters people use every day, so they
+          wait behind one line, which starts open if one is already ticked. */}
+      <details className={styles.more} open={amenitiesOpen}>
+        <summary className={styles.moreSummary}>Amenities</summary>
+        <CheckboxGroup
+          legend="Must have every one ticked"
+          name="amenities"
+          options={AMENITIES.map(({ key, label }) => ({ value: key, label }))}
+          chosen={filters.amenities}
+          onToggle={onFilterToggle}
+          columns
+        />
+      </details>
     </form>
   );
 }
@@ -117,24 +141,38 @@ export default function SearchControls({
  * A filter that accepts several values at once, such as City (FR-SRC-04). Tick boxes rather than
  * a multiple-select: a multiple-select is hard to use with a keyboard and worse on a phone.
  */
-function CheckboxGroup({ legend, name, options, chosen = [], onToggle }) {
+function CheckboxGroup({
+  legend,
+  name,
+  options,
+  chosen = [],
+  onToggle,
+  columns = false,
+}) {
   return (
     <fieldset className={styles.group}>
       <legend className={styles.legend}>{legend}</legend>
-      {options.map((option) => {
-        const id = `filter-${name}-${option.replace(/\s+/g, '-')}`;
-        return (
-          <div key={option} className={styles.checkbox}>
-            <input
-              id={id}
-              type="checkbox"
-              checked={chosen.includes(option)}
-              onChange={() => onToggle(name, option)}
-            />
-            <label htmlFor={id}>{option}</label>
-          </div>
-        );
-      })}
+      <div className={columns ? styles.columns : undefined}>
+        {options.map((option) => {
+          // An option is a plain string, or a value with a different label (the amenities).
+          const { value, label } =
+            typeof option === 'string'
+              ? { value: option, label: option }
+              : option;
+          const id = `filter-${name}-${value.replace(/\s+/g, '-')}`;
+          return (
+            <div key={value} className={styles.checkbox}>
+              <input
+                id={id}
+                type="checkbox"
+                checked={chosen.includes(value)}
+                onChange={() => onToggle(name, value)}
+              />
+              <label htmlFor={id}>{label}</label>
+            </div>
+          );
+        })}
+      </div>
     </fieldset>
   );
 }

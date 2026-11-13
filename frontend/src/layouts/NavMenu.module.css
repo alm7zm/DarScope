@@ -2,7 +2,7 @@
    (FR-NAV-08). The sticky header is the panel's containing block. From 768 px the button goes
    and the items sit in one row. */
 .nav {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .toggle {
@@ -59,7 +59,7 @@
 
 @media (min-width: 48rem) {
   .nav {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .toggle {

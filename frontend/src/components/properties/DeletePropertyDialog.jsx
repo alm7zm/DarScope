@@ -24,15 +24,20 @@ export default function DeletePropertyDialog({
 }) {
   const { deleteProperty } = usePortfolio();
   const [failure, setFailure] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function handleConfirm() {
+    if (deleting) return;
     setFailure(null);
+    setDeleting(true);
     try {
       const removed = await deleteProperty(property.id);
       // The confirmation message itself comes from the portfolio state (FR-DEL-04).
       onDeleted?.(removed);
     } catch (error) {
       setFailure(error?.message ?? 'The property could not be deleted.');
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -42,6 +47,7 @@ export default function DeletePropertyDialog({
       title="Delete this property?"
       confirmLabel="Delete"
       confirmVariant="danger"
+      busy={deleting}
       onConfirm={handleConfirm}
       onCancel={onCancel}
     >

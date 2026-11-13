@@ -9,6 +9,7 @@ import {
 import { TEXT } from '../../constants/messages.js';
 import {
   AMENITIES,
+  AMENITY_GROUPS,
   CITIES,
   DISTRICTS,
   FRONTS,
@@ -282,17 +283,32 @@ export default function PropertyForm({ property, onSave, onCancel }) {
 
       <fieldset className={styles.group}>
         <legend className={styles.legend}>Amenities</legend>
-        <div className={styles.amenities}>
-          {AMENITIES.map((amenity) => (
-            <CheckboxField
-              key={amenity.key}
-              id={amenity.key}
-              label={amenity.label}
-              checked={values.amenities[amenity.key]}
-              onChange={(checked) => setAmenity(amenity.key, checked)}
-            />
-          ))}
-        </div>
+        {AMENITY_GROUPS.map((group) => (
+          <div
+            key={group.title}
+            role="group"
+            aria-labelledby={`amenity-group-${group.title.replace(/\s+/g, '-')}`}
+            className={styles.amenityGroup}
+          >
+            <h3
+              id={`amenity-group-${group.title.replace(/\s+/g, '-')}`}
+              className={styles.amenityTitle}
+            >
+              {group.title}
+            </h3>
+            <div className={styles.amenities}>
+              {group.keys.map((key) => (
+                <CheckboxField
+                  key={key}
+                  id={key}
+                  label={AMENITIES.find((amenity) => amenity.key === key).label}
+                  checked={values.amenities[key]}
+                  onChange={(checked) => setAmenity(key, checked)}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </fieldset>
 
       <fieldset className={styles.group}>

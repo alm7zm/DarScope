@@ -26,7 +26,7 @@
 .table th,
 .table td {
   padding: var(--space-3) var(--space-4);
-  text-align: left;
+  text-align: start;
   white-space: nowrap;
 }
 
@@ -51,6 +51,6 @@
 }
 
 .numberCell {
-  text-align: right;
+  text-align: end;
   font-variant-numeric: tabular-nums;
 }

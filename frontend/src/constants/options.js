@@ -69,6 +69,31 @@ export const AMENITIES = [
   { key: 'fireplace', label: 'Fireplace' },
 ];
 
+/**
+ * The amenities in three headed groups, for the form: a flat list of thirteen tick boxes is hard
+ * to scan. Every key appears once, so the groups hold the same 13 flags as `AMENITIES`.
+ * @type {ReadonlyArray<{ title: string, keys: string[] }>}
+ */
+export const AMENITY_GROUPS = [
+  {
+    title: 'Inside',
+    keys: [
+      'kitchen',
+      'furnished',
+      'ac',
+      'basement',
+      'stairs',
+      'elevator',
+      'fireplace',
+    ],
+  },
+  { title: 'Staff rooms', keys: ['driverRoom', 'maidRoom'] },
+  {
+    title: 'Outside and parking',
+    keys: ['garage', 'roof', 'pool', 'frontyard'],
+  },
+];
+
 /** The 13 amenity keys, for building and checking an amenities object. */
 export const AMENITY_KEYS = AMENITIES.map((amenity) => amenity.key);
 

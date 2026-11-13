@@ -7,11 +7,15 @@ import styles from './Dialog.module.css';
  * while open, closes on Esc and returns focus to the control that opened it (NFR-ACC-06). Cancel
  * is focused first, so Enter never destroys anything by accident (FR-DEL-02).
  *
+ * While `busy`, the confirm button is disabled and reads "Working…", so a double click cannot send
+ * the request twice. Cancel stays available.
+ *
  * @param {{
  *   open: boolean,
  *   title: string,
  *   confirmLabel: string,
  *   confirmVariant?: 'primary' | 'danger',
+ *   busy?: boolean,
  *   onConfirm: () => void,
  *   onCancel: () => void,
  *   children?: import('react').ReactNode,
@@ -22,6 +26,7 @@ export default function Dialog({
   title,
   confirmLabel,
   confirmVariant = 'danger',
+  busy = false,
   onConfirm,
   onCancel,
   children,
@@ -62,8 +67,8 @@ export default function Dialog({
         <Button ref={cancelRef} variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant={confirmVariant} onClick={onConfirm}>
-          {confirmLabel}
+        <Button variant={confirmVariant} onClick={onConfirm} disabled={busy}>
+          {busy ? 'Working…' : confirmLabel}
         </Button>
       </div>
     </dialog>
