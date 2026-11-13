@@ -13,7 +13,7 @@ The Part 1 brief says, underlined, that "the backend will be manually coded in p
 
 ## The plan
 
-`docs/backend-plan.md` holds what the team agreed on 9 November 2026: the REST contract (routes, JSON, error bodies), the table, the checks with their exact messages, the split between four people, the H2 database (Supabase was dropped on 11 November 2026), and the tests. The frontend already calls exactly that contract. Answer backend questions from it, and if a change to the contract is needed, say so: the team and the frontend both depend on it.
+`docs/backend-plan.md` holds what the team agreed on 9 November 2026: the REST contract (routes, JSON, error bodies), the table, the checks with their exact messages, the split between four people, the Supabase setup, and the tests. The frontend already calls exactly that contract. Answer backend questions from it, and if a change to the contract is needed, say so: the team and the frontend both depend on it.
 
 ## What the Part 2 brief asks for
 

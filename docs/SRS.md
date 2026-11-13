@@ -229,7 +229,7 @@ A [published analysis of the dataset](https://turkinass.github.io/Aqar_Real_Esta
 ### 3.5 Data lifecycle
 
 - The server's database starts from the seed. When the app starts, it loads the portfolio from the server.
-- Changes are kept in the server's database and survive a page reload (C-02). The database lives in the server's memory, so restarting the server brings back the seed.
+- Changes are kept in the server's database and survive a page reload (C-02). On Supabase Postgres they also survive a restart of the server. On the local H2 database, which lives in the server's memory, a restart brings back the seed.
 - The market reference never changes while the app runs.
 
 These values are calculated when needed and never stored: the display title ("Villa in {district}, {city}"), comparables, the fair-rent estimate, the market position and embeddings.
