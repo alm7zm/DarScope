@@ -5,7 +5,7 @@ import PropertyDetail from '../components/properties/PropertyDetail.jsx';
 import PropertyNotFound from '../components/properties/PropertyNotFound.jsx';
 import Button, { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
-import { LoadError } from '../components/ui/PageStates.jsx';
+import { LoadError, Loading } from '../components/ui/PageStates.jsx';
 import { TEXT } from '../constants/messages.js';
 import { useServerProperty } from '../hooks/useServerProperty.js';
 import { PATHS } from '../routes/paths.js';
@@ -19,14 +19,14 @@ import styles from './PropertyDetailPage.module.css';
 export default function PropertyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { property, notFound, error } = useServerProperty(id);
+  const { property, notFound, error, retry } = useServerProperty(id);
   /** True while the delete is awaiting confirmation (FR-DEL-02). */
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   if (error) {
     return (
       <Page title="Property">
-        <LoadError reason={error} />
+        <LoadError reason={error} onRetry={retry} />
       </Page>
     );
   }
@@ -43,7 +43,7 @@ export default function PropertyDetailPage() {
   if (!property) {
     return (
       <Page title="Property">
-        <p>Loading property…</p>
+        <Loading message="Loading property…" />
       </Page>
     );
   }

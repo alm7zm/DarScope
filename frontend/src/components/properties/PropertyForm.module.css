@@ -50,7 +50,7 @@
   margin: var(--space-5) 0 0;
   padding: var(--space-3) var(--space-4);
   border: var(--border-width) solid var(--color-status-maintenance-text);
-  border-left-width: var(--border-width-thick);
+  border-inline-start-width: var(--border-width-thick);
   border-radius: var(--radius);
   background-color: var(--color-status-maintenance-bg);
   color: var(--color-status-maintenance-text);
@@ -61,7 +61,7 @@
   margin: 0 0 var(--space-4);
   padding: var(--space-3) var(--space-4);
   border: var(--border-width) solid var(--color-danger);
-  border-left-width: var(--border-width-thick);
+  border-inline-start-width: var(--border-width-thick);
   border-radius: var(--radius);
   background-color: var(--color-danger-tint);
   color: var(--color-danger-strong);
@@ -81,4 +81,16 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-md);
+}
+
+/* The amenities, in three short headed groups rather than one long run of boxes. */
+.amenityGroup + .amenityGroup {
+  margin-top: var(--space-4);
+}
+
+.amenityTitle {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
 }

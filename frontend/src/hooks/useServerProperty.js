@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { usePortfolio } from './usePortfolio.js';
 
 /**
@@ -8,7 +8,8 @@ import { usePortfolio } from './usePortfolio.js';
  *
  * @param {string} id Such as `RP-0007`.
  * @returns {{ property: Record<string, unknown> | null, notFound: boolean,
- *   error: string | null }} All three empty means the first answer has not arrived yet.
+ *   error: string | null, retry: () => void }} All three empty means the first answer has not
+ *   arrived yet. `retry` asks the server again, after an error.
  */
 export function useServerProperty(id) {
   const { properties, loadProperty } = usePortfolio();
@@ -17,6 +18,9 @@ export function useServerProperty(id) {
     notFound: false,
     error: null,
   });
+
+  const [attempt, setAttempt] = useState(0);
+  const retry = useCallback(() => setAttempt((count) => count + 1), []);
 
   useEffect(() => {
     let active = true;
@@ -38,7 +42,7 @@ export function useServerProperty(id) {
     return () => {
       active = false;
     };
-  }, [id, properties, loadProperty]);
+  }, [id, properties, loadProperty, attempt]);
 
-  return state;
+  return { ...state, retry };
 }

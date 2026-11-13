@@ -244,3 +244,20 @@ describe('DashboardPage: shortcuts (FR-DSH-07)', () => {
     ).toHaveAttribute('href', '/properties');
   });
 });
+
+describe('DashboardPage: the figures link to the list (FR-DSH-07)', () => {
+  it('opens the Properties list already narrowed to a status', async () => {
+    await openDashboard();
+    const main = within(screen.getByRole('main'));
+
+    expect(
+      main.getByRole('link', { name: 'View vacant properties' }),
+    ).toHaveAttribute('href', '/properties?status=Vacant');
+    expect(
+      main.getByRole('link', { name: 'View occupied properties' }),
+    ).toHaveAttribute('href', '/properties?status=Occupied');
+    expect(
+      main.getByRole('link', { name: 'View under maintenance properties' }),
+    ).toHaveAttribute('href', '/properties?status=Under+maintenance');
+  });
+});

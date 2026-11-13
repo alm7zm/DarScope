@@ -225,3 +225,64 @@ describe('PropertyListPage: pages (FR-LST-10, Part 2 brief requirement 4)', () =
     expect(dataRows()).toHaveLength(10);
   });
 });
+
+describe('PropertyListPage: the search lives in the URL (FR-SRC-12)', () => {
+  it('opens already narrowed when the URL carries a filter, with a chip to undo it', async () => {
+    const vacant = (await propertyService.list()).filter(
+      (property) => property.status === 'Vacant',
+    );
+    expect(vacant.length).toBeGreaterThan(0);
+
+    renderRoutes(routes, { initialEntries: ['/properties?status=Vacant'] });
+    await waitFor(() =>
+      expect(screen.queryByText('Loading properties…')).not.toBeInTheDocument(),
+    );
+
+    expect(screen.getByRole('checkbox', { name: 'Vacant' })).toBeChecked();
+    expect(
+      screen.getByRole('button', { name: 'Remove filter: Vacant' }),
+    ).toBeInTheDocument();
+    expect(dataRows()).toHaveLength(vacant.length);
+  });
+
+  it('writes a filter to the URL, and removes it again with its chip', async () => {
+    const user = userEvent.setup();
+    const { router } = await renderList();
+
+    await user.click(screen.getByRole('checkbox', { name: 'Riyadh' }));
+    await waitFor(() =>
+      expect(router.state.location.search).toBe('?city=Riyadh'),
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: 'Remove filter: Riyadh' }),
+    );
+    await waitFor(() => expect(router.state.location.search).toBe(''));
+    expect(screen.getByRole('checkbox', { name: 'Riyadh' })).not.toBeChecked();
+  });
+
+  it('sorts by the chosen field and keeps the choice in the URL (FR-SRC-09)', async () => {
+    const user = userEvent.setup();
+    const { router } = await renderList();
+
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Sort by' }),
+      'Yearly rent',
+    );
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Order' }),
+      'Ascending',
+    );
+
+    await waitFor(() =>
+      expect(router.state.location.search).toBe('?sort=yearlyRentSar&dir=asc'),
+    );
+    const rents = (await propertyService.list())
+      .map((property) => property.yearlyRentSar)
+      .sort((left, right) => left - right);
+    const firstRow = dataRows()[0];
+    expect(firstRow).toHaveTextContent(
+      new Intl.NumberFormat('en-US').format(rents[0]),
+    );
+  });
+});
