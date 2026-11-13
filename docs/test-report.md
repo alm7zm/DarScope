@@ -238,3 +238,17 @@ Functions    : 97.27% ( 286/294 )
 Lines        : 97.8% ( 757/774 )
 ================================================================================
 ```
+
+## Backend (Part 2)
+
+Run on 13 November 2026 with `./mvnw test` inside `backend/` (Spring Boot 4.1.2, Java 21, H2):
+
+| Test class | What it covers | Tests | Result |
+| --- | --- | --- | --- |
+| `PropertyServiceTest` | The service with a Mockito mock for the repository: pages, get by ID, create, update, delete, the tenant and lease rules | 19 | Pass |
+| `PropertyControllerTest` | The five routes through MockMvc with a Mockito mock for the service: status codes, Location, the 400 and 404 bodies with their exact messages | 17 | Pass |
+| `DarscopeApplicationTests` | The whole server on H2: the 8 starting properties, Arabic text, pages newest first, add, update, delete, IDs never reused | 6 | Pass |
+| **Total** | | **42** | **0 failures, 0 errors** |
+
+End to end, the same day: the server on the `supabase` profile against PostgreSQL 16, and the React app through `npm run dev`. The list paged with `?page=1&size=5`, a property was added (RP-0010), edited and deleted through the forms, an unknown ID showed "Property not found", and the data stayed after a restart.
+
