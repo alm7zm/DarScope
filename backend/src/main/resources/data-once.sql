@@ -1,6 +1,6 @@
--- Supabase only: the same 8 starting properties as data.sql, inserted only while the table is
--- empty. Restarting the server never adds them twice, and never brings back one the app deleted.
--- ORDER BY n keeps the IDs 1 to 8 in the same order as on H2.
+-- The same 8 starting properties as data.sql, inserted only while the table is empty, for the
+-- profiles whose data is kept: local (H2 in a file) and supabase. Restarting the server never adds
+-- them twice, and never brings back one the app deleted. ORDER BY n keeps the IDs 1 to 8 in order.
 INSERT INTO property (city, district, front, property_type, size_sqm, property_age_years, bedrooms, bathrooms, living_rooms, kitchen, garage, driver_room, maid_room, furnished, ac, roof, pool, frontyard, basement, stairs, elevator, fireplace, yearly_rent_sar, description, status, tenant_name, lease_start, lease_end, created_at, updated_at)
 SELECT city, district, front, property_type, size_sqm, property_age_years, bedrooms, bathrooms, living_rooms, kitchen, garage, driver_room, maid_room, furnished, ac, roof, pool, frontyard, basement, stairs, elevator, fireplace, yearly_rent_sar, description, status, tenant_name, lease_start, lease_end, created_at, updated_at
 FROM (VALUES

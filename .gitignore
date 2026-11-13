@@ -33,3 +33,6 @@ ai-model/models/
 
 # The Spring server's build output
 backend/target/
+
+# The local profile's H2 database file
+backend/data/

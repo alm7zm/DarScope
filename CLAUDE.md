@@ -75,7 +75,7 @@ Run these inside `frontend/`. If `frontend/package.json` does not exist, the app
 | `npm run format` | Format the code with Prettier |
 | `npm run build` | Build static files into `frontend/dist/` |
 
-`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` (H2), the same with `-Dspring-boot.run.profiles=supabase`, and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
+`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` (H2 in memory), the same with `-Dspring-boot.run.profiles=local` (H2 in a file, kept between restarts) or `-Dspring-boot.run.profiles=supabase`, and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
 
 The team works on Windows. Every npm script must also run on macOS and Linux, so use Node scripts instead of shell commands such as `rm`, `cp` or `VAR=value command`.
 

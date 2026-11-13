@@ -19,7 +19,7 @@ https://www.kaggle.com/datasets/lama122/saudi-arabia-real-estate-aqar
 
 The app needs both halves running, in two terminals:
 
-1. **The server**, in `backend/`: `mvnw.cmd spring-boot:run` (`./mvnw` on macOS and Linux). It needs JDK 21 or later, and starts on <http://localhost:8080> with an in-memory H2 database, where changes last until the server stops. To use the team's Supabase database instead, so changes are kept, add `-Dspring-boot.run.profiles=supabase` and see [docs/backend-plan.md](docs/backend-plan.md), section 7.
+1. **The server**, in `backend/`: `mvnw.cmd spring-boot:run` (`./mvnw` on macOS and Linux). It needs JDK 21 or later, and starts on <http://localhost:8080> with an in-memory H2 database, where changes last until the server stops. To keep changes on your laptop between restarts, add `-Dspring-boot.run.profiles=local` (H2 saved to `backend/data/`). To use the team's Supabase database instead, add `-Dspring-boot.run.profiles=supabase` and see [docs/backend-plan.md](docs/backend-plan.md), section 7.
 2. **The app**, in `frontend/`: `npm install` once, then `npm run dev`, and open <http://localhost:5173>. It forwards every `/api` call to the server.
 
 The frontend commands need Node.js 22.13 or later (22 or 24 LTS) and npm. Run them inside `frontend/`. None of the tests needs the server.

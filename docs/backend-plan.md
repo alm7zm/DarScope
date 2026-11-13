@@ -196,13 +196,16 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 
 Supabase was dropped on 11 November 2026 and brought back on 12 November 2026, agreed by the team. The brief does not ask for a database, so Supabase is the extra the demo shows: a property added in the app is still there after Spring restarts. H2 stays the default, so the tests, a fresh laptop and a bad network all still work with no setup.
 
-| | H2 (default profile) | Supabase (`supabase` profile) |
-| --- | --- | --- |
-| Where the data lives | In memory, inside Spring | Postgres in the cloud |
-| Setting up the table and the 8 starting properties | `schema.sql` and `data.sql`, run by Spring at every start | `schema.sql`, `supabase/security.sql` and `supabase/data.sql`, run by Spring at every start, and safe to run again: the table is created only if it is missing, and the starting properties go only into an empty table |
-| After a restart | Back to the 8 starting properties | Everything kept |
-| Needs | Nothing | `backend/.env` and a network that allows port 5432 |
-| Used by the tests | Yes | Never |
+| | H2 in memory (default profile) | H2 in a file (`local` profile) | Supabase (`supabase` profile) |
+| --- | --- | --- | --- |
+| Where the data lives | In memory, inside Spring | `backend/data/darscope.mv.db` on the laptop | Postgres in the cloud |
+| Setting up the table and the 8 starting properties | `schema.sql` and `data.sql` at every start | `schema.sql` and `data-once.sql` at every start, both safe to run again | `schema.sql`, `supabase/security.sql` and `data-once.sql` at every start, all safe to run again |
+| After a restart | Back to the 8 starting properties | Everything kept | Everything kept |
+| To start again from the 8 | Restart | Delete `backend/data/` | `DROP TABLE property;` in the SQL Editor |
+| Needs | Nothing | Nothing | `backend/.env` and a network that allows port 5432 |
+| Used by the tests | Yes | Never | Never |
+
+Run the `local` profile with `mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local`. It keeps the team's own data between restarts with nothing to install, so it is the everyday choice when Supabase is not needed. Its H2 console is at <http://localhost:8080/h2-console> with the JDBC URL `jdbc:h2:file:./data/darscope;AUTO_SERVER=TRUE`, while the server runs from `backend/`. `data-once.sql` inserts the starting properties only into an empty table, so a restart never adds them twice or brings back one the app deleted.
 
 ### Setting it up (Person A)
 
