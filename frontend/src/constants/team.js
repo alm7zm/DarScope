@@ -42,14 +42,13 @@ export const TEAM = [
     github: 'https://github.com/alm7zm',
   },
   {
-    name: 'Muhammad Yawar',
-    studentId: '',
-    bio: '',
+    name: 'Muhammad Yawar Hayat',
+    studentId: '222211563',
+    bio: 'Software Engineering senior at Prince Sultan University and a cybersecurity enthusiast',
     photo: '',
     email: '',
     linkedin: '',
-    github: '',
-    pending: true,
+    github: 'https://github.com/Muhammad-Yawar-Hayat',
   },
   {
     name: 'Omar Alrajhi',
