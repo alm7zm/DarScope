@@ -1,0 +1,21 @@
+#!/bin/sh
+# Runs Maven without installing it. The first run downloads Maven 3.9.11 into
+# ~/.m2/wrapper/dists, and later runs reuse it.
+# Usage, inside backend/:  ./mvnw spring-boot:run   or   ./mvnw test
+set -e
+MVN_VERSION=3.9.11
+MVN_DISTS="$HOME/.m2/wrapper/dists"
+MVN_HOME="$MVN_DISTS/apache-maven-$MVN_VERSION"
+
+if [ ! -x "$MVN_HOME/bin/mvn" ]; then
+  echo "Downloading Maven $MVN_VERSION, once..."
+  mkdir -p "$MVN_DISTS"
+  URL="https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/$MVN_VERSION/apache-maven-$MVN_VERSION-bin.tar.gz"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$URL" | tar -xz -C "$MVN_DISTS"
+  else
+    wget -qO- "$URL" | tar -xz -C "$MVN_DISTS"
+  fi
+fi
+
+exec "$MVN_HOME/bin/mvn" "$@"

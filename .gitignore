@@ -30,3 +30,6 @@ Thumbs.db
 ai-model/data/ 
 ai-model/figures/
 ai-model/models/
+
+# The Spring server's build output
+backend/target/
