@@ -3,7 +3,11 @@ import NeedsAttentionList from '../components/dashboard/NeedsAttentionList.jsx';
 import SummaryCards from '../components/dashboard/SummaryCards.jsx';
 import { ButtonLink } from '../components/ui/Button.jsx';
 import Page from '../components/ui/Page.jsx';
-import { EmptyState, LoadError } from '../components/ui/PageStates.jsx';
+import {
+  EmptyState,
+  LoadError,
+  Loading,
+} from '../components/ui/PageStates.jsx';
 import { TEXT } from '../constants/messages.js';
 import { usePortfolio } from '../hooks/usePortfolio.js';
 import { PATHS } from '../routes/paths.js';
@@ -12,12 +16,12 @@ import styles from './DashboardPage.module.css';
 
 /** The portfolio at a glance (SRS 4.2). */
 export default function DashboardPage() {
-  const { properties, loading, loadError } = usePortfolio();
+  const { properties, loading, loadError, reload } = usePortfolio();
 
   if (loading) {
     return (
       <Page title="Dashboard">
-        <p>Loading the portfolio…</p>
+        <Loading message="Loading the portfolio…" />
       </Page>
     );
   }
@@ -25,7 +29,7 @@ export default function DashboardPage() {
   if (loadError) {
     return (
       <Page title="Dashboard">
-        <LoadError reason={loadError} />
+        <LoadError reason={loadError} onRetry={reload} />
       </Page>
     );
   }

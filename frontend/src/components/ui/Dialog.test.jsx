@@ -83,4 +83,14 @@ describe('Dialog (FR-DEL-02, NFR-ACC-06)', () => {
     renderDialog({ open: false });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it('disables the confirm button and says it is working while busy', () => {
+    renderDialog({ busy: true });
+
+    expect(screen.getByRole('button', { name: 'Working…' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeEnabled();
+    expect(
+      screen.queryByRole('button', { name: 'Delete' }),
+    ).not.toBeInTheDocument();
+  });
 });
