@@ -56,3 +56,34 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
 }
+
+/* A card that is a link: the link's own box is just the number, so a pseudo-element stretches it
+   over the whole card, and the card shows the pointer, a border and a focus ring to match. */
+.clickable {
+  position: relative;
+}
+
+.clickable:hover {
+  border-color: var(--color-primary);
+}
+
+.clickable:has(.link:focus-visible) {
+  outline: var(--border-width-thick) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}

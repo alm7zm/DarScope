@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { MESSAGE_TIMEOUT_MS } from '../constants/messages.js';
 import * as propertyService from '../services/propertyService.js';
 import { PortfolioContext } from './portfolioContext.js';
@@ -12,7 +12,11 @@ import { initialPortfolioState, portfolioReducer } from './portfolioReducer.js';
 export default function PortfolioProvider({ children }) {
   const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
 
-  // Load the portfolio once, when the app starts (FR-DAT-01).
+  // Bumped by `reload`, so a "Try again" asks the server once more (a free Supabase project that
+  // was asleep, or a server started a moment late, needs nothing more than a second attempt).
+  const [attempt, setAttempt] = useState(0);
+
+  // Load the portfolio when the app starts (FR-DAT-01), and again whenever `reload` is called.
   useEffect(() => {
     let active = true;
     dispatch({ type: 'load/start' });
@@ -29,7 +33,10 @@ export default function PortfolioProvider({ children }) {
     return () => {
       active = false;
     };
-  }, []);
+  }, [attempt]);
+
+  /** Ask the server for the whole portfolio again, after a failed load. */
+  const reload = useCallback(() => setAttempt((count) => count + 1), []);
 
   // A confirmation message clears itself, and the timer starts again whenever a new one arrives
   // (FR-FBK-01). The Message component also lets the user dismiss it sooner.
@@ -84,6 +91,7 @@ export default function PortfolioProvider({ children }) {
       loadPage,
       loadProperty,
       clearMessage,
+      reload,
     }),
     [
       state,
@@ -93,6 +101,7 @@ export default function PortfolioProvider({ children }) {
       loadPage,
       loadProperty,
       clearMessage,
+      reload,
     ],
   );
 

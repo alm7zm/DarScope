@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { usePortfolio } from './usePortfolio.js';
 
 /**
@@ -12,11 +12,14 @@ import { usePortfolio } from './usePortfolio.js';
  * @param {number} perPage
  * @param {boolean} enabled False while a search is active: the list then pages in the browser.
  * @returns {{ result: Awaited<ReturnType<ReturnType<typeof usePortfolio>['loadPage']>> | null,
- *   error: string | null }}
+ *   error: string | null, retry: () => void }} `retry` asks the server for the page again, after
+ *   an error.
  */
 export function useServerPage(page, perPage, enabled) {
   const { properties, loadPage } = usePortfolio();
   const [state, setState] = useState({ result: null, error: null });
+  const [attempt, setAttempt] = useState(0);
+  const retry = useCallback(() => setAttempt((count) => count + 1), []);
 
   useEffect(() => {
     if (!enabled) return undefined;
@@ -40,7 +43,7 @@ export function useServerPage(page, perPage, enabled) {
     return () => {
       active = false;
     };
-  }, [page, perPage, enabled, properties, loadPage]);
+  }, [page, perPage, enabled, properties, loadPage, attempt]);
 
-  return state;
+  return { ...state, retry };
 }

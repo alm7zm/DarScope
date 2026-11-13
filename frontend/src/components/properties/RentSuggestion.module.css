@@ -64,7 +64,7 @@
   margin: 0;
   padding: var(--space-2) var(--space-3);
   border: var(--border-width) solid var(--color-status-maintenance-text);
-  border-left-width: var(--border-width-thick);
+  border-inline-start-width: var(--border-width-thick);
   border-radius: var(--radius-sm);
   background-color: var(--color-status-maintenance-bg);
   color: var(--color-status-maintenance-text);

@@ -5,7 +5,7 @@ import {
   isSearchActive,
   searchProperties,
 } from '../utils/search.js';
-import { DEFAULT_PAGE_SIZE } from '../utils/sort.js';
+import { DEFAULT_PAGE_SIZE, DEFAULT_SORT } from '../utils/sort.js';
 import { validateFilters } from '../utils/validation.js';
 
 /**
@@ -16,14 +16,25 @@ import { validateFilters } from '../utils/validation.js';
  * once on Enter (FR-SRC-03). Any change to the query, the filters or the page size goes back to
  * page 1 (FR-LST-10).
  *
+ * The state can start from a URL: pass what `readSearchState` made of the query string as
+ * `initial`. The hook reads it once and never touches the router itself, so it stays testable
+ * without one (FR-SRC-12).
+ *
  * @param {Array<Record<string, unknown>>} properties The whole portfolio.
+ * @param {Partial<ReturnType<typeof import('../utils/searchParams.js').readSearchState>>} [initial]
  */
-export function usePropertySearch(properties) {
-  const [text, setText] = useState('');
-  const [query, setQuery] = useState('');
-  const [filters, setFilters] = useState(EMPTY_FILTERS);
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPageCount] = useState(DEFAULT_PAGE_SIZE);
+export function usePropertySearch(properties, initial = {}) {
+  const [text, setText] = useState(initial.query ?? '');
+  const [query, setQuery] = useState(initial.query ?? '');
+  const [filters, setFilters] = useState(() => ({
+    ...EMPTY_FILTERS,
+    ...initial.filters,
+  }));
+  const [sort, setSortState] = useState(initial.sort ?? DEFAULT_SORT);
+  const [page, setPage] = useState(initial.page ?? 1);
+  const [perPage, setPerPageCount] = useState(
+    initial.perPage ?? DEFAULT_PAGE_SIZE,
+  );
 
   // Only text that differs from the current search starts the clock. Otherwise opening the page,
   // or typing a letter and rubbing it out, would send the list back to page 1 a moment later,
@@ -46,6 +57,19 @@ export function usePropertySearch(properties) {
   /** Show 10, 25 or 50 properties per page, starting again from page 1 (FR-LST-10). */
   const setPerPage = useCallback((count) => {
     setPerPageCount(count);
+    setPage(1);
+  }, []);
+
+  /** Change the order of the list, starting again from page 1 (FR-SRC-09). */
+  const setSort = useCallback((next) => {
+    setSortState((current) => ({ ...current, ...next }));
+    setPage(1);
+  }, []);
+
+  /** Empty the search box and search for nothing, at once. */
+  const clearQuery = useCallback(() => {
+    setText('');
+    setQuery('');
     setPage(1);
   }, []);
 
@@ -95,6 +119,20 @@ export function usePropertySearch(properties) {
   return {
     /** What is in the search box. */
     text,
+    /** What the list is actually searched for: `text`, after the pause or Enter. */
+    query,
+    clearQuery,
+    /** The order of the list, and how to change it (FR-SRC-09). */
+    sort,
+    setSort,
+    /**
+     * Whether the browser, not the server, has to cut the list into pages: a search, a filter or
+     * a chosen order are all done here, where the Arabic matching lives.
+     */
+    browserPaged:
+      isSearchActive({ query, filters }) ||
+      sort.key !== DEFAULT_SORT.key ||
+      sort.direction !== DEFAULT_SORT.direction,
     setText,
     commitSearch,
     filters,
