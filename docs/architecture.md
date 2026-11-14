@@ -1,23 +1,25 @@
 # Architecture
 
 Part of deliverable PD-04 (SRS section 12), with [features.md](features.md) and the
-[README](../README.md). It describes the code as it is on 11 November 2026, not the plans in the
-SRS. Where a planned part is missing, it says so. Requirement IDs follow SRS version 1.1.
+[README](../README.md). It describes the code as it is on 14 November 2026. Requirement IDs
+follow SRS version 1.2, which withdrew every requirement the app did not meet, so nothing the SRS
+still asks for is missing here.
 
 ## 1. Overview
 
 Darscope is a single-page React app for one company's rental villas and duplexes in Riyadh,
 Jeddah, Dammam and Al Khobar. The interface runs in the browser. Since Part 2 the portfolio
-lives in the team's Java Spring server, in Supabase Postgres (or an H2 database in the server's
-memory for local runs), and the app reads and writes it through that server's REST API. On
-Supabase changes are kept; on H2 they last until the server stops. The browser keeps only what the server returned. It holds no database,
-no cookie, no analytics and no API key. One AI feature is built: the Add and Edit forms suggest
-a yearly rent from the rent model the team trained on 2021 listings. That runs in the browser
-too, from a JSON file of weights loaded the first time a form needs it.
+lives in the team's Java Spring server, in `backend/`, and the app reads and writes it through
+that server's REST API. By default the server keeps it in an H2 database in its own memory, where
+changes last until the server stops. The `local` profile saves H2 to a file and the `supabase`
+profile uses Supabase Postgres, and both keep changes across a restart. The browser keeps only
+what the server returned. It holds no database, no cookie, no analytics and no API key. One AI
+feature is built: the Add and Edit forms suggest a yearly rent from the rent model the team
+trained on 2021 listings. That runs in the browser too, from a JSON file of weights loaded the
+first time a form needs it.
 
-The server is built with AI assistance (`docs/ai-usage.md`). Its contract is
-`docs/backend-plan.md`. On 11 November 2026 its code is not in the repository yet: there is no
-`backend/` folder on `dev` or `main`.
+The server was built with AI assistance (`docs/ai-usage.md`), from the contract in
+`docs/backend-plan.md`.
 
 ## 2. Modules
 
@@ -26,7 +28,7 @@ flowchart TD
     App["App.jsx<br/>PortfolioProvider around the router"]
     Routes["routes/routes.jsx<br/>one URL per page"]
     Layout["layouts/AppLayout<br/>header, menu, message strip, footer"]
-    Pages["pages/<br/>Dashboard, Properties, Add and Edit,<br/>Detail, Market insights, About,<br/>Not found, Error"]
+    Pages["pages/<br/>Dashboard, Properties, Add and Edit,<br/>Detail, About, Not found, Error"]
     Components["components/<br/>properties, dashboard, search, about, ui"]
     Hooks["hooks/<br/>usePortfolio, usePropertySearch,<br/>useServerPage, useServerProperty"]
     State["context/<br/>PortfolioProvider and portfolioReducer"]
@@ -36,7 +38,13 @@ flowchart TD
     Constants["constants/<br/>choices, messages, team, market"]
     Weights[("data/rent-model.json")]
     Districts[("data/districts.json")]
-    Server["Spring server, port 8080<br/>/api/v1/properties<br/>(not in the repository yet)"]
+    subgraph Server["Spring server in backend/, port 8080"]
+        Controller["PropertyController<br/>the five routes under /api/v1/properties"]
+        Rules["PropertyService<br/>IDs, timestamps, the two-field checks"]
+        Repo["PropertyRepository<br/>Spring Data JDBC"]
+        Handler["ApiExceptionHandler<br/>the 400 and 404 bodies"]
+    end
+    DB[("H2, or Supabase Postgres")]
 
     App --> Routes --> Layout --> Pages
     Pages --> Components
@@ -44,7 +52,9 @@ flowchart TD
     Components --> Hooks
     Hooks --> State
     State --> Service
-    Service -->|fetch, through the Vite proxy| Server
+    Service -->|fetch, through the Vite proxy| Controller
+    Controller --> Rules --> Repo --> DB
+    Rules -.->|exceptions| Handler
     Components --> RentService
     RentService -.->|dynamic import, on first use| Weights
     Service --> Utils
@@ -60,17 +70,18 @@ flowchart TD
 | `routes/` | `routes.jsx` maps each URL to its page inside `AppLayout`, with `ErrorPage` as the error boundary. `paths.js` holds every URL. |
 | `layouts/` | The header with the menu, which folds behind a Menu button below 768 px, the one message strip that screen readers announce, and the footer. |
 | `pages/` | One thin component per URL. Each reads state through a hook and arranges components. |
-| `components/` | The building blocks, one folder per feature, with shared pieces in `ui/`: `Button` and `ButtonLink`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`, `Pager`, `EmptyState` and `LoadError`. |
-| `hooks/` | `usePortfolio` gives a component the properties and the actions that change them. `usePropertySearch` holds the search box, the filters and the page number, and works out the matching properties. `useServerPage` asks the server for one page of the list, and `useServerProperty` for one property by its ID. |
+| `components/` | The building blocks, one folder per feature, with shared pieces in `ui/`: `Button` and `ButtonLink`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`, `Pager`, `EmptyState`, `Loading` and `LoadError`. |
+| `hooks/` | `usePortfolio` gives a component the properties and the actions that change them. `usePropertySearch` holds the search box, the filters, the order, the page number and the page size, can start from what the URL holds, and works out the matching properties. `useServerPage` asks the server for one page of the list, and `useServerProperty` for one property by its ID. |
 | `context/` | `PortfolioProvider` loads the portfolio from the server once, runs the actions and clears each message after 5 seconds. `portfolioReducer` is the pure function that applies each change. |
 | `services/propertyService.js` | The data service: the only code that reads or writes properties. It calls the server's REST routes and translates between the server's JSON and the app's shape (section 4). |
 | `services/rentModelService.js` | Loads the rent model's weights with a dynamic `import()`, once, and lets a later form try again if the load fails. |
 | `utils/` | Pure functions with no React in them: field checks, search, sorting, paging, the URL state, Arabic normalisation, formatting, Dashboard figures, the rent model and team photos. |
 | `constants/` | Every fixed list, message and threshold, so no component repeats one (NFR-MNT-04). |
+| `backend/` | The Spring server. `PropertyController` maps the five REST routes and checks each body with the Bean Validation annotations on the `Property` record. `PropertyService` sets the IDs and timestamps, applies the two checks that compare fields and clears the tenant of a property that is not Occupied. `PropertyRepository` reads and writes the `property` table through Spring Data JDBC. `ApiExceptionHandler` turns each failure into the error bodies of `docs/backend-plan.md`, section 3. |
 
-Not built yet: the market reference set and its service (`marketService.js`), the
-language-model wrapper (`embeddingService.js`) and the `components/market/` folder. They belong to
-the Should features in SRS 7.1 to 7.4. `/insights` shows a placeholder page and is not in the menu.
+SRS version 1.2 withdrew the market reference set, the language-model wrapper and the
+`components/market/` folder, with the features that needed them (SRS 7.1 to 7.4). `/insights`
+shows "Page not found".
 
 ## 3. Data flow
 
@@ -79,10 +90,11 @@ the Should features in SRS 7.1 to 7.4. `/insights` shows a placeholder page and 
 1. `PortfolioProvider` calls `propertyService.list()` once, which asks the server for
    `GET /api/v1/properties?page=0&size=1000`.
 2. The reducer stores the properties. The Dashboard, the search and the edit page all read this
-   one list. While it loads, each page says "Loading…".
+   one list. While it loads, each page shows a spinner beside "Loading…".
 3. If the server cannot be reached, or answers with a 5xx status, the Dashboard, the property list
    and the edit page show "The Darscope server could not be reached. Check that it is running,
-   then try again." in place of their content.
+   then try again." in place of their content, with a Try again button that asks the server
+   once more (`reload` in `PortfolioProvider`).
 
 One request of up to 1,000 properties is a deliberate limit, marked in the code. A larger
 portfolio would need the service to loop over pages.
@@ -136,15 +148,16 @@ form warns first and the tenant and lease are cleared on save (FR-UPD-07).
 1. **Delete** on a list row or the detail page opens `DeletePropertyDialog`, a native
    `<dialog>` that names the property. Cancel has focus first and Esc cancels (FR-DEL-02).
 2. **Delete** in the dialog calls `deleteProperty(id)`, and the service sends
-   `DELETE /api/v1/properties/{n}`. The server answers 204. Its database never issues the number
-   again (FR-DEL-06).
+   `DELETE /api/v1/properties/{n}`. While the request runs the dialog is busy, so a double click
+   deletes once. The server answers 204. Its database never issues the number again (FR-DEL-06).
 3. The reducer removes the property and sets "Property RP-0001 deleted". From the detail page the
    app returns to the list (FR-DEL-03 to FR-DEL-05). If the delete fails, the dialog stays open
    and says why.
 
 ### Browse the list a page at a time
 
-1. With nothing typed and no filter set, `useServerPage` asks the server for the page shown:
+1. With nothing typed, no filter set and the default order (Last updated, newest first),
+   `useServerPage` asks the server for the page shown:
    `GET /api/v1/properties?page={n-1}&size={5, 10, 25 or 50}`. The server sorts by `updatedAt`,
    newest first.
 2. `listPage` turns the answer into `{ items, page, pageCount, from, to, total }`, the same
@@ -157,17 +170,25 @@ form warns first and the tenant and lease are cleared on save (FR-UPD-07).
 
 1. Each keystroke in the search box sets `text` in `usePropertySearch`. The search itself uses
    `query`, which follows `text` 300 ms after the last keystroke, or at once on Enter (FR-SRC-03).
-2. A filter change sets `filters` at once. `validateFilters` reports a rent or size range whose
-   "from" is above its "to", and that range is skipped (FR-SRC-07).
+2. A filter change sets `filters` at once: the cities, the statuses, the type, the rent and size
+   ranges, the minimum bedrooms and the ticked amenities (FR-SRC-04, FR-SRC-10). `validateFilters`
+   reports a rent or size range whose "from" is above its "to", and that range is skipped
+   (FR-SRC-07). Each active filter shows as a chip that removes it when dismissed
+   (`components/search/FilterChips.jsx`, FR-SRC-13).
 3. `searchProperties` keeps a property when every typed word appears in its searchable text and
    every filter matches (FR-SRC-02, FR-SRC-05). Both sides of each comparison go through
    `normalise` in `utils/arabic.js`, so Arabic spelling variants match (Appendix B.4). The result
    is memoised on the properties, the query and the filters.
 4. The search runs in the browser on the whole list from "Start", because the Arabic rules live
-   there. While a search or filter is active, the page sorts the matches newest first and cuts
-   them into pages itself, with `sortProperties` and `paginate`. Any change to the search, the
-   filters or the page size goes back to page 1 (FR-LST-10).
+   there. While a search, a filter or an order other than the default is active, the page sorts
+   the matches by the chosen Sort by and Order (FR-SRC-09) and cuts them into pages itself, with
+   `sortProperties` and `paginate`. Any change to the search, the filters, the order or the page
+   size goes back to page 1 (FR-LST-10).
 5. The list shows the result and "Showing X of Y properties" (FR-LST-04).
+6. The page writes the search text, the filters, the order, the page and the page size into the
+   URL (`writeSearchState` in `utils/searchParams.js`), and reads them back when it opens
+   (`readSearchState`), so Back and a bookmark restore the view (FR-SRC-12). The Dashboard's
+   status figures link to the list this way, already narrowed to that status.
 
 ### Rent suggestion
 
@@ -214,6 +235,14 @@ How the two sides fit:
   shows the server's copy. The edit page reads the property from the list loaded at start, which
   holds a new or changed property at once, because state takes what `create` and `update`
   returned.
+- **The other side.** The server's `PropertyController` answers these routes. `PropertyService`
+  sorts every page by `updatedAt`, newest first, then by ID, so a page never changes order, and
+  keeps a page between 1 and 1,000 properties (`MAX_PAGE_SIZE`). Its JUnit and Mockito tests are
+  in `backend/src/test/`, and `docs/test-report.md` gives their last run.
+- **A known gap.** The app always sends all 13 amenity fields. The server rejects a body that
+  leaves one out with 400 "The request could not be read", although `docs/backend-plan.md`
+  says a missing amenity counts as false. Only a hand-written request is affected
+  (`docs/tasks.md`, task 6).
 - **Removed in Part 2.** `restore` (undo, FR-DEL-07) and `reset` (Reset demo data, FR-DAT-05),
   both withdrawn in SRS version 1.1. Nothing on screen used them, and resetting a shared
   database is risky.
@@ -247,11 +276,18 @@ Versions are from `frontend/package.json`, and the installed ones from `package-
 | @types/react, @types/react-dom | ^19.2.18, ^19.2.7 | 19.3.0, 19.3.0 | Editor hints from the JSDoc type comments; the code is JavaScript |
 | Node.js | | 22.20.0 on the team's machine | Running the tools. The README asks for 22.13 or later. |
 
-The server's stack was chosen on 9 November 2026 (`docs/backend-plan.md`, section 6): Maven,
-Java 21, Spring Boot 4.1, Spring Web, Spring Data JDBC, Bean Validation, Supabase Postgres
-through the PostgreSQL driver, an in-memory H2 database for local runs and the tests, and JUnit
-with Mockito. Supabase was dropped on 11 November 2026 and brought back on 12 November 2026. Its code is not in the
-repository yet, so this document gives no installed versions for it.
+The server's stack, from `backend/pom.xml`:
+
+| Tool | Version | Used for |
+| --- | --- | --- |
+| Java | 21, the version the build targets | The server's language. It also runs on later JDKs: its tests were run on JDK 26 on 14 November 2026. |
+| Spring Boot, with Maven through the Maven wrapper | 4.1.2 | The server and its build (`mvnw.cmd`) |
+| `spring-boot-starter-webmvc` | From Spring Boot 4.1.2 | The REST routes |
+| `spring-boot-starter-data-jdbc` | From Spring Boot 4.1.2 | `PropertyRepository`, and pages cut in the database |
+| `spring-boot-starter-validation` | From Spring Boot 4.1.2 | The Bean Validation checks on `Property` |
+| H2, and `spring-boot-h2console` | From Spring Boot 4.1.2 | The default database, in memory or in a file, and its console at `/h2-console` |
+| PostgreSQL driver | From Spring Boot 4.1.2 | Supabase Postgres, on the `supabase` profile |
+| `spring-boot-starter-test` | From Spring Boot 4.1.2 | JUnit 5, Mockito and MockMvc for the tests |
 
 The rent model is trained outside the app, in `ai-model/prepare.ipynb`, with Python and the
 libraries in `ai-model/requirements.txt`: pandas 2.3.3, matplotlib 3.10.6 and scikit-learn
@@ -265,8 +301,8 @@ libraries in `ai-model/requirements.txt`: pandas 2.3.3, matplotlib 3.10.6 and sc
 | `components/about/` | The team gallery and the person card on the About page |
 | `components/dashboard/` | The summary cards, the city table and the Needs attention list |
 | `components/properties/` | The table, the detail view, the form, the District field, the rent suggestion, the delete dialog and "Property not found" |
-| `components/search/` | The search box and the filters |
-| `components/ui/` | The shared pieces: `Button` and `ButtonLink`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`, `Pager`, `EmptyState` and `LoadError` (`PageStates.jsx`), and `Placeholder` |
+| `components/search/` | The search box, the filters and the filter chips |
+| `components/ui/` | The shared pieces: `Button` and `ButtonLink`, `Badge`, `Dialog`, `FormField`, `Message`, `Page`, `Pager`, and `EmptyState`, `Loading` and `LoadError` (`PageStates.jsx`) |
 | `constants/` | `options.js` (choices and ranges), `messages.js` (every message), `market.js` (rounding and the mistyped-rent factor), `team.js` (team and course) |
 | `context/` | The portfolio context, its provider and its reducer |
 | `data/` | The rent model's weights and the district list, plus a README on where they come from |
@@ -312,11 +348,8 @@ valuation.
 - **The mistyped-rent check:** a typed rent more than 3 times the suggestion, or under a third of
   it, gets a warning that does not stop Save (`RENT_CHECK_FACTOR`, FR-RNT-07).
 
-### Planned, not built
+### Withdrawn in SRS version 1.2
 
-- **Search by meaning (SRS 7.1)** will use a ready-made multilingual language model,
-  `Xenova/multilingual-e5-small`, run in the browser with Transformers.js after the user agrees to
-  the download. The team trains no model for it.
-- **Comparable listings and the fair-rent estimate (SRS 7.2, 7.3)** will use a nearest-neighbour
-  method with fixed weights over the 2021 market reference set. Nothing is trained.
-- **Market insights (SRS 7.4)** will be plain statistics, not AI.
+Search by meaning (SRS 7.1), comparable listings and the fair-rent estimate (7.2, 7.3), Market
+insights (7.4) and plain-language input (7.5) were planned but never built, and SRS version 1.2
+withdrew them. The rent suggestion is the app's one AI feature.

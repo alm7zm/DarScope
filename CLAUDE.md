@@ -31,23 +31,21 @@ darscope/
 ├── frontend/           Part 1
 │   ├── package.json, index.html, vite.config.js, eslint.config.js
 │   ├── public/         favicon.svg
-│   ├── scripts/        prepare-data.mjs, not written yet (for market.reference.json)
 │   └── src/
 │       ├── main.jsx, App.jsx
 │       ├── routes/     routes.jsx (the URL to page table), paths.js
 │       ├── layouts/    AppLayout, NavMenu, Footer
 │       ├── pages/      one component per URL
 │       ├── components/ ui/ (Button, Badge, Dialog, FormField, Message, Page, Pager), then
-│       │               one folder per feature: properties/, dashboard/, market/, search/
+│       │               one folder per feature: properties/, dashboard/, search/, about/
 │       ├── context/    portfolio context, reducer and provider
 │       ├── hooks/      shared hooks: usePortfolio, usePropertySearch, useServerPage
-│       ├── services/   propertyService.js, marketService.js, embeddingService.js,
-│       │               rentModelService.js
-│       ├── utils/      validation, search, sort, arabic, format, stats, similarity, estimate,
+│       ├── services/   propertyService.js, rentModelService.js
+│       ├── utils/      validation, search, searchParams, sort, arabic, format, stats, photos,
 │       │               rentModel
 │       ├── constants/  choices, thresholds, messages, team details
 │       ├── styles/     tokens.css, global.css
-│       ├── data/       rent-model.json, districts.json (market.reference.json once built)
+│       ├── data/       rent-model.json, districts.json
 │       ├── assets/     team/: the team photos, any size; the build crops and shrinks them
 │       └── test/       setup.js, shared fixtures and helpers, and the in-memory stand-in
 │                       for the server: fakePropertyService.js, portfolio.seed.json
@@ -87,7 +85,6 @@ These are the defaults from SRS section 11. Ask before you swap one.
 - Vite, React Router, and React Context with a reducer for state. No state library.
 - CSS Modules, with design tokens as CSS variables. No component library or CSS framework.
 - Vitest with React Testing Library. ESLint and Prettier.
-- `@huggingface/transformers` version 4 or later, loaded only when search by meaning is first turned on.
 - `vite-imagetools`, a development dependency added on 15 October 2026, which crops and shrinks the team photos when the app is built.
 - Part 2, chosen by the team on 9 November 2026: Java 21, Spring Boot 4.1 with Maven, Spring Data JDBC and Bean Validation, as in lab 14; Supabase Postgres, with H2 for local runs; JUnit and Mockito. The contract is in `docs/backend-plan.md`.
 
@@ -103,7 +100,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 4. Components never import data files or change the collection themselves. Every read and write goes through `frontend/src/services/propertyService.js`, whose functions return Promises and call the server's REST routes (`docs/backend-plan.md`). In tests, `src/test/setup.js` swaps it for `src/test/fakePropertyService.js`. If a route or its JSON has to change, change the contract in `docs/backend-plan.md` first and tell the user: the team codes against it.
 5. The interface text is English. Property data may be Arabic or English, so render data text with `dir="auto"` and never assume left-to-right.
 6. Render user-entered text as text. Never use `dangerouslySetInnerHTML`.
-7. The AI features are optional extras. No Must requirement may depend on them, and each one must fail safely.
+7. The rent suggestion, the one AI feature, is an optional extra. No Must requirement may depend on it, and it must fail safely. SRS version 1.2 withdrew the other AI features and every other requirement the app did not meet: do not build a withdrawn one unless the user says the team brought it back.
 8. Never commit the raw Kaggle CSV, language-model files, `.env` files or `node_modules`. The one model file that is committed is `frontend/src/data/rent-model.json`, the rent model's weights, which hold no rows of the dataset (the team's decision of 16 October 2026).
 9. Never invent team names or student IDs. They live in `frontend/src/constants/team.js`: leave placeholders and ask the user.
 10. Tell the user before you add a dependency, and say why it is needed.
@@ -122,7 +119,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 - Tests for the change exist and pass, and lint is clean.
 - The browser console shows no errors.
 - It works with the keyboard alone and at 360 px wide.
-- Every Must feature still works when the language model cannot load.
+- Every Must feature still works when the rent model cannot load.
 
 ## Rule files
 
@@ -131,9 +128,8 @@ These are the defaults from SRS section 11. Ask before you swap one.
 | `.claude/rules/product.md` | Vocabulary, pages, feature priorities, build order. Always loaded. |
 | `.claude/rules/data-model.md` | Property fields, IDs, seed files, the data service |
 | `.claude/rules/frontend.md` | Components, forms, search, styling, accessibility, messages |
-| `.claude/rules/ai-features.md` | Search by meaning, comparables, fair-rent estimate |
+| `.claude/rules/ai-features.md` | The rent model and its suggestion on the forms |
 | `.claude/rules/testing.md` | What to test and how |
-| `.claude/rules/data-prep.md` | The script that builds the data files |
 | `.claude/rules/backend.md` | Rules for the Part 2 server |
 
 Each one loads when you open a file it covers. When you start in an area that has no files yet, read its rule file yourself first.

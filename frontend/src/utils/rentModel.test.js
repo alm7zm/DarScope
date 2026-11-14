@@ -222,7 +222,7 @@ describe('the exported model (ai-model/prepare.ipynb, step 19)', () => {
 });
 
 describe('roundToNearest', () => {
-  it('rounds to the nearest 500 SAR, as the estimate does (FR-EST-01)', () => {
+  it('rounds to the nearest 500 SAR (FR-ADD-13)', () => {
     expect(roundToNearest(123468, 500)).toBe(123500);
     expect(roundToNearest(123249, 500)).toBe(123000);
     expect(roundToNearest(123250, 500)).toBe(123500);

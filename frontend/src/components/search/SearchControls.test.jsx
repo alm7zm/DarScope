@@ -83,7 +83,7 @@ describe('The search box (FR-SRC-01, FR-SRC-02)', () => {
 
   it('AC-10 finds a property by its Arabic district', async () => {
     // The district is taken from the seed rather than written here, so the test keeps working
-    // when prepare-data replaces the seed with the real 40 properties.
+    // if the starting properties change.
     const all = await propertyService.list();
     const withArabic = all.find((property) => /[؀-ۿ]/.test(property.district));
     expect(withArabic).toBeDefined();

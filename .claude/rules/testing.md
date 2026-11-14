@@ -21,19 +21,19 @@ This file condenses `docs/SRS.md` section 10.8. The SRS wins if they differ. The
 
 | Kind | Must cover | Requirement |
 | --- | --- | --- |
-| Unit tests | Field checks, keyword search, filters, sorting, ID generation, Arabic normalisation, comparables, the estimate | NFR-TST-02 |
+| Unit tests | Field checks, keyword search, filters, sorting, ID generation, Arabic normalisation | NFR-TST-02 |
 | Component tests | The form with valid and invalid input, the list, the delete dialog, the About page | NFR-TST-03 |
 
-Statement coverage of `frontend/src/`, excluding the model wrapper `src/services/embeddingService.js`, should be at least 70% (NFR-TST-06). `vite.config.js` already leaves that file out.
+Statement coverage of `frontend/src/` should be at least 70% (NFR-TST-06). `vite.config.js` leaves only `src/test/` out.
 
 ## How to write them
 
 - Test behaviour through the interface: find elements by role and label, as a user would. Do not test implementation details.
-- Take expected values from the SRS, not from the code under test. Use the exact messages in Appendix C and the worked examples in Appendix B.
+- Take expected values from the SRS, not from the code under test. Use the exact messages in Appendix C and the normalisation examples in Appendix B.4.
 - Cover the edges the SRS names: every boundary of each number range, Occupied without a tenant name, a "from" above a "to", an unknown ID, an empty portfolio, a search with no matches.
 - Check that a deleted ID is never issued again (FR-DEL-06, scenario AC-08).
 - Include Arabic input in search tests: a district name in Arabic, and spelling variants that Appendix B.4 says must match.
-- Never load the real language model in a test. Replace the embedding wrapper with a stub that returns fixed vectors, so tests run offline in seconds (NFR-TST-04).
+- The rent model's tests read its weights from the local file. Nothing in a test is fetched from a network.
 - Tests must not use the network, the real clock or random values. Use fake timers for the 300 ms search delay and the 5-second confirmation message.
 - Start each test from a fresh copy of the data. Tests must not depend on each other or on their order.
 

@@ -4,9 +4,10 @@ Part of deliverable PD-03 (SRS section 12), with the [style guide](style-guide.m
 wireframe for every screen in SRS section 9.1. A wireframe shows what each screen holds and where
 it sits. Colour, type and spacing are in the style guide.
 
-They were drawn on 16 October 2026 from the screens as built that day, so they match the app.
-Anything marked **planned** belongs to a Should or Could requirement that is not built yet, and is
-named by its ID. Market insights is planned as a whole: its address shows a placeholder today.
+They were drawn on 16 October 2026 from the screens as built that day, and updated on 14 November
+2026 for SRS version 1.2. The sort control and the pager, planned then, are built and drawn. The
+planned items that were never built, Market insights among them, were withdrawn in SRS 1.2 and are
+no longer drawn; each is named by its ID where it would have been.
 
 ## How to read them
 
@@ -45,13 +46,12 @@ update and delete, is read out by screen readers, and clears itself after 5 seco
 │   … the page …                                                                                   │
 │                                                                                                  │
 │ ──────────────────────────────────────────────────────────────────────────────────────────────── │
-│ SE411 · Fall 2026-27 · Project Part 1    Data credit    Changes are kept only until              │
-│                                                         the page reloads.                        │
+│ SE411 · Fall 2026-27          Rent model data: Saudi Arabia Real Estate (AQAR), Kaggle, 2021.    │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 - The current page's menu item is a filled pill and carries `aria-current="page"` (FR-NAV-04).
-  Market insights joins the menu once its page is built (FR-NAV-02).
+  The menu keeps these four items: SRS 1.2 withdrew Market insights (FR-NAV-02).
 - The first Tab shows a "Skip to content" link above the header.
 - Below 768 px the menu folds behind a Menu button (FR-NAV-08). The button opens the items as a
   panel under the header; choosing an item or pressing Esc closes it, and Esc puts focus back
@@ -176,7 +176,7 @@ with AND (FR-SRC-01 to FR-SRC-08).
 │ │ [ ] Dammam    [ ] Under maintenance LEAST                                                    │ │
 │ │ [ ] Al Khobar                       [Any number v]                                           │ │
 │ └──────────────────────────────────────────────────────────────────────────────────────────────┘ │
-│ Showing 8 of 8 properties                    planned: Sort [Last updated v] [↓]  [Table | Cards] │
+│ Showing 8 of 8 properties                  Sort by [Last updated v]   Order [Descending   v]     │
 │ ┌─ Properties in the portfolio ────────────────────────────────────────────────────────────────┐ │
 │ │ ID      City    District  Type   Size   Beds Yearly rent Status       Actions                │ │
 │ │ ──────────────────────────────────────────────────────────────────────────────────────────── │ │
@@ -185,7 +185,7 @@ with AND (FR-SRC-01 to FR-SRC-08).
 │ │ RP-0003 Riyadh  Al Yasmin Duplex 310 m² 3    95,000 SAR  (• Under m.) (View) (Edit) [Delete] │ │
 │ │ …                                                                                            │ │
 │ └──────────────────────────────────────────────────────────────────────────────────────────────┘ │
-│                                                             planned: [10 v] per page   ‹ 1 2 3 › │
+│                           [ Previous ]  Page 1 of 1 (1 to 8 of 8)  [ Next ]      Per page [10 v] │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -197,9 +197,10 @@ with AND (FR-SRC-01 to FR-SRC-08).
   button. With no properties at all, it says so and offers Add property (FR-LST-05).
 - A rent or size range the wrong way round shows its message under the range and is not applied
   (FR-SRC-07).
-- **Planned:** the sort control (FR-SRC-09), card view (FR-LST-09), pages of 10, 25 or 50
-  (FR-LST-10), a chip per active filter (FR-SRC-13) and the "Search by meaning" switch beside the
-  search box (FR-AIS-01).
+- Sort by and Order change the order of the list (FR-SRC-09). Previous, Next and Per page (5,
+  10, 25 or 50) move through the pages (FR-LST-10). Under the filters, an Amenities line opens 13
+  tick boxes (FR-SRC-10), and each active filter shows as a chip that removes it (FR-SRC-13).
+- **Withdrawn in SRS 1.2:** card view (FR-LST-09) and the "Search by meaning" switch (FR-AIS-01).
 
 ```text
 ┌─ /properties  360 px ──────────────┐
@@ -260,18 +261,13 @@ is worked out from the type, district and city, never stored (SRS 3.5).
 │ │ ID              Created                         Last updated                                 │ │
 │ │ RP-0001         1 October 2026, 08:00 UTC       1 October 2026, 08:00 UTC                    │ │
 │ └──────────────────────────────────────────────────────────────────────────────────────────────┘ │
-│ ┌─ planned: MARKET, SRS 7.2 and 7.3 ───────────────────────────────────────────────────────────┐ │
-│ │ Fair-rent estimate 104,000 SAR (low 90,000, high 130,000)   (Above market) +21,000 SAR       │ │
-│ │ Up to 5 comparable listings: district, type, size, rooms, age, rent, similarity %            │ │
-│ │ Based on 2021 listings. Indicative only, not a valuation.                                    │ │
-│ └──────────────────────────────────────────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 - The tenant and lease lines appear only for an Occupied property (FR-DET-04).
 - Below 960 px the groups stack in one column.
-- **Planned (SRS 7.2, 7.3):** the market panel, with the fair-rent estimate, the market position
-  and up to 5 comparable listings.
+- **Withdrawn in SRS 1.2:** the market panel below Record, with the fair-rent estimate and the
+  comparable listings (FR-DET-06).
 
 An ID that does not exist, or a property that has just been deleted, gets this instead (FR-DET-03):
 
@@ -385,32 +381,10 @@ On a phone every field takes a whole row, and the suggestion drops under Yearly 
 └────────────────────────────────────┘
 ```
 
-## 5. Market insights (planned)
+## 5. Market insights (withdrawn)
 
-`/insights`, SRS 7.4, Should. Statistics from the market reference set, beside the portfolio's
-own figures. Today this address shows a placeholder, and the page is not in the menu.
-
-```text
-┌─ /insights  Market insights  (planned: FR-INS-01 to FR-INS-04) ──────────────────────────────────┐
-│ Market insights                                                                                  │
-│ From the 2021 market reference set: Saudi Arabia Real Estate (AQAR), Kaggle,                     │
-│ N listings after cleaning (FR-INS-03).                                                           │
-│ ┌─ BY CITY ───────────────────────────────────┐ ┌─ BY BEDROOMS ────────────────────────────────┐ │
-│ │ City       Listings  Market      Portfolio  │ │ Bedrooms    Median yearly rent               │ │
-│ │                      median      median     │ │ 2           … SAR                            │ │
-│ │ Riyadh     …         … SAR       … SAR      │ │ 3           … SAR                            │ │
-│ │ Jeddah     …         … SAR       … SAR      │ │ 4           … SAR                            │ │
-│ │ Dammam     …         … SAR       … SAR      │ │ 5 or more   … SAR                            │ │
-│ │ Al Khobar  …         … SAR       … SAR      │ │                                              │ │
-│ └─────────────────────────────────────────────┘ └──────────────────────────────────────────────┘ │
-│ ┌─ HIGHEST-RENT DISTRICTS ─────────────────────────────────────────────────────────────────────┐ │
-│ │ #   District                  City          Listings    Median yearly rent                   │ │
-│ │ 1   …                         Riyadh        …           … SAR                                │ │
-│ │ …  10 rows, from districts with at least 5 listings                                          │ │
-│ └──────────────────────────────────────────────────────────────────────────────────────────────┘ │
-│ Could (FR-INS-04): each table also drawn as a bar chart, the table kept beside it.               │
-└──────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
+`/insights`, SRS 7.4, was withdrawn in SRS version 1.2 before it was built. The address now shows
+"Page not found" (FR-NAV-07).
 
 ## 6. About
 

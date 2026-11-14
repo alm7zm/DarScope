@@ -1,19 +1,21 @@
 # Features
 
 Part of deliverable PD-04 (SRS section 12), with [architecture.md](architecture.md) and the
-[README](../README.md). It lists what works in the app on 11 November 2026, with the code behind
-each feature and the requirements it meets, from SRS version 1.1. Paths are under
-`frontend/src/`. Section 13 lists what is not built yet, and section 14 what SRS 1.1 withdrew.
+[README](../README.md). It lists what works in the app on 14 November 2026, with the code behind
+each feature and the requirements it meets, from SRS version 1.2. Paths are under
+`frontend/src/`, apart from the server's, which are under `backend/`. Section 13 lists the checks
+only a person can make, and section 14 what the SRS withdrew.
 
-Since Part 2 the app reads and writes the portfolio through the team's Spring server, whose code
-is not in the repository yet. Every feature below has been tested against the in-memory stand-in
-for the server (`test/fakePropertyService.js`), and the calls to the real server against a
-stubbed `fetch`. The end-to-end check with the server is in `docs/backend-plan.md`, section 10.
+Since Part 2 the app reads and writes the portfolio through the team's Spring server, in
+`backend/`. Every feature below has been tested against the in-memory stand-in for the server
+(`test/fakePropertyService.js`), and the calls to the real server against a stubbed `fetch`. The
+server has its own JUnit and Mockito tests. The end-to-end check with both running is in
+`docs/backend-plan.md`, section 10.
 
-Every Must requirement of the course brief works: the menu, adding, updating, deleting,
-searching and displaying properties, and the About page. On the frontend side, so do the Part 2
-brief's add, search by ID, paginated list and update (section 12). Three Must requirements of the
-SRS are only partly met; section 13 lists them.
+Every functional requirement of SRS version 1.2 that is not withdrawn works. That covers what
+the course brief asks for: the menu, adding, updating, deleting, searching and displaying
+properties, and the About page. It also covers the Part 2 brief's add, search by ID, paginated
+list and update, which section 12 maps to the code.
 
 ## 1. Menu and pages
 
@@ -34,15 +36,16 @@ course and credits the dataset.
 
 The first page shows the portfolio at a glance: the number of properties, how many are Occupied,
 Vacant and Under maintenance, the occupancy rate, the yearly rent from occupied properties and the
-rent if every property were let. A table gives the properties, occupied properties and rent of
-each city, and "Needs attention" lists every property earning nothing, each linking to its page.
-Every figure follows an add, update or delete at once. With no properties, the page shows zeros,
-a dash for the rate, and an "Add property" button. If the server cannot be reached, the page says
-so.
+rent if every property were let. Each count is a link into the property list: the total opens the
+whole portfolio, and each status count opens the list narrowed to that status. A table gives the
+properties, occupied properties and rent of each city, and "Needs attention" lists every property
+earning nothing, each linking to its page. "View all properties" opens the list. Every figure
+follows an add, update or delete at once. With no properties, the page shows zeros, a dash for the
+rate, and an "Add property" button. If the server cannot be reached, the page says so, with a Try
+again button.
 
 - **Code:** `pages/DashboardPage.jsx`, `components/dashboard/`, `utils/stats.js`
-- **Meets:** FR-DSH-01 to FR-DSH-06, and FR-DSH-07 in part: "View all properties" is there, and
-  "Add property" only on an empty Dashboard.
+- **Meets:** FR-DSH-01 to FR-DSH-07
 
 ## 3. Property list
 
@@ -53,10 +56,10 @@ and each status is a word on a coloured badge. Arabic districts read right to le
 table scrolls sideways inside its frame while the page stays still.
 
 Under the table, Previous and Next move between pages, with "Page 2 of 3 (11 to 20 of 27)"
-between them, and "Per page" offers 5, 10, 25 or 50, with 10 by default. With no search, each page
-comes from the server. While a search or filter is active, the browser pages the matches. Any
-change to the search, the filters or the page size goes back to page 1. If the server cannot be
-reached, the page says so.
+between them, and "Per page" offers 5, 10, 25 or 50, with 10 by default. With no search, no
+filter and the default order, each page comes from the server. Otherwise the browser pages the
+matches. Any change to the search, the filters, the order or the page size goes back to page 1.
+If the server cannot be reached, the page says so, with a Try again button.
 
 - **Code:** `pages/PropertyListPage.jsx`, `components/properties/PropertyTable.jsx`,
   `components/ui/Pager.jsx`, `hooks/useServerPage.js`, `components/ui/Badge.jsx`,
@@ -64,35 +67,43 @@ reached, the page says so.
 - **Meets:** FR-LST-01 to FR-LST-08, FR-LST-10, NFR-USE-02, NFR-ACC-05, NFR-ACC-07, and Part 2
   brief requirement 4
 
-## 4. Search and filters
+## 4. Search, filters and sort
 
 A search box above the list finds properties by any word in their ID, city, district, type,
 status, tenant, description or amenities, in English or Arabic, ignoring letter case. Arabic
 spelling variants of a word match one another. The list follows 300 ms after typing stops, or at
 once on Enter. Filters narrow the list by city, status, type, yearly rent from and to, size from
-and to, and a minimum number of bedrooms, all at once. A range the wrong way round shows a
-message and is ignored. "Clear all" empties the box and every filter. The search runs in the
-browser, on the whole portfolio the server sent at start.
+and to, and a minimum number of bedrooms, all at once. An Amenities line under them opens 13 tick
+boxes, and the list then keeps only the properties that have every ticked amenity. A range the
+wrong way round shows a message and is ignored. Each active filter shows as a chip, and choosing
+a chip removes that filter. "Clear all" empties the box and every filter.
 
-- **Code:** `components/search/SearchControls.jsx`, `hooks/usePropertySearch.js`,
-  `utils/search.js`, `utils/arabic.js`, `validateFilters` in `utils/validation.js`
-- **Meets:** FR-SRC-01 to FR-SRC-08, FR-SRC-11, NFR-PERF-02 (under 4 ms for 500 properties,
-  measured on 16 October 2026 for `docs/code-review.md`)
+Sort by (Last updated, Yearly rent, Size, Bedrooms or City) and Order (Ascending or Descending)
+change the order of the list. The default is Last updated, newest first. The search text, the
+filters, the order, the page and the page size are kept in the address, so Back restores them and
+the view can be bookmarked. The search runs in the browser, on the whole portfolio the server
+sent at start.
+
+- **Code:** `components/search/SearchControls.jsx`, `components/search/FilterChips.jsx`,
+  `hooks/usePropertySearch.js`, `utils/search.js`, `utils/searchParams.js`,
+  `sortProperties` in `utils/sort.js`, `utils/arabic.js`, `validateFilters` in
+  `utils/validation.js`
+- **Meets:** FR-SRC-01 to FR-SRC-13, NFR-PERF-02 (under 4 ms for 500 properties, measured on
+  16 October 2026 for `docs/code-review.md`)
 
 ## 5. Property detail
 
 `/properties/:id` shows every field of one property in six groups: Location, Building, Amenities,
-Rent and tenancy, Description and Record. The tenant and the lease dates appear only for an
-Occupied property. The page offers Edit, Delete and Back to list. An ID that does not exist, or a
-property just deleted, shows "Property not found" with a link back to the list. The page asks the
-server for the property by its ID, so it always shows the server's copy. If the server cannot be
-reached, the page says so.
+Rent and tenancy, Description and Record. Amenities lists the ones the property has. The tenant
+and the lease dates appear only for an Occupied property. The page offers Edit, Delete and Back to
+list. An ID that does not exist, or a property just deleted, shows "Property not found" with a
+link back to the list. The page asks the server for the property by its ID, so it always shows
+the server's copy. If the server cannot be reached, the page says so, with a Try again button.
 
 - **Code:** `pages/PropertyDetailPage.jsx`, `hooks/useServerProperty.js`,
   `components/properties/PropertyDetail.jsx`, `components/properties/PropertyNotFound.jsx`,
   `getById` in `services/propertyService.js`
-- **Meets:** FR-DET-01 to FR-DET-04, Part 2 brief requirement 3, and FR-DET-05 in part: the
-  amenities the property has are listed, not all 13 as a checklist.
+- **Meets:** FR-DET-01 to FR-DET-05, and Part 2 brief requirement 3
 
 ## 6. Add a property
 
@@ -100,14 +111,15 @@ reached, the page says so.
 Description. Required fields say "(required)" and units are in the labels. City, district,
 front, type, age, the room counts and status are dropdowns, so they cannot be mistyped. District
 lists the chosen city's districts by their English names, with "Other district…" for any other.
-Size and rent take only digits, turning Arabic digits into 0 to 9. Tenant name and the lease
-dates open only when Status is Occupied, and the tenant's name is then required. On Save, every
-field is checked against SRS Appendix C. A failure sends nothing, shows each message under its
-field, moves focus to the first one and keeps everything typed. The server checks the values
-again, and any message it returns appears under its field the same way. A success opens the new
-property's page with the ID the server gave it and confirms "Property RP-0009 added". If the
-server cannot be reached, the form says so above Save and keeps everything typed. Cancel leaves
-without saving.
+The 13 amenities are tick boxes in three headed groups: Inside, Staff rooms, and Outside and
+parking. Size and rent take only digits, turning Arabic digits into 0 to 9. Tenant name and the
+lease dates open only when Status is Occupied, and the tenant's name is then required. On Save,
+every field is checked against SRS Appendix C. A failure sends nothing, shows each message under
+its field, moves focus to the first one and keeps everything typed. The server checks the values
+again, and any message it returns appears under its field the same way. While the server
+answers, Save reads "Saving…" and cannot be pressed again. A success opens the new property's
+page with the ID the server gave it and confirms "Property RP-0009 added". If the server cannot
+be reached, the form says so above Save and keeps everything typed. Cancel leaves without saving.
 
 - **Code:** `pages/PropertyFormPage.jsx`, `components/properties/PropertyForm.jsx`,
   `components/properties/DistrictField.jsx`, `components/ui/FormField.jsx`, `utils/validation.js`,
@@ -122,7 +134,7 @@ Saving applies the same checks, keeps the ID and the created date, gets a new "l
 from the server, opens the property and confirms "Property RP-0001 updated". Moving the status
 away from Occupied warns that the tenant and lease will be cleared, and they are cleared on save.
 Cancel returns to the property unchanged. If the server cannot be reached, the page says so
-instead of showing the form.
+instead of showing the form, with a Try again button.
 
 - **Code:** the same as section 6, with `updateProperty` in `context/PortfolioProvider.jsx` and
   `update` in `services/propertyService.js`
@@ -132,23 +144,27 @@ instead of showing the form.
 
 Delete, on every list row and on the detail page, opens a dialog that names the property by ID,
 type, district and city. Cancel has focus first and Esc cancels, so nothing is deleted by
-accident. Confirming removes the property from the list, the search results and the Dashboard at
-once, and shows "Property RP-0001 deleted". From the detail page the app returns to the list. If
-the delete fails, the dialog stays open and says why. The server's database never gives a deleted
-property's number to a new one.
+accident. While the server answers, the dialog is busy, so a double click deletes once.
+Confirming removes the property from the list, the search results and the Dashboard at once, and
+shows "Property RP-0001 deleted". From the detail page the app returns to the list. If the delete
+fails, the dialog stays open and says why. The server's database never gives a deleted property's
+number to a new one.
 
 - **Code:** `components/properties/DeletePropertyDialog.jsx`, `components/ui/Dialog.jsx`,
   `remove` in `services/propertyService.js`
 - **Meets:** FR-DEL-01 to FR-DEL-06, NFR-USE-03, NFR-ACC-06
 
-## 9. Confirmation messages
+## 9. Messages and waiting
 
 Every add, update and delete shows a confirmation in one strip at the top of the page. Screen
-readers announce it, it clears itself after 5 seconds and × dismisses it sooner.
+readers announce it, it clears itself after 5 seconds and × dismisses it sooner. While a page
+waits for the server, it shows a spinner beside "Loading…". Save and the delete dialog show they
+are busy, as sections 6 and 8 say. The rent panel stays empty for the moment its weights, 2.86 kB
+compressed, take to load.
 
-- **Code:** `components/ui/Message.jsx`, `context/PortfolioProvider.jsx`,
-  `context/portfolioReducer.js`, `constants/messages.js`
-- **Meets:** FR-FBK-01, FR-FBK-02
+- **Code:** `components/ui/Message.jsx`, `components/ui/PageStates.jsx`,
+  `context/PortfolioProvider.jsx`, `context/portfolioReducer.js`, `constants/messages.js`
+- **Meets:** FR-FBK-01, FR-FBK-02, FR-FBK-04
 
 ## 10. Rent suggestion
 
@@ -175,91 +191,81 @@ a member's photo puts them in the spotlight with their paragraph and links, incl
 site when one is given. The page lays out however many members `constants/team.js` lists.
 
 - **Code:** `pages/AboutPage.jsx`, `components/about/`, `constants/team.js`
-- **Meets:** FR-ABT-01, FR-ABT-03 to FR-ABT-06, and FR-ABT-02 in part: Muhammad Yawar's entry
-  in `constants/team.js` is still empty, and the page shows "Student ID to add" under that name.
+- **Meets:** FR-ABT-01 to FR-ABT-06
 
 ## 12. Data from the server
 
 Only `services/propertyService.js` reads or writes properties, and every operation returns a
 Promise. It calls the Spring server's routes under `/api/v1/properties`, which `npm run dev`
 forwards to port 8080. It checks every property before sending it, translates between the
-server's JSON and the app's shape, and turns each failure into a message the page can show. The
-server issues the IDs and timestamps. Changes survive a page reload. On the `supabase` profile they
-are kept in Supabase Postgres and survive a restart of the server too; on the default H2 profile
-a restart brings back the starting data.
+server's JSON and the app's shape, and turns each failure into a message the page can show.
+Changes survive a page reload.
+
+The server, in `backend/`, starts from the same 8 hand-written properties as the tests, issues
+the IDs and timestamps, and never reuses a deleted ID. It checks every property again with the
+same rules and messages as the form, and answers 400 with one message per bad field, or 404
+"Property not found". On the default H2 profile a restart brings back the 8 starting properties.
+On the `local` and `supabase` profiles changes survive a restart too.
 
 - **Code:** `services/propertyService.js`, `context/PortfolioProvider.jsx`,
   `hooks/useServerPage.js`, `frontend/vite.config.js`; for the tests,
-  `test/fakePropertyService.js` and `test/portfolio.seed.json`
-- **Meets:** FR-DAT-02, FR-DAT-03, IF-01, IF-02, NFR-REL-03, NFR-REL-04, and on the server's side
-  FR-DAT-04 and AC-17. The contract is in `docs/backend-plan.md`, section 3.
+  `test/fakePropertyService.js` and `test/portfolio.seed.json`. On the server,
+  `backend/src/main/java/edu/psu/se411/darscope/` and `backend/src/main/resources/`
+- **Meets:** FR-DAT-01 to FR-DAT-04, IF-01, IF-02, NFR-REL-03, NFR-REL-04, and AC-17. The
+  contract is in `docs/backend-plan.md`, section 3.
 
-The frontend side of the Part 2 brief:
+The Part 2 brief, and where each requirement is met:
 
-| Brief requirement | Frontend |
-| --- | --- |
-| 2. Add an element | The Add form, through `create` and `POST` |
-| 3. Search for an element by ID | The detail page, through `getById` and `GET /api/v1/properties/{id}` |
-| 4. Search for all elements, paginated | The property list, through `listPage`, when no search is active |
-| 5. Update an element | The Edit form, through `update` and `PUT` |
-
-## 13. Not built yet
-
-Requirements of the SRS that do not work yet, with their priority. "In part" marks one that is
-partly met: the cell says what is missing. Some have their pure functions written and tested but
-not used by any page yet.
-
-| Requirement | What is missing | Priority |
+| Brief requirement | Server | Frontend |
 | --- | --- | --- |
-| FR-DAT-01, in part | The starting properties are now the server's `data.sql`, which is not in the repository yet. The tests start from 8 hand-written properties; the SRS asks for at least 30, and 40 from the dataset once the licence question is answered (`frontend/src/data/README.md`). | Must |
-| FR-ABT-02, in part | Muhammad Yawar's student ID and details, in `constants/team.js` | Must |
-| NFR-TST-02, in part | Unit tests for comparables and the estimate, which are not built | Must |
-| FR-NAV-02 | Market insights in the menu, once that page exists | Should |
-| FR-DSH-07, in part | "Add property" on a Dashboard that has properties | Should |
-| FR-DSH-08 | Leases ending within 60 days | Could |
-| FR-DSH-09 | Counts of properties below and above market | Could |
-| FR-LST-09 | Card view | Should |
-| FR-LST-11 | Opening a property by selecting its row | Should |
-| FR-DET-05, in part | All 13 amenities as a checklist | Should |
-| FR-DET-06 | The market panel on the detail page | Should |
-| FR-ADD-10 | A confirmation before leaving a form with unsaved input | Should |
-| FR-ADD-11 | The possible-duplicate warning | Should |
-| FR-UPD-08 | Save disabled until a value changes | Should |
-| FR-UPD-09 | Switching between Vacant and Under maintenance from the list | Could |
-| FR-DEL-08 | Deleting several properties at once | Could |
-| FR-SRC-09, in part | A control to change the order. The list is always newest first; `sortProperties` in `utils/sort.js` sorts by the other keys and is tested. | Should |
-| FR-SRC-10 | Amenity tick boxes in the filters. The filter is in `utils/search.js`. | Should |
-| FR-SRC-12 | The search kept in the URL. `utils/searchParams.js` is written and tested. | Should |
-| FR-SRC-13 | A chip for each active filter. `activeFilterChips` in `utils/search.js` is written and tested. | Should |
-| FR-SRC-14 | Highlighted matches | Could |
-| FR-AIS-01 to FR-AIS-12 | Search by meaning | Should |
-| FR-AIS-13 | Keyword matches ranked first | Could |
-| FR-CMP-01 to FR-CMP-06 | Comparable listings | Should |
-| FR-CMP-07 | Comparables on the form | Could |
-| FR-EST-01 to FR-EST-06 | The fair-rent estimate. The rent suggestion already shows FR-EST-05's note. | Should |
-| FR-EST-07 | The market position as a badge and a filter | Could |
-| FR-INS-01 to FR-INS-03 | The Market insights page. Its address shows a placeholder. | Should |
-| FR-INS-04 | Its bar charts | Could |
-| FR-NLI-01 to FR-NLI-04 | Plain-language input | Could |
-| FR-FBK-04, in part | A progress indicator. Pages show "Loading…" text while the server answers, and the rent panel stays empty until the model arrives. | Should |
-| FR-DAT-07 | Loading the market reference set on demand: the set does not exist yet | Should |
-| FR-DAT-08 | CSV export | Could |
-| UI-07 | A dark theme | Could |
-| NFR-ACC-08 | An automated accessibility check of every page | Should |
-| NFR-MNT-06 | Two component files are past 250 lines: `PropertyForm.jsx` (401) and `FormField.jsx` (266) (`docs/code-review.md`, CR-13) | Could |
+| 1. A Java Spring server | `backend/`, Spring Boot 4.1.2 | – |
+| 2. Add an element | `POST /api/v1/properties`, which answers 201 | The Add form, through `create` |
+| 3. Search for an element by ID | `GET /api/v1/properties/{id}` | The detail page, through `getById` |
+| 4. Search for all elements, paginated | `GET /api/v1/properties?page=&size=`, one page cut in the database | The property list, through `listPage` |
+| 5. Update an element | `PUT /api/v1/properties/{id}` | The Edit form, through `update` |
+| 6. A JUnit and Mockito test suite for the whole backend | 42 tests in `backend/src/test/`: the service with a Mockito mock for the repository, the controller through MockMvc with a Mockito mock for the service, and the whole server on H2 | – |
 
-Three things can only be checked by hand, and are listed as manual checks in
-[test-report.md](test-report.md): AC-16 (keyboard only), AC-23 (360 px) and NFR-COM-01 (the
-latest two versions of Chrome, Edge, Firefox and Safari).
+## 13. Still to check by hand
 
-## 14. Withdrawn in SRS version 1.1
+Nothing the SRS still asks for is missing. Four checks need a person, and are listed as manual
+checks in [test-report.md](test-report.md): AC-16 (keyboard only), AC-17 (reload, with the server
+running), AC-23 (360 px) and NFR-COM-01 (the latest two versions of Chrome, Edge, Firefox and
+Safari).
 
-SRS version 1.1 (11 November 2026) updated the requirements for Part 2. Its "Changes in version
-1.1" list gives every change and its source. These were withdrawn, and the app does not have
-them:
+One gap lies outside the SRS. The server rejects a property sent without one of the 13 amenity
+fields, with 400 "The request could not be read", although `docs/backend-plan.md` says a missing
+amenity counts as false. The app always sends all 13, so only a hand-written request is affected
+(`docs/tasks.md`, task 6).
 
-| Requirement | What it was | Why |
+## 14. Withdrawn
+
+SRS version 1.1 (11 November 2026) and version 1.2 (14 November 2026) withdrew these, and the app
+does not have them. Each version's "Changes" table gives every change and its source.
+
+| Requirement | What it was | Withdrawn in |
 | --- | --- | --- |
-| FR-DEL-07, AC-18 | Undo for 8 seconds after a delete | Nothing on screen used it, and `restore` was removed from the data service |
-| FR-DAT-05 | Reset demo data | Resetting a database the team shares is risky, and `reset` was removed |
-| FR-DAT-06 | A footer notice that changes last until a reload | Since Part 2, changes survive a reload |
+| FR-DEL-07, AC-18 | Undo for 8 seconds after a delete | 1.1 |
+| FR-DAT-05 | Reset demo data | 1.1 |
+| FR-DAT-06 | A footer notice that changes last until a reload | 1.1 |
+| FR-AIS-01 to FR-AIS-13, NFR-PERF-04, NFR-PERF-06, NFR-COM-03, NFR-TST-04, IF-04, AC-21, AC-22 | Search by meaning | 1.2 |
+| FR-CMP-01 to FR-CMP-07, FR-EST-01 to FR-EST-07, FR-DET-06, FR-DSH-09, NFR-PERF-05, AC-19, AC-20 | Comparable listings, the fair-rent estimate and the market panel | 1.2 |
+| FR-INS-01 to FR-INS-04, FR-NAV-02 | Market insights | 1.2 |
+| FR-NLI-01 to FR-NLI-04 | Plain-language input | 1.2 |
+| FR-DAT-07 | The market reference set | 1.2 |
+| FR-LST-09 | Card view | 1.2 |
+| FR-LST-11 | Opening a property by selecting its row | 1.2 |
+| FR-ADD-10 | A warning before leaving a form with unsaved input | 1.2 |
+| FR-ADD-11 | The possible-duplicate warning | 1.2 |
+| FR-UPD-08 | Save disabled until a value changes | 1.2 |
+| FR-UPD-09 | Switching between Vacant and Under maintenance from the list | 1.2 |
+| FR-DEL-08 | Deleting several properties at once | 1.2 |
+| FR-DSH-08 | Leases ending within 60 days | 1.2 |
+| FR-SRC-14 | Highlighted matches | 1.2 |
+| FR-DAT-08 | CSV export | 1.2 |
+| UI-07 | A dark theme | 1.2 |
+| NFR-ACC-08 | An automated accessibility check of every page | 1.2 |
+| NFR-MNT-06 | At most about 250 lines per component file | 1.2 |
+
+Version 1.2 also narrowed three requirements to what the app does: FR-DAT-01 (a seed of 8
+hand-written properties, not 40 from the dataset), FR-DSH-07 (the "View all properties" shortcut)
+and FR-DET-05 (the amenities the property has, not a checklist of all 13).

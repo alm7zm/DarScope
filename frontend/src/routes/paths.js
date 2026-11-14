@@ -8,6 +8,5 @@ export const PATHS = {
   addProperty: '/properties/new',
   propertyDetail: '/properties/:id',
   editProperty: '/properties/:id/edit',
-  insights: '/insights',
   about: '/about',
 };

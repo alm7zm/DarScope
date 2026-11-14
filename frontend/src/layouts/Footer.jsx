@@ -13,8 +13,8 @@ export default function Footer() {
         <p>
           {COURSE.code} · {COURSE.term}
         </p>
-        {/* The sample properties are written by hand; only the rent model learns from the
-            dataset, until task 1 builds the seed from it too. */}
+        {/* The starting properties are written by hand; only the rent model learns from the
+            dataset (SRS 3.4). */}
         <p>
           Rent model data: {DATASET.name}, {DATASET.source}, {DATASET.year}.
         </p>

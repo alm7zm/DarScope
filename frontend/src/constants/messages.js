@@ -41,15 +41,9 @@ export const TEXT = {
   noSearchMatches: 'No properties match your search.',
   emptyPortfolio: 'No properties yet. Add your first property.',
   propertyNotFound: 'Property not found',
-  possibleDuplicate:
-    'A property with the same city, district, size, bedrooms and rent already exists.',
   statusLeavesOccupied:
     'Changing the status will clear the tenant and lease details.',
-  beforeModelDownload:
-    'Search by meaning downloads a language model of about 135 MB once. It runs on this device.',
-  modelCannotLoad:
-    'The language model could not be loaded. Keyword search is still available.',
-  tooFewComparables: 'Not enough market data',
+  // The note under every rent suggestion (FR-ADD-13).
   estimateDisclaimer:
     'Based on 2021 listings. Indicative only, not a valuation.',
   rentSuggestionNeedsFields:

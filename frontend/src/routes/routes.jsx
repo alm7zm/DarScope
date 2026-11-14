@@ -2,7 +2,6 @@ import AppLayout from '../layouts/AppLayout.jsx';
 import AboutPage from '../pages/AboutPage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
 import ErrorPage from '../pages/ErrorPage.jsx';
-import MarketInsightsPage from '../pages/MarketInsightsPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import PropertyDetailPage from '../pages/PropertyDetailPage.jsx';
 import PropertyFormPage from '../pages/PropertyFormPage.jsx';
@@ -25,7 +24,6 @@ export const routes = [
           { path: PATHS.addProperty, element: <PropertyFormPage /> },
           { path: PATHS.propertyDetail, element: <PropertyDetailPage /> },
           { path: PATHS.editProperty, element: <PropertyFormPage /> },
-          { path: PATHS.insights, element: <MarketInsightsPage /> },
           { path: PATHS.about, element: <AboutPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],

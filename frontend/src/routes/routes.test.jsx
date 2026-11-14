@@ -42,7 +42,6 @@ describe('routes', () => {
     ['/properties', 'Properties'],
     ['/properties/new', 'Add property'],
     ['/properties/RP-0001/edit', 'Edit property'],
-    ['/insights', 'Market insights'],
     ['/about', 'About'],
   ])(
     'opens %s as the page "%s", with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)',

@@ -7,7 +7,6 @@ const ITEMS = [
   { to: PATHS.dashboard, label: 'Dashboard' },
   { to: PATHS.properties, label: 'Properties' },
   { to: PATHS.addProperty, label: 'Add property' },
-  // Add Market insights here once that page is built (FR-NAV-02).
   { to: PATHS.about, label: 'About' },
 ];
 

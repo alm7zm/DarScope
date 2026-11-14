@@ -1,7 +1,6 @@
 ---
 paths:
   - "frontend/src/**/*"
-  - "frontend/scripts/**/*"
 ---
 
 # Data model
@@ -37,20 +36,15 @@ A property is one object in the portfolio.
 - `amenities` is an object with 13 booleans: `kitchen`, `garage`, `driverRoom`, `maidRoom`, `furnished`, `ac`, `roof`, `pool`, `frontyard`, `basement`, `stairs`, `elevator`, `fireplace`. SRS section 3.2 gives the label shown for each.
 - The number ranges are wide on purpose so that real listings pass. Do not tighten them unless the user asks.
 
-## Market listing
-
-A market listing has the descriptive fields of a property, `city` through `description`, plus `refId` in the format `MR-0001`. It has no status, tenant, lease or timestamp fields. The app never edits a listing.
-
 ## Data files
 
 | File | Holds | How it is used |
 | --- | --- | --- |
 | `frontend/src/test/portfolio.seed.json` | 8 hand-written properties, RP-0001 to RP-0008 | The starting data of the tests' in-memory stand-in for the server (`src/test/fakePropertyService.js`). Since Part 2 the app's own starting rows are in the server's `data.sql` |
-| `frontend/src/data/market.reference.json` | About 1,350 listings | Read-only. Load it with a dynamic `import()` the first time a page needs it (FR-DAT-07). |
 | `frontend/src/data/rent-model.json` | The rent model's weights (SRS 7.6), no rows of the dataset | Read-only. Loaded with a dynamic `import()` by `services/rentModelService.js` when a form first shows the suggestion (FR-RNT-02). |
 | `frontend/src/data/districts.json` | Each city's districts in the 2021 data: the English name, paired with the most common Arabic spelling | The District dropdown's choices (FR-ADD-14), read through `DISTRICTS` in `constants/options.js`; the rent model finds a district by the Arabic spelling |
 
-No listing appears in both files. `market.reference.json` is not built yet: see `.claude/rules/data-prep.md`. `rent-model.json` and `districts.json` come from step 19 of `ai-model/prepare.ipynb` instead, and are never edited by hand either.
+`rent-model.json` and `districts.json` come from step 19 of `ai-model/prepare.ipynb` and are never edited by hand. SRS version 1.2 withdrew the market reference set, so no other data file is planned.
 
 ## Rules for property data
 
@@ -59,7 +53,7 @@ No listing appears in both files. `market.reference.json` is not built yet: see 
 - **Tenancy.** `tenantName` is required when `status` is Occupied. Lease dates are allowed only then. When the status leaves Occupied, clear the tenant and lease fields on save (FR-ADD-07, FR-UPD-07).
 - **Text.** Trim leading and trailing spaces. Number fields accept digits and one decimal point only, and no more digits than their largest value has (FR-ADD-12).
 - **No mutation.** Never change the collection or a property in place. Every change produces new objects (NFR-REL-04).
-- **Derived values are never stored**: the display title ("Villa in {district}, {city}"), comparables, the fair-rent estimate, the market position and embeddings (SRS section 3.5).
+- **Derived values are never stored**: the display title ("Villa in {district}, {city}") and the rent suggestion (SRS section 3.5).
 - **One validator.** All field checks live in pure functions in `frontend/src/utils/validation.js`. The form uses them to show errors, and the service uses them again before it sends anything. The server repeats the same checks with the same messages (`docs/backend-plan.md`, section 5), and the form shows any it returns beside the field (NFR-REL-03).
 
 ## The data service
