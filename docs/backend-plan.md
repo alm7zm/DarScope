@@ -86,14 +86,33 @@ Return `new PagedModel<>(page)` (`org.springframework.data.web.PagedModel`) from
 
 - Sort every page by `updatedAt`, newest first: `PageRequest.of(page, size, Sort.by("updatedAt").descending())`. That is the app's default order (FR-SRC-09).
 - The app asks for `size=1000` once, to load everything for the Dashboard and the search. Do not cap `size` below 1000.
+- `page` counts from 0 and must be 0 or more; `size` must be 1 to 1000. Anything else is a 400, not quietly changed. A page past the last one is a 200 with an empty `content` and the real totals.
+
+### Behaviours a direct caller should know
+
+- **The server owns `id`, `createdAt` and `updatedAt`.** If a request body sends them, they are ignored. On PUT the ID in the URL wins: a different `id` in the body never touches another property.
+- **PUT replaces the whole property.** An optional field left out becomes `null`, and an amenity left out becomes `false`. There is no PATCH: the app always sends the whole form.
+- **Amenities:** left out or `null` means `false`.
+- **Whole numbers only:** `620.7` is a 400, not rounded down.
+- **Not Occupied:** `tenantName`, `leaseStart` and `leaseEnd` are cleared on save. **Occupied:** `tenantName` is required. Each lease date is optional, but when both are given the end must be after the start.
+- The body is checked before the ID is looked up, so a PUT with a bad body to an unknown ID answers 400.
+- Unknown JSON fields and unknown query parameters are ignored. Duplicate properties are allowed: nothing is unique but the ID.
+- Two edits at the same time: the last one wins. There is one portfolio manager, so the app does no locking.
 
 ### Errors, as JSON
 
 | Status | When | Body |
 | --- | --- | --- |
 | 400 | A field fails a check | `{ "errors": { "yearlyRentSar": "Yearly rent must be between 1,000 and 10,000,000 SAR." } }`, one entry per bad field |
-| 400 | The JSON cannot be read, such as text where a number goes | `{ "message": "…" }` (any wording) |
-| 404 | No property has the ID | `{ "message": "Property not found" }` |
+| 400 | The body is missing or cannot be read, such as text or a decimal where a whole number goes | `{ "message": "…" }` (any wording) |
+| 400 | An ID, `page` or `size` that is not a number, or `page`/`size` out of range | `{ "message": "…" }` |
+| 404 | No property has the ID (including 0 and negative IDs) | `{ "message": "Property not found" }` |
+| 404 | No such route | `{ "message": "…" }` |
+| 405 | Wrong method, such as PATCH; the `Allow` header lists the right ones | `{ "message": "…" }` |
+| 415 | The body is not `application/json` | `{ "message": "…" }` |
+| 500 | A fault in the server, such as the database being down. Logged on the server; no SQL or stack trace is sent | `{ "message": "Something went wrong on the server." }` |
+
+A field error and a broken cross-field rule (tenant, lease) are both 400 with `errors`, because the form shows both beside the field. There is no login, so no 401 or 403, and nothing is unique, so no 409.
 
 The form shows each `errors` message beside its field, so **the field names and the messages must match the table in section 5 exactly**. One `@RestControllerAdvice` class builds all three bodies.
 

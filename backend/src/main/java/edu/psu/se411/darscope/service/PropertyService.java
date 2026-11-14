@@ -40,13 +40,11 @@ public class PropertyService {
     }
 
     /**
-     * One page of properties, newest first. Pages count from 0. A page below 0 is read as 0, and
-     * the size is kept between 1 and {@link #MAX_PAGE_SIZE}.
+     * One page of properties, newest first. Pages count from 0. PropertyController has already
+     * checked that page is 0 or more and size is from 1 to {@link #MAX_PAGE_SIZE}.
      */
     public Page<Property> getPage(int page, int size) {
-        int safePage = Math.max(page, 0);
-        int safeSize = Math.clamp(size, 1, MAX_PAGE_SIZE);
-        return repository.findAll(PageRequest.of(safePage, safeSize, NEWEST_FIRST));
+        return repository.findAll(PageRequest.of(page, size, NEWEST_FIRST));
     }
 
     /** The property with this ID, or ObjectNotFoundException. */

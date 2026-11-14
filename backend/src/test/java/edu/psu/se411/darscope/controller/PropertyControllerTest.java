@@ -2,7 +2,10 @@ package edu.psu.se411.darscope.controller;
 
 import static edu.psu.se411.darscope.TestProperties.VALID_JSON;
 import static edu.psu.se411.darscope.TestProperties.occupied;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -93,6 +96,34 @@ class PropertyControllerTest {
         mvc.perform(get(URL).param("page", "two"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(ApiExceptionHandler.BAD_PARAMETER));
+    }
+
+    @Test
+    void getPageAnswers400ForAPageOrSizeOutOfRangeAndNeverCallsTheService() throws Exception {
+        for (String[] query : new String[][] { { "page", "-1" }, { "size", "0" }, { "size", "1001" } }) {
+            mvc.perform(get(URL).param(query[0], query[1]))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value(ApiExceptionHandler.BAD_PAGE));
+        }
+        verifyNoInteractions(service);
+    }
+
+    @Test
+    void getPageAllowsSizeOneAndAThousand() throws Exception {
+        when(service.getPage(eq(0), anyInt())).thenReturn(new PageImpl<>(List.of()));
+
+        mvc.perform(get(URL).param("size", "1")).andExpect(status().isOk());
+        mvc.perform(get(URL).param("size", "1000")).andExpect(status().isOk());
+    }
+
+    @Test
+    void answers500WithAFixedMessageAndHidesTheCause() throws Exception {
+        when(service.getById(1L)).thenThrow(new IllegalStateException("SQL: connection refused"));
+
+        mvc.perform(get(URL + "/1"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value(ApiExceptionHandler.SERVER_ERROR))
+                .andExpect(content().string(not(containsString("SQL"))));
     }
 
     // GET by ID

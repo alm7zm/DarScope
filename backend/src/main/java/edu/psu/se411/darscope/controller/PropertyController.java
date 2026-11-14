@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.psu.se411.darscope.model.Property;
 import edu.psu.se411.darscope.service.PropertyService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 /**
  * The REST routes (docs/backend-plan.md, section 3). Each one hands the work to PropertyService;
@@ -26,6 +28,7 @@ import jakarta.validation.Valid;
  *
  * <pre>
  * GET    /api/v1/properties?page=0&amp;size=10  one page, newest first      (brief 4)
+ *                                             page 0 or more, size 1 to 1000, or 400
  * GET    /api/v1/properties/{id}              one property, or 404        (brief 3)
  * POST   /api/v1/properties                   add: 201 and the property   (brief 2)
  * PUT    /api/v1/properties/{id}              update: 200 and the property (brief 5)
@@ -46,8 +49,8 @@ public class PropertyController {
 
     @GetMapping
     public PagedModel<Property> getPage(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size) {
+            @RequestParam(name = "page", defaultValue = "0") @Min(0) int page,
+            @RequestParam(name = "size", defaultValue = "10") @Min(1) @Max(PropertyService.MAX_PAGE_SIZE) int size) {
         return new PagedModel<>(service.getPage(page, size));
     }
 

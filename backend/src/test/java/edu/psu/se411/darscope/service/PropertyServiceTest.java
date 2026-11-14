@@ -84,20 +84,6 @@ class PropertyServiceTest {
         assertThat(asked.getValue().getPageSize()).isEqualTo(1000);
     }
 
-    @Test
-    void getPageKeepsAPageAndSizeOutOfRangeSafe() {
-        when(repository.findAll(any(Pageable.class))).thenReturn(Page.empty());
-
-        service.getPage(-3, 0);
-        service.getPage(0, 50_000);
-
-        ArgumentCaptor<Pageable> asked = ArgumentCaptor.forClass(Pageable.class);
-        verify(repository, org.mockito.Mockito.times(2)).findAll(asked.capture());
-        assertThat(asked.getAllValues().get(0).getPageNumber()).isZero();
-        assertThat(asked.getAllValues().get(0).getPageSize()).isEqualTo(1);
-        assertThat(asked.getAllValues().get(1).getPageSize()).isEqualTo(PropertyService.MAX_PAGE_SIZE);
-    }
-
     // getById
 
     @Test
