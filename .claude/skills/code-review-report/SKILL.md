@@ -13,12 +13,12 @@ Read the code itself. Report only what you can point to in a file. Do not change
 - Secrets, keys or tokens anywhere in the repository (NFR-SEC-01)
 - User text rendered as HTML, or any use of `dangerouslySetInnerHTML` (NFR-SEC-03)
 - Personal data in the seed files: real names, phone numbers, links, email addresses (NFR-SEC-02)
-- Network requests other than GET for the app's own files and the model files, and any analytics or cookies (IF-01 to IF-03)
+- Network requests other than the calls to the Spring server and GET for the app's own files, and any analytics or cookies (IF-01 to IF-03)
 - Dependencies: run `npm audit` in `frontend/` and include its result (NFR-SEC-05)
 - Input checks that the form applies but the data service does not (NFR-REL-03)
 
 **Performance**
-- The AI library or the market reference file loaded before they are needed (NFR-PERF-04, FR-DAT-07)
+- The rent model's weights loaded before a form needs them (FR-RNT-02)
 - Work repeated on every render that could be memoised or moved out
 - Search without the 300 ms delay, or filtering slower than NFR-PERF-02 allows
 - Bundle size against NFR-PERF-07: run `npm run build` and quote the sizes it prints

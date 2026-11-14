@@ -12,18 +12,18 @@ This file condenses `docs/SRS.md` sections 4 to 6 and 8 to 10. The SRS wins if t
 The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.md` shows the full tree.
 
 - `src/pages/` holds one component per URL. A page stays thin: it reads state, calls hooks and arranges components.
-- `src/components/` holds the building blocks of the pages, grouped by feature: `properties/`, `dashboard/`, `market/`, `search/`. Pieces that more than one feature uses go in `src/components/ui/` (NFR-MNT-03).
+- `src/components/` holds the building blocks of the pages, grouped by feature: `properties/`, `dashboard/`, `search/`, `about/`. Pieces that more than one feature uses go in `src/components/ui/` (NFR-MNT-03).
 - `src/layouts/` holds the shared layout: `AppLayout`, `NavMenu`, `Footer`.
 - `src/routes/` holds `routes.jsx`, the one table that maps each URL to its page, and `paths.js`, the URL of every page. Build links from `PATHS`, never from a URL written by hand.
-- Field checks, filtering, sorting, Arabic normalisation, similarity and the estimate are pure functions in `src/utils/`, with no React or DOM code, so they can be unit-tested (NFR-MNT-01).
+- Field checks, filtering, sorting, Arabic normalisation and the rent model's arithmetic are pure functions in `src/utils/`, with no React or DOM code, so they can be unit-tested (NFR-MNT-01).
 - Choices, thresholds, labels, messages and team details live in `src/constants/`. Never repeat them inside components (NFR-MNT-04).
   - `options.js`: cities, property types, statuses, front directions, amenities with their labels
   - `messages.js`: every fixed message, copied exactly from SRS Appendix C
-  - `market.js`: the constants in `.claude/rules/ai-features.md`
+  - `market.js`: the rent suggestion's constants, listed in `.claude/rules/ai-features.md`
   - `team.js`: the course details, and the team names and student IDs (FR-ABT-06). Each person's `photo` is the file name of an image in `src/assets/team/`, which the build crops and shrinks (`components/about/teamPhotos.js`).
-- Use function components and hooks. Split a component file that grows past about 250 lines.
+- Use function components and hooks. Split a component file that grows hard to read. SRS version 1.2 withdrew the 250-line limit (NFR-MNT-06), which `PropertyForm.jsx` and `FormField.jsx` pass.
 - State is one portfolio context with a reducer in `src/context/`. Its async actions call `propertyService`. Hooks that several components share go in `src/hooks/`. Components never import the service's data or the JSON files.
-- Everything that reaches outside React lives in `src/services/`: `propertyService.js` for the portfolio, `marketService.js` for the market reference set and `embeddingService.js` for the language model.
+- Everything that reaches outside React lives in `src/services/`: `propertyService.js` for the portfolio and `rentModelService.js` for the rent model's weights.
 
 ## Routing and layout
 
@@ -109,6 +109,6 @@ The layout is layered: each folder under `src/` holds one kind of code. `CLAUDE.
 
 ## Performance
 
-- Load the AI library and the market reference file with dynamic `import()`, only when first needed (NFR-PERF-04, FR-DAT-07).
+- Load the rent model's weights with a dynamic `import()`, only when a form first needs them (FR-RNT-02).
 - Search, filter and sort results appear within 200 ms for 500 properties (NFR-PERF-02).
-- The app's own JavaScript, without the AI library, stays under 300 kB compressed (NFR-PERF-07).
+- The JavaScript the first page loads stays under 300 kB compressed (NFR-PERF-07).

@@ -26,8 +26,7 @@ export default defineConfig(({ mode }) => ({
     testTimeout: 15000,
     coverage: {
       include: ['src/**/*.{js,jsx}'],
-      // NFR-TST-06 leaves the language-model wrapper out of the coverage target.
-      exclude: ['src/services/embeddingService.js', 'src/test/**'],
+      exclude: ['src/test/**'],
     },
   },
 }));

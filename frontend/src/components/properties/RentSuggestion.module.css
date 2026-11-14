@@ -72,7 +72,7 @@
   font-weight: var(--font-weight-medium);
 }
 
-/* The fine print: the unknown-district note and the FR-EST-05 note. */
+/* The fine print: the unknown-district note and the "Based on 2021 listings" note. */
 .notes {
   display: grid;
   gap: var(--space-1);

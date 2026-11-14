@@ -2,7 +2,7 @@
 
 How the four of us build the Spring server, and how it plugs into the React app. The brief is in [part-2-brief.md](part-2-brief.md). **Due 14 November 2026.**
 
-The Part 1 brief says the backend "will be manually coded in part2", so **we write every line of Java and SQL ourselves**. The AI tool wrote this plan and the frontend side of the connection (the `frontend/` changes listed at the end), and it can review our code. It does not write anything in `backend/`.
+The Part 1 brief says the backend "will be manually coded in part2". On 13 November 2026 Muhammad Yawar chose to build the server with AI assistance instead, and Claude Code wrote the code in `backend/` from this plan. `docs/ai-usage.md` records it. Everyone should still read and be able to explain all of it, because the instructor asks questions about the code.
 
 ## 1. How the two halves connect
 
@@ -86,14 +86,33 @@ Return `new PagedModel<>(page)` (`org.springframework.data.web.PagedModel`) from
 
 - Sort every page by `updatedAt`, newest first: `PageRequest.of(page, size, Sort.by("updatedAt").descending())`. That is the app's default order (FR-SRC-09).
 - The app asks for `size=1000` once, to load everything for the Dashboard and the search. Do not cap `size` below 1000.
+- `page` counts from 0 and must be 0 or more; `size` must be 1 to 1000. Anything else is a 400, not quietly changed. A page past the last one is a 200 with an empty `content` and the real totals.
+
+### Behaviours a direct caller should know
+
+- **The server owns `id`, `createdAt` and `updatedAt`.** If a request body sends them, they are ignored. On PUT the ID in the URL wins: a different `id` in the body never touches another property.
+- **PUT replaces the whole property.** An optional field left out becomes `null`, and an amenity left out becomes `false`. There is no PATCH: the app always sends the whole form.
+- **Amenities:** left out or `null` means `false`.
+- **Whole numbers only:** `620.7` is a 400, not rounded down.
+- **Not Occupied:** `tenantName`, `leaseStart` and `leaseEnd` are cleared on save. **Occupied:** `tenantName` is required. Each lease date is optional, but when both are given the end must be after the start.
+- The body is checked before the ID is looked up, so a PUT with a bad body to an unknown ID answers 400.
+- Unknown JSON fields and unknown query parameters are ignored. Duplicate properties are allowed: nothing is unique but the ID.
+- Two edits at the same time: the last one wins. There is one portfolio manager, so the app does no locking.
 
 ### Errors, as JSON
 
 | Status | When | Body |
 | --- | --- | --- |
 | 400 | A field fails a check | `{ "errors": { "yearlyRentSar": "Yearly rent must be between 1,000 and 10,000,000 SAR." } }`, one entry per bad field |
-| 400 | The JSON cannot be read, such as text where a number goes | `{ "message": "…" }` (any wording) |
-| 404 | No property has the ID | `{ "message": "Property not found" }` |
+| 400 | The body is missing or cannot be read, such as text or a decimal where a whole number goes | `{ "message": "…" }` (any wording) |
+| 400 | An ID, `page` or `size` that is not a number, or `page`/`size` out of range | `{ "message": "…" }` |
+| 404 | No property has the ID (including 0 and negative IDs) | `{ "message": "Property not found" }` |
+| 404 | No such route | `{ "message": "…" }` |
+| 405 | Wrong method, such as PATCH; the `Allow` header lists the right ones | `{ "message": "…" }` |
+| 415 | The body is not `application/json` | `{ "message": "…" }` |
+| 500 | A fault in the server, such as the database being down. Logged on the server; no SQL or stack trace is sent | `{ "message": "Something went wrong on the server." }` |
+
+A field error and a broken cross-field rule (tenant, lease) are both 400 with `errors`, because the form shows both beside the field. There is no login, so no 401 or 403, and nothing is unique, so no 409.
 
 The form shows each `errors` message beside its field, so **the field names and the messages must match the table in section 5 exactly**. One `@RestControllerAdvice` class builds all three bodies.
 
@@ -196,20 +215,21 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 
 Supabase was dropped on 11 November 2026 and brought back on 12 November 2026, agreed by the team. The brief does not ask for a database, so Supabase is the extra the demo shows: a property added in the app is still there after Spring restarts. H2 stays the default, so the tests, a fresh laptop and a bad network all still work with no setup.
 
-| | H2 (default profile) | Supabase (`supabase` profile) |
-| --- | --- | --- |
-| Where the data lives | In memory, inside Spring | Postgres in the cloud |
-| `schema.sql` and `data.sql` | Run by Spring at every start | Run once, by hand, in step 2 below |
-| After a restart | Back to the 8 starting properties | Everything kept |
-| Needs | Nothing | `backend/.env` and a network that allows port 5432 |
-| Used by the tests | Yes | Never |
+| | H2 in memory (default profile) | H2 in a file (`local` profile) | Supabase (`supabase` profile) |
+| --- | --- | --- | --- |
+| Where the data lives | In memory, inside Spring | `backend/data/darscope.mv.db` on the laptop | Postgres in the cloud |
+| Setting up the table and the 8 starting properties | `schema.sql` and `data.sql` at every start | `schema.sql` and `data-once.sql` at every start, both safe to run again | `schema.sql`, `supabase/security.sql` and `data-once.sql` at every start, all safe to run again |
+| After a restart | Back to the 8 starting properties | Everything kept | Everything kept |
+| To start again from the 8 | Restart | Delete `backend/data/` | `DROP TABLE property;` in the SQL Editor |
+| Needs | Nothing | Nothing | `backend/.env` and a network that allows port 5432 |
+| Used by the tests | Yes | Never | Never |
+
+Run the `local` profile with `mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local`. It keeps the team's own data between restarts with nothing to install, so it is the everyday choice when Supabase is not needed. Its H2 console is at <http://localhost:8080/h2-console> with the JDBC URL `jdbc:h2:file:./data/darscope;AUTO_SERVER=TRUE`, while the server runs from `backend/`. `data-once.sql` inserts the starting properties only into an empty table, so a restart never adds them twice or brings back one the app deleted.
 
 ### Setting it up (Person A)
 
 1. Create a free project at [supabase.com](https://supabase.com). Keep the database password private: **this repository is public**.
-2. In the **SQL Editor**, run `schema.sql`, then `data.sql`, then this one line, which belongs to Supabase only:
-   `ALTER TABLE property ENABLE ROW LEVEL SECURITY;`
-   It closes Supabase's own public data API to the table. Spring is not affected, because it connects as the table's owner.
+2. Nothing to run in the SQL Editor: on its first start on the `supabase` profile, Spring creates the table, turns on row level security (`supabase/security.sql`, which closes Supabase's own public data API to the table; Spring is not affected, because it connects as the table's owner) and inserts the 8 starting properties. To start again from the 8, run `DROP TABLE property;` in the SQL Editor and restart Spring.
 3. Under **Connect**, copy the **Session pooler** connection details. That one works on any network. The "Direct connection" needs IPv6, which many networks lack.
 4. Each person creates `backend/.env`. The repository's `.gitignore` already keeps every `.env` out of git. It holds three lines:
    ```
@@ -217,11 +237,11 @@ Supabase was dropped on 11 November 2026 and brought back on 12 November 2026, a
    DB_USER=postgres.<project ref>
    DB_PASSWORD=<the password>
    ```
-5. `application.properties` imports that file with `spring.config.import=optional:file:.env[.properties]`. `application-supabase.properties` sets `spring.datasource.url`, `username` and `password` to `${DB_URL}`, `${DB_USER}` and `${DB_PASSWORD}`.
+5. `application.properties` imports that file with `spring.config.import=optional:file:.env[.properties]`. `application-supabase.properties` sets `spring.datasource.url`, `username` and `password` to `${DB_URL}`, `${DB_USER}` and `${DB_PASSWORD}`. The file is read from the folder Spring starts in, so start it inside `backend/` (in IntelliJ, set the run configuration's working directory to `backend`). The `.env` file is read as Java properties, so a backslash in the password must be written twice.
 6. **Free projects pause after a week without use.** Open the Supabase dashboard on 13 November, and again on the morning of 14 November, to be sure it is awake.
 7. **Never point the tests at Supabase.** `mvnw.cmd test` runs on the default profile, so the tests use H2 and mocks and never change the shared data.
 
-On H2, Spring runs `schema.sql` and `data.sql` itself at every start, because H2 is an embedded database. On Supabase it never runs them: the table was made once in step 2, and the data stays between restarts.
+On H2, Spring runs `schema.sql` and `data.sql` at every start, so the app always starts from the 8 properties. On Supabase it runs the safe versions, so the data stays between restarts.
 
 ### Looking at the data
 

@@ -83,7 +83,7 @@ You write the code in `prepare.ipynb`. Claude explains each step, names the func
 13. ✔ Baselines, the scores to beat (found: B1 43.8%, B2 41.4%):
     - B1: a model that knows only the city.
     - B2: a model that knows only the city and the size.
-    - Optional B3: the app's own comparables estimate (SRS B.2 and B.3).
+    - Optional B3, not done: the app's comparables estimate, withdrawn in SRS version 1.2 with Appendix B.2 and B.3.
 14. ✔ Ridge regression (found: 23.6% with `alpha` = 1; a plain loop over the four values replaced `GridSearchCV`).
     - A `Pipeline` with a `ColumnTransformer`: `OneHotEncoder` for city, front and type, `TargetEncoder` for district and `StandardScaler` for the numbers. Put `Ridge` last.
     - Wrap it in `TransformedTargetRegressor(func=np.log, inverse_func=np.exp)`, so it learns log price but answers in SAR.

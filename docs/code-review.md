@@ -83,8 +83,8 @@ before commit `af9b312`, so they are not findings below.
 
 - The rent model's weights are a separate 7.90 kB file (2.86 kB compressed), loaded with a
   dynamic `import()` the first time a form shows the suggestion (`services/rentModelService.js`,
-  FR-RNT-02). The AI library and the market reference set are not built yet, so nothing is
-  loaded too early (NFR-PERF-04, FR-DAT-07).
+  FR-RNT-02). SRS version 1.2 withdrew the AI library and the market reference set
+  (NFR-PERF-04, FR-DAT-07), so nothing else is loaded on demand.
 - Search waits 300 ms after the last keystroke (`hooks/usePropertySearch.js:24-27`, FR-SRC-03),
   and its results are memoised (`:69-72`).
 - Timed over 500 properties (NFR-PERF-02 allows 200 ms): an Arabic and English keyword search

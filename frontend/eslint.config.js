@@ -18,10 +18,4 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
-  {
-    // Node scripts, such as scripts/prepare-data.mjs, run outside the browser.
-    files: ['scripts/**/*.mjs'],
-    extends: [js.configs.recommended],
-    languageOptions: { globals: globals.node },
-  },
 ]);
