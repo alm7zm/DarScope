@@ -15,7 +15,7 @@ no cookie, no analytics and no API key. One AI feature is built: the Add and Edi
 a yearly rent from the rent model the team trained on 2021 listings. That runs in the browser
 too, from a JSON file of weights loaded the first time a form needs it.
 
-The server is hand-coded by the team (`docs/part-2-brief.md`). Its contract is
+The server is built with AI assistance (`docs/ai-usage.md`). Its contract is
 `docs/backend-plan.md`. On 11 November 2026 its code is not in the repository yet: there is no
 `backend/` folder on `dev` or `main`.
 
