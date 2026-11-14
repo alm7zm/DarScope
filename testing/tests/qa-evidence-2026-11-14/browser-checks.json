@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Dashboard and server-driven pagination through the Vite proxy",
+    "status": "PASS"
+  },
+  {
+    "name": "Search matches Arabic seed district and opens a real by-ID route",
+    "status": "PASS"
+  },
+  {
+    "name": "Browser creates, reloads, edits and deletes a property",
+    "status": "PASS"
+  },
+  {
+    "name": "About page at mobile width and standalone unknown-property URL",
+    "status": "PASS"
+  },
+  {
+    "name": "Backend outage shows a message through the still-running frontend",
+    "status": "PASS"
+  },
+  {
+    "name": "No uncaught JavaScript errors in browser journeys",
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="481" failures="0" errors="0" time="28.362196001">
+    <testsuite name="src/components/about/PersonCard.test.jsx" timestamp="2026-11-14T15:57:57.230Z" hostname="Salmans-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="0.141638041">
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; shows the name, the detail line and the paragraph" time="0.117467708">
+        </testcase>
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; shows the small copy of the photo that the build makes" time="0.001922625">
+        </testcase>
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; shows initials when there is no photo" time="0.006942333">
+        </testcase>
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; shows initials when the photo file cannot be found" time="0.001543375">
+        </testcase>
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; links the email, portfolio, LinkedIn and GitHub, each naming the person" time="0.008980708">
+        </testcase>
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; leaves out whatever is empty, rather than showing a dead link" time="0.000839167">
+        </testcase>
+        <testcase classname="src/components/about/PersonCard.test.jsx" name="PersonCard &gt; marks an unfilled person as unfinished instead of showing a detail" time="0.00229375">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/about/TeamGallery.test.jsx" timestamp="2026-11-14T15:57:57.231Z" hostname="Salmans-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="0.572322667">
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; shows every member as a photo with the name and student ID beneath it (FR-ABT-02)" time="0.183731166">
+        </testcase>
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; keeps the bio and the links back until a photo is chosen" time="0.020148792">
+        </testcase>
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; opens the details of the member chosen, and only theirs" time="0.078754791">
+        </testcase>
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; closes the details when the same photo is chosen again" time="0.075436166">
+        </testcase>
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; moves the spotlight when another photo is chosen" time="0.101815041">
+        </testcase>
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; makes room for a fourth member with no change to the layout" time="0.030095084">
+        </testcase>
+        <testcase classname="src/components/about/TeamGallery.test.jsx" name="TeamGallery &gt; opens and closes from the keyboard (NFR-ACC-01)" time="0.080723833">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/properties/DeletePropertyDialog.test.jsx" timestamp="2026-11-14T15:57:57.231Z" hostname="Salmans-MacBook-Air.local" tests="9" failures="0" errors="0" skipped="0" time="1.1188195">
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="Delete from a list row (FR-DEL-01, FR-DEL-02) &gt; names the property by ID, type, district and city before deleting it" time="0.268067209">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="Delete from a list row (FR-DEL-01, FR-DEL-02) &gt; offers Cancel and Delete, with Cancel focused first" time="0.116388291">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="AC-07 delete with confirmation &gt; keeps the property after Cancel, and removes it after confirming" time="0.3204715">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="AC-07 delete with confirmation &gt; then shows &quot;Property not found&quot; at the deleted URL (FR-DET-03)" time="0.041123792">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="Esc cancels the confirmation (FR-DEL-02, NFR-ACC-06) &gt; closes the dialog and keeps the property" time="0.121266833">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="Delete from the detail page (FR-DEL-01, FR-DEL-05) &gt; offers Delete beside Edit and Back to list (FR-DET-02)" time="0.021542125">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="Delete from the detail page (FR-DEL-01, FR-DEL-05) &gt; returns to the list after the delete is confirmed" time="0.060051208">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="Delete from the detail page (FR-DEL-01, FR-DEL-05) &gt; stays on the property when the delete is cancelled" time="0.05160075">
+        </testcase>
+        <testcase classname="src/components/properties/DeletePropertyDialog.test.jsx" name="AC-08 a deleted ID is never reissued (FR-DEL-06) &gt; gives the next new property the following ID, not the freed one" time="0.1163155">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/properties/DistrictField.test.jsx" timestamp="2026-11-14T15:57:57.232Z" hostname="Salmans-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="0.800040916">
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; waits for a city before offering any district" time="0.036753458">
+        </testcase>
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; offers the chosen city’s districts in the 2021 data, then &quot;Other district…&quot;" time="0.0040845">
+        </testcase>
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; names every district in English, as the rest of the interface is" time="0.000199709">
+        </testcase>
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; stores the district chosen from the list, as the list spells it" time="0.121816792">
+        </testcase>
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; opens a text box for a district the list lacks" time="0.125871834">
+        </testcase>
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; keeps a stored name the list lacks as a choice, so editing never loses it" time="0.006240208">
+        </testcase>
+        <testcase classname="src/components/properties/DistrictField.test.jsx" name="DistrictField (FR-ADD-14) &gt; marks a kept Arabic name as Arabic, so it reads right-to-left (NFR-ACC-07)" time="0.502739084">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/properties/PropertyTable.test.jsx" timestamp="2026-11-14T15:57:57.232Z" hostname="Salmans-MacBook-Air.local" tests="14" failures="0" errors="0" skipped="0" time="0.504441625">
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable (FR-LST-02) &gt; has the nine columns of SRS 4.3, in order" time="0.104080417">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable (FR-LST-02) &gt; shows one row per property, plus the header row" time="0.040597625">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable (FR-LST-02) &gt; has an accessible name, so the table is announced" time="0.01416625">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable (FR-LST-02) &gt; puts each property ID in a row header" time="0.010646458">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: how values are written (FR-LST-06) &gt; writes rent with thousands separators and SAR" time="0.019028459">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: how values are written (FR-LST-06) &gt; writes size with m2" time="0.025347459">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: how values are written (FR-LST-06) &gt; shows city, district, type and bedrooms" time="0.015512375">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: status (FR-LST-08, NFR-ACC-05) &gt; shows the status as a word, so colour is never the only signal" time="0.0671095">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: Arabic text (FR-LST-07, NFR-ACC-07) &gt; lets the browser lay out an Arabic district, and marks its language" time="0.030370667">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: Arabic text (FR-LST-07, NFR-ACC-07) &gt; marks an English district for automatic direction but not as Arabic" time="0.012741042">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: row actions (FR-LST-03) &gt; offers View, Edit and Delete on every row" time="0.040975083">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: row actions (FR-LST-03) &gt; asks the page to confirm rather than deleting the row itself (FR-DEL-02)" time="0.08780375">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: row actions (FR-LST-03) &gt; names each action with its property, so the links are told apart" time="0.019997667">
+        </testcase>
+        <testcase classname="src/components/properties/PropertyTable.test.jsx" name="PropertyTable: nothing to show &gt; renders the header row only when given no properties" time="0.014314375">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/properties/RentSuggestion.test.jsx" timestamp="2026-11-14T15:57:57.233Z" hostname="Salmans-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="0.189426708">
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; shows the suggestion with the 2021 note, and &quot;Use this rent&quot; hands it to the form" time="0.1573635">
+        </testcase>
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; follows the values as they change: the number grows as amenities are added" time="0.013281">
+        </testcase>
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; says when the district is not in the 2021 data" time="0.005268625">
+        </testcase>
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; asks for the fields it needs, and offers no rent to use until then" time="0.00625225">
+        </testcase>
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; suggests nothing for a size the model never learned from" time="0.001680667">
+        </testcase>
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; warns when the entered rent looks mistyped (FR-RNT-07)" time="0.00234425">
+        </testcase>
+        <testcase classname="src/components/properties/RentSuggestion.test.jsx" name="RentSuggestion (FR-ADD-13) &gt; fails safely when the model cannot be loaded (CLAUDE.md rule 7)" time="0.001660916">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/search/FilterChips.test.jsx" timestamp="2026-11-14T15:57:57.233Z" hostname="Salmans-MacBook-Air.local" tests="3" failures="0" errors="0" skipped="0" time="0.162978083">
+        <testcase classname="src/components/search/FilterChips.test.jsx" name="FilterChips (FR-SRC-13) &gt; shows nothing when no filter is set" time="0.008257334">
+        </testcase>
+        <testcase classname="src/components/search/FilterChips.test.jsx" name="FilterChips (FR-SRC-13) &gt; shows one removable chip per filter that is set" time="0.098847542">
+        </testcase>
+        <testcase classname="src/components/search/FilterChips.test.jsx" name="FilterChips (FR-SRC-13) &gt; hands the chip to onRemove when it is pressed" time="0.054809875">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/search/SearchControls.test.jsx" timestamp="2026-11-14T15:57:57.233Z" hostname="Salmans-MacBook-Air.local" tests="17" failures="0" errors="0" skipped="0" time="4.753239625">
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The search box (FR-SRC-01, FR-SRC-02) &gt; sits above the list, with a label" time="0.221585875">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The search box (FR-SRC-01, FR-SRC-02) &gt; AC-09 narrows the list to what matches, and counts against the whole portfolio" time="0.4885295">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The search box (FR-SRC-01, FR-SRC-02) &gt; finds one property by its ID" time="0.440004791">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The search box (FR-SRC-01, FR-SRC-02) &gt; AC-10 finds a property by its Arabic district" time="0.43002075">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The 300 ms pause (FR-SRC-03) &gt; waits for the typing to stop, then searches" time="0.075861375">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The 300 ms pause (FR-SRC-03) &gt; searches at once on Enter, without waiting" time="0.072790333">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; offers every filter SRS 6 names" time="0.110726792">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; filters by one city, then by two at once" time="0.293008292">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; filters by status" time="0.143115834">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; filters by type" time="0.127462125">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; AC-11 combines city, status and minimum bedrooms, and Clear all restores everything" time="0.462424959">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; applies the search box and the filters together" time="0.546246458">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="The filters (FR-SRC-04, FR-SRC-05) &gt; FR-SRC-06 Clear all also empties the search box" time="0.145425375">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="AC-13 a range the wrong way round (FR-SRC-07) &gt; explains the problem and leaves the list alone" time="0.326181042">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="AC-13 a range the wrong way round (FR-SRC-07) &gt; explains a backwards size range too" time="0.184852083">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="AC-13 a range the wrong way round (FR-SRC-07) &gt; applies the range once it is the right way round" time="0.278129625">
+        </testcase>
+        <testcase classname="src/components/search/SearchControls.test.jsx" name="AC-12 a search with no matches (FR-LST-05) &gt; says so, and offers a Clear all that brings the list back" time="0.405079708">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/ui/Badge.test.jsx" timestamp="2026-11-14T15:57:57.234Z" hostname="Salmans-MacBook-Air.local" tests="5" failures="0" errors="0" skipped="0" time="0.039177209">
+        <testcase classname="src/components/ui/Badge.test.jsx" name="Badge (FR-LST-08, NFR-ACC-05) &gt; shows Vacant as a word, not only a colour" time="0.03275175">
+        </testcase>
+        <testcase classname="src/components/ui/Badge.test.jsx" name="Badge (FR-LST-08, NFR-ACC-05) &gt; shows Occupied as a word, not only a colour" time="0.000940459">
+        </testcase>
+        <testcase classname="src/components/ui/Badge.test.jsx" name="Badge (FR-LST-08, NFR-ACC-05) &gt; shows Under maintenance as a word, not only a colour" time="0.000767834">
+        </testcase>
+        <testcase classname="src/components/ui/Badge.test.jsx" name="Badge (FR-LST-08, NFR-ACC-05) &gt; gives each status its own colour class" time="0.001487792">
+        </testcase>
+        <testcase classname="src/components/ui/Badge.test.jsx" name="Badge (FR-LST-08, NFR-ACC-05) &gt; still shows the text for a status outside the three choices" time="0.000660458">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/ui/Dialog.test.jsx" timestamp="2026-11-14T15:57:57.234Z" hostname="Salmans-MacBook-Air.local" tests="9" failures="0" errors="0" skipped="0" time="0.225377542">
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; shows its title and what it is about" time="0.097320333">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; names the dialog for assistive technology" time="0.013710958">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; gives Cancel focus first, so Enter never deletes by accident" time="0.012100416">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; offers Cancel and the named confirm action" time="0.016105">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; calls back when the confirm action is chosen" time="0.031469459">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; calls back when Cancel is chosen" time="0.02203175">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; cancels on Esc (FR-DEL-02)" time="0.014732375">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; is not shown while closed" time="0.005575125">
+        </testcase>
+        <testcase classname="src/components/ui/Dialog.test.jsx" name="Dialog (FR-DEL-02, NFR-ACC-06) &gt; disables the confirm button and says it is working while busy" time="0.010528708">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/ui/Message.test.jsx" timestamp="2026-11-14T15:57:57.234Z" hostname="Salmans-MacBook-Air.local" tests="5" failures="0" errors="0" skipped="0" time="0.102191542">
+        <testcase classname="src/components/ui/Message.test.jsx" name="Message (FR-FBK-01, FR-FBK-02) &gt; shows the message text" time="0.029098709">
+        </testcase>
+        <testcase classname="src/components/ui/Message.test.jsx" name="Message (FR-FBK-01, FR-FBK-02) &gt; puts the message in a polite live region, so it is announced" time="0.003521917">
+        </testcase>
+        <testcase classname="src/components/ui/Message.test.jsx" name="Message (FR-FBK-01, FR-FBK-02) &gt; keeps the live region on the page when there is no message, so the next one is announced" time="0.001033667">
+        </testcase>
+        <testcase classname="src/components/ui/Message.test.jsx" name="Message (FR-FBK-01, FR-FBK-02) &gt; can be dismissed before its timer runs out" time="0.066287792">
+        </testcase>
+        <testcase classname="src/components/ui/Message.test.jsx" name="Message (FR-FBK-01, FR-FBK-02) &gt; offers no dismiss button when there is nothing to dismiss" time="0.000882542">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/ui/PageStates.test.jsx" timestamp="2026-11-14T15:57:57.235Z" hostname="Salmans-MacBook-Air.local" tests="5" failures="0" errors="0" skipped="0" time="0.101689">
+        <testcase classname="src/components/ui/PageStates.test.jsx" name="Loading &gt; announces what is loading as a status, politely" time="0.070118">
+        </testcase>
+        <testcase classname="src/components/ui/PageStates.test.jsx" name="LoadError &gt; says the portfolio could not be loaded, with the reason, as an alert" time="0.002598958">
+        </testcase>
+        <testcase classname="src/components/ui/PageStates.test.jsx" name="LoadError &gt; offers no Try again button when nothing can be retried" time="0.000952584">
+        </testcase>
+        <testcase classname="src/components/ui/PageStates.test.jsx" name="LoadError &gt; asks again when Try again is pressed" time="0.022868916">
+        </testcase>
+        <testcase classname="src/components/ui/PageStates.test.jsx" name="EmptyState &gt; shows its message and the action that goes with it" time="0.004375916">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/ui/Pager.test.jsx" timestamp="2026-11-14T15:57:57.235Z" hostname="Salmans-MacBook-Air.local" tests="4" failures="0" errors="0" skipped="0" time="0.214850209">
+        <testcase classname="src/components/ui/Pager.test.jsx" name="Pager (FR-LST-10) &gt; says which page is shown and which rows it holds" time="0.142828125">
+        </testcase>
+        <testcase classname="src/components/ui/Pager.test.jsx" name="Pager (FR-LST-10) &gt; asks for the page before and after" time="0.048076">
+        </testcase>
+        <testcase classname="src/components/ui/Pager.test.jsx" name="Pager (FR-LST-10) &gt; cannot go before the first page or past the last" time="0.006302959">
+        </testcase>
+        <testcase classname="src/components/ui/Pager.test.jsx" name="Pager (FR-LST-10) &gt; offers 5, 10, 25 or 50 a page" time="0.016309916">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/constants/team.test.js" timestamp="2026-11-14T15:57:57.235Z" hostname="Salmans-MacBook-Air.local" tests="1" failures="0" errors="0" skipped="0" time="0.00170075">
+        <testcase classname="src/constants/team.test.js" name="team photos in constants/team.js &gt; finds the photo of everyone who has one in src/assets/team/" time="0.001011917">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/context/PortfolioProvider.test.jsx" timestamp="2026-11-14T15:57:57.235Z" hostname="Salmans-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="0.279904">
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="PortfolioProvider &gt; loads the portfolio when the app starts (FR-DAT-01)" time="0.03855525">
+        </testcase>
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="PortfolioProvider &gt; adds a property and confirms it (FR-ADD-06)" time="0.148288625">
+        </testcase>
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="PortfolioProvider &gt; updates a property and confirms it (FR-UPD-05)" time="0.026433834">
+        </testcase>
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="PortfolioProvider &gt; deletes a property and confirms it (FR-DEL-03, FR-DEL-04)" time="0.017413583">
+        </testcase>
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="PortfolioProvider &gt; lets the message be dismissed at once (FR-FBK-01)" time="0.031660333">
+        </testcase>
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="PortfolioProvider: the message clears itself (FR-FBK-01) &gt; takes the message away after 5 seconds" time="0.009601041">
+        </testcase>
+        <testcase classname="src/context/PortfolioProvider.test.jsx" name="usePortfolio &gt; refuses to work outside the provider, rather than failing quietly" time="0.006774792">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/context/portfolioReducer.test.js" timestamp="2026-11-14T15:57:57.235Z" hostname="Salmans-MacBook-Air.local" tests="9" failures="0" errors="0" skipped="0" time="0.003039542">
+        <testcase classname="src/context/portfolioReducer.test.js" name="initialPortfolioState &gt; starts empty and loading, with nothing to report" time="0.001276708">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; replaces the collection when the load finishes" time="0.000228167">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; keeps the failure message when the load fails" time="0.000106875">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; adds a property and names it in the message (FR-ADD-05)" time="0.000120292">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; replaces the changed property only (FR-UPD-04)" time="0.000106375">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; takes the property out and names it in the message (FR-DEL-04)" time="0.000091417">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; clears the message" time="0.0000785">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; never changes the state it was given (NFR-REL-04)" time="0.000090958">
+        </testcase>
+        <testcase classname="src/context/portfolioReducer.test.js" name="portfolioReducer &gt; ignores an action it does not know" time="0.00007975">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/usePropertySearch.test.js" timestamp="2026-11-14T15:57:57.236Z" hostname="Salmans-MacBook-Air.local" tests="10" failures="0" errors="0" skipped="0" time="0.024853625">
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: the page (FR-LST-10) &gt; keeps the page the user chose while nothing has been searched" time="0.009716">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: the page (FR-LST-10) &gt; goes back to page 1 once typed text becomes the search" time="0.001461875">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: the page (FR-LST-10) &gt; stays on its page when the text is typed and rubbed out before the pause ends" time="0.0008245">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: the page (FR-LST-10) &gt; goes back to page 1 when a filter, the page size or Clear all changes the list" time="0.001557542">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: the page (FR-LST-10) &gt; starts on page 1 with 10 a page" time="0.000530542">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: sort and starting state (FR-SRC-09, FR-SRC-12) &gt; starts from the state it is given, such as one read from a URL" time="0.002215083">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: sort and starting state (FR-SRC-09, FR-SRC-12) &gt; sorts newest first by default, and leaves paging to the server" time="0.001223667">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: sort and starting state (FR-SRC-09, FR-SRC-12) &gt; pages in the browser once another order is chosen, and goes back to page 1" time="0.000703833">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: sort and starting state (FR-SRC-09, FR-SRC-12) &gt; changes only the direction when only the direction is given" time="0.00049825">
+        </testcase>
+        <testcase classname="src/hooks/usePropertySearch.test.js" name="usePropertySearch: sort and starting state (FR-SRC-09, FR-SRC-12) &gt; clears the search text at once with clearQuery" time="0.005072417">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/layouts/AppLayout.test.jsx" timestamp="2026-11-14T15:57:57.236Z" hostname="Salmans-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="0.273767875">
+        <testcase classname="src/layouts/AppLayout.test.jsx" name="AppLayout &gt; frames the page with header, navigation, main and footer landmarks (UI-01, NFR-ACC-04)" time="0.169803083">
+        </testcase>
+        <testcase classname="src/layouts/AppLayout.test.jsx" name="AppLayout &gt; shows the menu items Dashboard, Properties, Add property and About (FR-NAV-01)" time="0.0362195">
+        </testcase>
+        <testcase classname="src/layouts/AppLayout.test.jsx" name="AppLayout &gt; marks only the current page in the menu (FR-NAV-04)" time="0.021284291">
+        </testcase>
+        <testcase classname="src/layouts/AppLayout.test.jsx" name="AppLayout &gt; offers a skip link that jumps past the menu to the content (WCAG 2.4.1)" time="0.019696375">
+        </testcase>
+        <testcase classname="src/layouts/AppLayout.test.jsx" name="AppLayout &gt; is the first thing a keyboard reaches, before the menu" time="0.016541583">
+        </testcase>
+        <testcase classname="src/layouts/AppLayout.test.jsx" name="AppLayout &gt; states the course and the data credit in the footer, and nothing about saving (UI-01)" time="0.008735584">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/layouts/NavMenu.test.jsx" timestamp="2026-11-14T15:57:57.236Z" hostname="Salmans-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="0.309156209">
+        <testcase classname="src/layouts/NavMenu.test.jsx" name="NavMenu toggle (FR-NAV-08) &gt; starts closed, with a Menu button that controls the list of items" time="0.134401208">
+        </testcase>
+        <testcase classname="src/layouts/NavMenu.test.jsx" name="NavMenu toggle (FR-NAV-08) &gt; opens and closes when the button is pressed" time="0.057637583">
+        </testcase>
+        <testcase classname="src/layouts/NavMenu.test.jsx" name="NavMenu toggle (FR-NAV-08) &gt; can be opened from the keyboard" time="0.023010167">
+        </testcase>
+        <testcase classname="src/layouts/NavMenu.test.jsx" name="NavMenu toggle (FR-NAV-08) &gt; closes once an item is chosen, on the chosen page" time="0.050237458">
+        </testcase>
+        <testcase classname="src/layouts/NavMenu.test.jsx" name="NavMenu toggle (FR-NAV-08) &gt; closes on Esc and puts focus back on the button (NFR-ACC-01)" time="0.028576375">
+        </testcase>
+        <testcase classname="src/layouts/NavMenu.test.jsx" name="NavMenu toggle (FR-NAV-08) &gt; leaves focus alone on Esc when the menu is already closed" time="0.013443042">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/AboutPage.test.jsx" timestamp="2026-11-14T15:57:57.237Z" hostname="Salmans-MacBook-Air.local" tests="14" failures="0" errors="0" skipped="0" time="0.449974958">
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the team (FR-ABT-02) &gt; names the page and sets the tab title" time="0.137057291">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the team (FR-ABT-02) &gt; lists every team member" time="0.040018292">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the team (FR-ABT-02) &gt; shows the student ID of every member who has one" time="0.027499917">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the team (FR-ABT-02) &gt; marks a member with no details as unfinished, rather than inventing one" time="0.016435541">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the team (FR-ABT-02) &gt; opens a member&apos;s details from their photo" time="0.072426125">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the instructor &gt; shows the instructor, or says plainly that the name is still to add" time="0.017280667">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the course (FR-ABT-03) &gt; shows the course code and the term" time="0.0148875">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: the course (FR-ABT-03) &gt; AC-15 shows the course and term together with the names, and no longer &quot;Project Part 1&quot;" time="0.008466583">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: how it is built (FR-ABT-04) &gt; describes the app in a sentence" time="0.005268667">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: how it is built (FR-ABT-04) &gt; lists the technologies" time="0.025276666">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: how it is built (FR-ABT-04) &gt; links to the repository" time="0.014822416">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: credits (FR-ABT-05) &gt; credits the dataset by name, source and year" time="0.035939583">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: credits (FR-ABT-05) &gt; credits the dataset for the rent suggestion, and says the sample properties are invented" time="0.008560708">
+        </testcase>
+        <testcase classname="src/pages/AboutPage.test.jsx" name="AboutPage: credits (FR-ABT-05) &gt; leaves the AI tools to docs/ai-usage.md rather than the page" time="0.0242225">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/DashboardPage.test.jsx" timestamp="2026-11-14T15:57:57.237Z" hostname="Salmans-MacBook-Air.local" tests="13" failures="0" errors="0" skipped="0" time="2.465939666">
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: the headline figures (FR-DSH-01) &gt; names the page and sets the tab title" time="0.180815667">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: the headline figures (FR-DSH-01) &gt; shows the total, the three status counts, the rate and both rent figures" time="0.053545041">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: the headline figures (FR-DSH-01) &gt; writes both rent figures with separators and SAR (FR-LST-06)" time="0.026288125">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: AC-14 the figures follow a change (FR-DSH-03) &gt; raises the total, the occupied count and the occupied rent after an add" time="1.732080875">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: AC-14 the figures follow a change (FR-DSH-03) &gt; lowers the total after a delete" time="0.03638975">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: an empty portfolio (FR-DSH-04, FR-DSH-02) &gt; shows zeros, a dash for the rate, and asks for a first property" time="0.030509042">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: an empty portfolio (FR-DSH-04, FR-DSH-02) &gt; shows no city table and no attention list when there is nothing to list" time="0.027535333">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: the city table (FR-DSH-05) &gt; shows a row per city with properties, occupied and rent" time="0.030203334">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: needs attention (FR-DSH-06) &gt; lists every property that is not occupied, each linking to its page" time="0.091536125">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: needs attention (FR-DSH-06) &gt; leaves out the occupied ones" time="0.068902709">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: needs attention (FR-DSH-06) &gt; says so when every property is occupied" time="0.01815025">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: shortcuts (FR-DSH-07) &gt; links to the full property list" time="0.084655375">
+        </testcase>
+        <testcase classname="src/pages/DashboardPage.test.jsx" name="DashboardPage: the figures link to the list (FR-DSH-07) &gt; opens the Properties list already narrowed to a status" time="0.084139583">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/PropertyDetailPage.test.jsx" timestamp="2026-11-14T15:57:57.238Z" hostname="Salmans-MacBook-Air.local" tests="17" failures="0" errors="0" skipped="0" time="0.776571167">
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; shows all six groups of SRS 4.4" time="0.183554">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; names the page after the property, and sets the tab title (UI-02)" time="0.072236125">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; puts the location fields in the Location group" time="0.027937125">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; writes the building figures with their units (FR-LST-06)" time="0.037448042">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; writes the rent with separators and SAR" time="0.043509333">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; shows the record fields, including the ID" time="0.02430175">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: the six field groups (FR-DET-01) &gt; lists the amenities the property has" time="0.0294485">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: tenancy appears only when Occupied (FR-DET-04) &gt; shows tenant and lease details for an occupied property" time="0.036429333">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: tenancy appears only when Occupied (FR-DET-04) &gt; hides them for a Vacant property" time="0.026024459">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: tenancy appears only when Occupied (FR-DET-04) &gt; hides them for a Under maintenance property" time="0.016682625">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: Arabic text (FR-LST-07, NFR-ACC-07) &gt; marks an Arabic district and description with their language and direction" time="0.021669542">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: actions (FR-DET-02) &gt; offers Edit and Back to list" time="0.011715542">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: search by ID (Part 2 brief, requirement 3) &gt; shows the server&apos;s copy, even when the list loaded at start is out of date" time="0.119607417">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: an unknown ID (FR-DET-03) &gt; shows &quot;Property not found&quot; with a link back to the list" time="0.026649458">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: an unknown ID (FR-DET-03) &gt; AC-07 reads the same for a property that was just deleted" time="0.031808917">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: an unknown ID (FR-DET-03) &gt; says the server cannot be reached, rather than &quot;Property not found&quot;" time="0.035145417">
+        </testcase>
+        <testcase classname="src/pages/PropertyDetailPage.test.jsx" name="PropertyDetailPage: an unknown ID (FR-DET-03) &gt; shows no field groups when there is no property" time="0.031301625">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/PropertyFormPage.test.jsx" timestamp="2026-11-14T15:57:57.238Z" hostname="Salmans-MacBook-Air.local" tests="33" failures="0" errors="0" skipped="0" time="11.559469666">
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Add form (FR-ADD-01, FR-ADD-02) &gt; shows every editable field of SRS 3.1" time="0.298851875">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Add form (FR-ADD-01, FR-ADD-02) &gt; offers a tick box for each of the 13 amenities (SRS 3.2)" time="0.264082042">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Add form (FR-ADD-01, FR-ADD-02) &gt; marks the required fields in words, not by colour (FR-ADD-02, NFR-ACC-05)" time="0.151296833">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Add form (FR-ADD-01, FR-ADD-02) &gt; starts with Type Villa, Status Vacant and no amenities (FR-ADD-09)" time="0.113514291">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Add form (FR-ADD-01, FR-ADD-02) &gt; groups the fields as SRS 5.1 asks (UI-03)" time="0.08756825">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-02 add a valid property &gt; saves it, opens its detail page and confirms it by ID" time="1.432517416">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-02 add a valid property &gt; sets both timestamps and stores the values that were typed (FR-ADD-04)" time="1.549596">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-02 add a valid property &gt; shows the new property in the list at once (FR-ADD-06)" time="1.010278541">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-03 reject invalid input (FR-ADD-03) &gt; saves nothing, shows each error beside its field and keeps what was typed" time="0.778759792">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-03 reject invalid input (FR-ADD-03) &gt; focuses the &quot;Other district&quot; box when the name typed there fails its check" time="0.905987833">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-03 reject invalid input (FR-ADD-03) &gt; links each error to its field, so it is read with the field (NFR-ACC-03)" time="0.069923333">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-03 reject invalid input (FR-ADD-03) &gt; takes an error away as soon as the field is corrected" time="0.160415958">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: tenancy fields (FR-ADD-07) &gt; leaves them unusable until the status is Occupied" time="0.108530583">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: tenancy fields (FR-ADD-07) &gt; makes the tenant name required once the status is Occupied" time="0.103406875">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-04 cancel an add (FR-ADD-08) &gt; returns to the list and saves nothing" time="0.701472667">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the rent suggestion (FR-ADD-13) &gt; follows the form as it is filled, and fills Yearly rent only when asked" time="1.151886875">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the rent suggestion (FR-ADD-13) &gt; is on the Edit form too, and says when the district is not in the 2021 data" time="0.211707792">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the rent suggestion (FR-ADD-13) &gt; warns when the rent looks mistyped, but still lets it be saved (FR-RNT-07)" time="0.679323208">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: choices instead of typing (FR-ADD-14, FR-ADD-15) &gt; offers age and the room counts as dropdowns of whole numbers" time="0.058572958">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: choices instead of typing (FR-ADD-14, FR-ADD-15) &gt; lists the chosen city’s districts, and clears one the new city does not have" time="0.229394167">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: number fields (FR-ADD-12) &gt; turns Arabic digits into 0 to 9 and drops thousands separators as they are typed" time="0.167831917">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: number fields (FR-ADD-12) &gt; takes nothing but digits and one decimal point" time="0.128771334">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: number fields (FR-ADD-12) &gt; keeps a decimal point, so the check reports it instead of changing the number" time="0.1385665">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: number fields (FR-ADD-12) &gt; takes no more digits than the largest allowed value has" time="0.199615792">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Edit form (FR-UPD-01) &gt; opens filled with the stored values" time="0.069032291">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Edit form (FR-UPD-01) &gt; ticks the amenities the property already has" time="0.104313917">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Edit form (FR-UPD-01) &gt; shows &quot;Property not found&quot; for an ID that does not exist (FR-DET-03)" time="0.011464583">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: the Edit form (FR-UPD-01) &gt; says the server cannot be reached, rather than &quot;Property not found&quot;" time="0.008356208">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-05 update a property &gt; stores the change, keeps the ID and created date, and moves Last updated on" time="0.166143">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-05 update a property &gt; discards the change on Cancel (FR-UPD-06)" time="0.160420959">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-05 update a property &gt; applies the same checks as adding (FR-UPD-02)" time="0.146354708">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-06 the status leaves Occupied (FR-UPD-07) &gt; warns before saving, then clears the tenant and lease details" time="0.111335584">
+        </testcase>
+        <testcase classname="src/pages/PropertyFormPage.test.jsx" name="PropertyFormPage: AC-06 the status leaves Occupied (FR-UPD-07) &gt; does not warn when the status was never Occupied" time="0.078134042">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/PropertyListPage.test.jsx" timestamp="2026-11-14T15:57:57.239Z" hostname="Salmans-MacBook-Air.local" tests="13" failures="0" errors="0" skipped="0" time="2.40296375">
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage (SRS 4.3) &gt; names the page and sets the tab title (UI-02)" time="0.233989666">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage (SRS 4.3) &gt; lists every property in the portfolio (FR-LST-01)" time="0.11736825">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage (SRS 4.3) &gt; counts what is shown against the whole portfolio (FR-LST-04)" time="0.046321875">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: an empty portfolio (FR-LST-05) &gt; shows the message from Appendix C and a way to add the first property" time="0.03501925">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: an empty portfolio (FR-LST-05) &gt; shows no table when there is nothing to put in it" time="0.031301917">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: pages (FR-LST-10, Part 2 brief requirement 4) &gt; shows 10 properties a page, newest first, and moves with Next and Previous" time="0.239588417">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: pages (FR-LST-10, Part 2 brief requirement 4) &gt; shows 25 a page when asked, from page 1" time="0.238396583">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: pages (FR-LST-10, Part 2 brief requirement 4) &gt; pages the 8 starting properties when 5 a page is chosen, for the demo" time="0.173364958">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: pages (FR-LST-10, Part 2 brief requirement 4) &gt; goes back to page 1 when the search changes, and pages the matches" time="0.521055583">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: pages (FR-LST-10, Part 2 brief requirement 4) &gt; shows the last page that is left after deleting the only row on the last page" time="0.248923541">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: the search lives in the URL (FR-SRC-12) &gt; opens already narrowed when the URL carries a filter, with a chip to undo it" time="0.148290916">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: the search lives in the URL (FR-SRC-12) &gt; writes a filter to the URL, and removes it again with its chip" time="0.234647583">
+        </testcase>
+        <testcase classname="src/pages/PropertyListPage.test.jsx" name="PropertyListPage: the search lives in the URL (FR-SRC-12) &gt; sorts by the chosen field and keeps the choice in the URL (FR-SRC-09)" time="0.133733292">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/routes/routes.test.jsx" timestamp="2026-11-14T15:57:57.240Z" hostname="Salmans-MacBook-Air.local" tests="10" failures="0" errors="0" skipped="0" time="0.759288292">
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; AC-01 navigate" time="0.576693542">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens / as the page &quot;Dashboard&quot;, with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)" time="0.009277334">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens /properties as the page &quot;Properties&quot;, with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)" time="0.006787458">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens /properties/new as the page &quot;Add property&quot;, with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)" time="0.041127208">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens /properties/RP-0001/edit as the page &quot;Edit property&quot;, with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)" time="0.011434833">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens /insights as the page &quot;Market insights&quot;, with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)" time="0.013225875">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens /about as the page &quot;About&quot;, with one main heading and a tab title (FR-NAV-05, UI-02, FR-NAV-09)" time="0.023409">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; opens /properties/:id as the page for that property (FR-NAV-05, UI-02, FR-NAV-09)" time="0.028639125">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; shows &quot;Page not found&quot; with a link to the Dashboard for an unknown URL (FR-NAV-07)" time="0.01147475">
+        </testcase>
+        <testcase classname="src/routes/routes.test.jsx" name="routes &gt; shows an error screen with a Reload button when a page throws, and keeps the menu (FR-FBK-03)" time="0.036305083">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/services/propertyService.test.js" timestamp="2026-11-14T15:57:57.240Z" hostname="Salmans-MacBook-Air.local" tests="19" failures="0" errors="0" skipped="0" time="0.011161958">
+        <testcase classname="src/services/propertyService.test.js" name="IDs &gt; shows the server number as RP plus four digits (FR-ADD-04)" time="0.00246975">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="IDs &gt; reads the server number back out of an ID, and 0 for anything else" time="0.000514042">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="list &gt; asks for every property and turns each into the app shape" time="0.001933041">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="list &gt; reports a server that cannot be reached" time="0.001141708">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="list &gt; reports a server error, which is also what the proxy answers when Spring is down" time="0.000248375">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="listPage &gt; asks the server for one page, counting pages from 0 on the wire and from 1 in the app" time="0.000319292">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="listPage &gt; still has one page when the portfolio is empty" time="0.00013725">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="getById &gt; asks for the property by its server number" time="0.000134667">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="getById &gt; turns a 404 into &quot;Property not found&quot; (FR-DET-03)" time="0.001618792">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="getById &gt; does not ask the server about an ID that cannot exist" time="0.000213833">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="create &gt; posts the values in the server shape and returns the new property" time="0.00050575">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="create &gt; clears tenant and lease details unless the status is Occupied (FR-UPD-07)" time="0.000146333">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="create &gt; rejects invalid values without calling the server (NFR-REL-03)" time="0.000142208">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="create &gt; passes on the field messages the server sends with a 400" time="0.000125833">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="update &gt; puts the values to the property by its server number" time="0.000147667">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="update &gt; turns a 404 into &quot;Property not found&quot;" time="0.000103625">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="update &gt; rejects invalid values without calling the server" time="0.000121208">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="remove &gt; deletes the property by its server number" time="0.000125875">
+        </testcase>
+        <testcase classname="src/services/propertyService.test.js" name="remove &gt; turns a 404 into &quot;Property not found&quot;" time="0.000083708">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/arabic.test.js" timestamp="2026-11-14T15:57:57.241Z" hostname="Salmans-MacBook-Air.local" tests="22" failures="0" errors="0" skipped="0" time="0.014660333">
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; turns &quot; Al Malqa  &quot; into &quot;al malqa&quot;" time="0.002823583">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; turns &quot;الروضة&quot; into &quot;الروضه&quot;" time="0.000462334">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; turns &quot;أحمد&quot; into &quot;احمد&quot;" time="0.000247459">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; turns &quot;حي المَلْقا&quot; into &quot;حي الملقا&quot;" time="0.001561167">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; lower-cases Latin letters (step 1)" time="0.000226667">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; removes the tatweel (step 2)" time="0.000091584">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; writes the alif variant &quot;أ&quot; as a plain alif (step 3)" time="0.000082">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; writes the alif variant &quot;إ&quot; as a plain alif (step 3)" time="0.000056708">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; writes the alif variant &quot;آ&quot; as a plain alif (step 3)" time="0.000061125">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; writes the alif variant &quot;ٱ&quot; as a plain alif (step 3)" time="0.000049166">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; writes alif maksura as ya (step 4)" time="0.000055625">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; writes ta marbuta as ha (step 5)" time="0.000053833">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; converts Arabic-Indic digits to 0 to 9 (step 6)" time="0.000062875">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; collapses repeated spaces and trims (step 7)" time="0.000054917">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; keeps a leading district word unless asked to strip it (step 8 is opt-in)" time="0.000100125">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; makes spelling variants of one word match" time="0.000058916">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; normalises the non-string null to an empty string" time="0.000052667">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; normalises the non-string undefined to an empty string" time="0.000046708">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; normalises the non-string 42 to an empty string" time="0.000045667">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="normalise (SRS Appendix B.4) &gt; normalises the non-string {} to an empty string" time="0.000045167">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="hasArabic &gt; finds Arabic letters" time="0.000139208">
+        </testcase>
+        <testcase classname="src/utils/arabic.test.js" name="textDirection &gt; marks Arabic text with its language, and leaves direction automatic either way" time="0.00095125">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/format.test.js" timestamp="2026-11-14T15:57:57.242Z" hostname="Salmans-MacBook-Air.local" tests="24" failures="0" errors="0" skipped="0" time="0.0200395">
+        <testcase classname="src/utils/format.test.js" name="formatRent (FR-LST-06) &gt; groups thousands and names the currency" time="0.003391625">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatRent (FR-LST-06) &gt; shows a dash for null" time="0.000249667">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatRent (FR-LST-06) &gt; shows a dash for undefined" time="0.000156959">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatRent (FR-LST-06) &gt; shows a dash for &quot;abc&quot;" time="0.000288917">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatRent (FR-LST-06) &gt; shows a dash for null" time="0.000239333">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatSize (FR-LST-06) &gt; adds the unit" time="0.000450667">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatSize (FR-LST-06) &gt; shows a dash when there is no number" time="0.000239292">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatCount &gt; groups thousands" time="0.000240833">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatAge &gt; calls a brand new property New (SRS 3.1)" time="0.001850458">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatAge &gt; writes one year in the singular" time="0.000958542">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; writes a lease date in full" time="0.000362833">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; reads the day straight from the string, so the date never shifts by a time zone" time="0.000151834">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; shows a dash for null" time="0.000116917">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; shows a dash for undefined" time="0.000101417">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; shows a dash for &quot;&quot;" time="0.000120084">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; shows a dash for &quot;not a date&quot;" time="0.000472416">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDate &gt; shows a dash for &quot;2026-13-01&quot;" time="0.000290917">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDateTime &gt; writes a timestamp in UTC" time="0.002870125">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDateTime &gt; pads single-digit hours and minutes" time="0.001288709">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDateTime &gt; shows a dash for null" time="0.000594334">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDateTime &gt; shows a dash for undefined" time="0.0002745">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="formatDateTime &gt; shows a dash for &quot;not a date&quot;" time="0.00023">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="displayTitle (SRS 3.5) &gt; reads &quot;Type in district, city&quot;" time="0.000158834">
+        </testcase>
+        <testcase classname="src/utils/format.test.js" name="displayTitle (SRS 3.5) &gt; keeps an Arabic district as it was written" time="0.000080417">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/photos.test.js" timestamp="2026-11-14T15:57:57.243Z" hostname="Salmans-MacBook-Air.local" tests="4" failures="0" errors="0" skipped="0" time="0.005885333">
+        <testcase classname="src/utils/photos.test.js" name="findPhoto &gt; finds a photo by its file name" time="0.003469167">
+        </testcase>
+        <testcase classname="src/utils/photos.test.js" name="findPhoto &gt; ignores any folder written in front of the name" time="0.000186958">
+        </testcase>
+        <testcase classname="src/utils/photos.test.js" name="findPhoto &gt; ignores letter case and spaces around the name" time="0.000100667">
+        </testcase>
+        <testcase classname="src/utils/photos.test.js" name="findPhoto &gt; finds nothing for an unknown or empty name" time="0.000101375">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/rentModel.test.js" timestamp="2026-11-14T15:57:57.243Z" hostname="Salmans-MacBook-Air.local" tests="21" failures="0" errors="0" skipped="0" time="0.007928417">
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; adds the base, the city, front, type and district numbers, and each input times its weight" time="0.00115375">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; finds the district after Arabic normalisation, without the word حي (Appendix B.4)" time="0.000138791">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; finds a district by the English name the dropdown saves, in any case (FR-ADD-14)" time="0.000132291">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; gives a district it does not know the average district instead" time="0.000097">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; keeps the same district name in another city apart" time="0.000103917">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; adds nothing for an empty front, or for a value that is no key of its table" time="0.000090334">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="predictRent (FR-ADD-13) &gt; suggests nothing outside the sizes the model learned from" time="0.000321834">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="modelInputs: the inputs the notebook computes in steps 5 and 17 &gt; marks a new house, and divides the size by the bedrooms, treating 0 as 1" time="0.000391042">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="modelInputs: the inputs the notebook computes in steps 5 and 17 &gt; adds up the rooms and the amenities, under the dataset’s column names" time="0.000282625">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="modelInputs: the inputs the notebook computes in steps 5 and 17 &gt; counts a corner only for three or four streets" time="0.000260667">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="modelInputs: the inputs the notebook computes in steps 5 and 17 &gt; finds an annex in the description, but not ملحق بها (&quot;attached to it&quot;)" time="0.000336">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="modelInputs: the inputs the notebook computes in steps 5 and 17 &gt; finds an internal staircase, however many spaces are between the words" time="0.000162625">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="modelInputs: the inputs the notebook computes in steps 5 and 17 &gt; gives the exported model every input it has a weight for" time="0.000171">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="the exported model (ai-model/prepare.ipynb, step 19) &gt; gives the same rents as scikit-learn, to within 0.005%" time="0.000122666">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="the exported model (ai-model/prepare.ipynb, step 19) &gt; knows every district the District dropdown offers, by its English name (FR-ADD-14)" time="0.002041541">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="roundToNearest &gt; rounds to the nearest 500 SAR, as the estimate does (FR-EST-01)" time="0.000096083">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="suggestedRent &gt; is the model’s rent to the nearest 500 SAR, or nothing outside the model’s sizes" time="0.000425833">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="isFarFromSuggestion (FR-RNT-07) &gt; flags a rent more than 3 times the suggestion, or under a third of it" time="0.000090125">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="isFarFromSuggestion (FR-RNT-07) &gt; catches an extra or a missing zero" time="0.000055667">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="canSuggestRent &gt; needs a valid city, size, age and room counts (Appendix C)" time="0.000270125">
+        </testcase>
+        <testcase classname="src/utils/rentModel.test.js" name="canSuggestRent &gt; does not need the district, the rent or the status" time="0.000063375">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/search.test.js" timestamp="2026-11-14T15:57:57.244Z" hostname="Salmans-MacBook-Air.local" tests="43" failures="0" errors="0" skipped="0" time="0.012372583">
+        <testcase classname="src/utils/search.test.js" name="searchableText (FR-SRC-02) &gt; covers ID, city, district, type, status, tenant name and description" time="0.001213291">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchableText (FR-SRC-02) &gt; includes the labels of the amenities the property has, and no others" time="0.000184667">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; keeps everything when nothing is typed" time="0.000161208">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; ignores letter case" time="0.000629958">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; requires every word, though they may be in different fields" time="0.000103417">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; finds a property by its ID" time="0.000162917">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; finds a property by an amenity it has" time="0.00012675">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; finds a property by a word in its description" time="0.000085">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords (FR-SRC-02) &gt; matches part of a word, so a half-typed search still finds things" time="0.000094833">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords: Arabic (FR-SRC-08, FR-SRC-11) &gt; finds a property by its Arabic district" time="0.000195083">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords: Arabic (FR-SRC-08, FR-SRC-11) &gt; matches a spelling variant of the same Arabic word (Appendix B.4)" time="0.000317417">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords: Arabic (FR-SRC-08, FR-SRC-11) &gt; matches an Arabic word written with a different alif" time="0.000186709">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesKeywords: Arabic (FR-SRC-08, FR-SRC-11) &gt; ignores Arabic diacritics in the text and in the query" time="0.000142042">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; lets everything through when no filter is set" time="0.000360209">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; filters by one or more cities" time="0.000208667">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; filters by one or more statuses" time="0.000119541">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; filters by type" time="0.000159709">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; filters by a rent range, inclusive at both ends" time="0.000449583">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; filters by a size range, inclusive at both ends" time="0.000092542">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; filters by a minimum number of bedrooms" time="0.000077875">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; does not apply a range it was told to skip (FR-SRC-07)" time="0.000589292">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="matchesFilters (FR-SRC-04) &gt; keeps only a property with every ticked amenity (FR-SRC-10)" time="0.000201084">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="activeFilterChips (FR-SRC-13) &gt; has no chip when no filter is set" time="0.001079875">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="activeFilterChips (FR-SRC-13) &gt; gives one chip per active filter, naming what dismissing it removes" time="0.000791958">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="activeFilterChips (FR-SRC-13) &gt; gives every chip its own id" time="0.00013375">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; AC-11 city, status and minimum bedrooms together" time="0.000535166">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; applies the search box and the filters at the same time" time="0.000184083">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; AC-09 narrows by city name typed in the box" time="0.000206834">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; AC-10 narrows by an Arabic district typed in the box" time="0.000521166">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; AC-12 returns nothing when nothing matches" time="0.000118166">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; returns everything when nothing is typed or set" time="0.00014325">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; keeps the order it was given" time="0.00010275">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="searchProperties: everything combines with AND (FR-SRC-05) &gt; changes nothing about the properties themselves" time="0.000333333">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is false when nothing is typed and no filter is set" time="0.000313417">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once something is typed" time="0.000128041">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once cities is set" time="0.000127834">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once statuses is set" time="0.000094709">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once propertyType is set" time="0.000090791">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once rentFrom is set" time="0.0001195">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once rentTo is set" time="0.000095833">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once sizeFrom is set" time="0.000093584">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once sizeTo is set" time="0.000087875">
+        </testcase>
+        <testcase classname="src/utils/search.test.js" name="isSearchActive (FR-LST-05) &gt; is true once minBedrooms is set" time="0.000087875">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/searchParams.test.js" timestamp="2026-11-14T15:57:57.246Z" hostname="Salmans-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="0.005339125">
+        <testcase classname="src/utils/searchParams.test.js" name="the search state in the URL (FR-SRC-12) &gt; reads a bare URL as no search, Last updated newest first, page 1 of 10" time="0.003047125">
+        </testcase>
+        <testcase classname="src/utils/searchParams.test.js" name="the search state in the URL (FR-SRC-12) &gt; gives an untouched list a clean URL" time="0.000255041">
+        </testcase>
+        <testcase classname="src/utils/searchParams.test.js" name="the search state in the URL (FR-SRC-12) &gt; keeps the search text, every filter, the order and the page" time="0.000211792">
+        </testcase>
+        <testcase classname="src/utils/searchParams.test.js" name="the search state in the URL (FR-SRC-12) &gt; repeats a parameter for a filter with several values" time="0.000100541">
+        </testcase>
+        <testcase classname="src/utils/searchParams.test.js" name="the search state in the URL (FR-SRC-12) &gt; drops what a hand-edited URL gets wrong, so the list still works" time="0.0001465">
+        </testcase>
+        <testcase classname="src/utils/searchParams.test.js" name="the search state in the URL (FR-SRC-12) &gt; never reads a page before page 1" time="0.000079167">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/sort.test.js" timestamp="2026-11-14T15:57:57.246Z" hostname="Salmans-MacBook-Air.local" tests="17" failures="0" errors="0" skipped="0" time="0.019311084">
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; offers Yearly rent, Size, Bedrooms, City and Last updated" time="0.002553917">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; sorts by Last updated, newest first, by default" time="0.013120958">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; sorts by yearlyRentSar ascending, and descending in reverse" time="0.000193375">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; sorts by sizeSqm ascending, and descending in reverse" time="0.000100833">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; sorts by bedrooms ascending, and descending in reverse" time="0.000089666">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; sorts by city ascending, and descending in reverse" time="0.000084292">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; sorts by updatedAt ascending, and descending in reverse" time="0.000079666">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; breaks a tie by ID, so two runs never swap rows" time="0.000129959">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; puts a property without the value last, in either direction" time="0.00013125">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; falls back to the default order for a field it does not know" time="0.000094166">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="sortProperties (FR-SRC-09) &gt; returns a new array and leaves the collection as it was (NFR-REL-04)" time="0.000352">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="paginate (FR-LST-10) &gt; offers 5, 10, 25 or 50 properties per page, 10 by default" time="0.000190625">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="paginate (FR-LST-10) &gt; shows the second page of 10" time="0.000099417">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="paginate (FR-LST-10) &gt; shows what is left on the last page" time="0.000120792">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="paginate (FR-LST-10) &gt; shows the last page for a page past the end, and page 1 for one before it" time="0.000085166">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="paginate (FR-LST-10) &gt; fits all 25 on one page of 25 or 50" time="0.000351084">
+        </testcase>
+        <testcase classname="src/utils/sort.test.js" name="paginate (FR-LST-10) &gt; has one empty page when nothing matches" time="0.000069333">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/stats.test.js" timestamp="2026-11-14T15:57:57.247Z" hostname="Salmans-MacBook-Air.local" tests="17" failures="0" errors="0" skipped="0" time="0.012304042">
+        <testcase classname="src/utils/stats.test.js" name="summarise: the headline figures (FR-DSH-01) &gt; counts the portfolio and each status" time="0.006545166">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: the headline figures (FR-DSH-01) &gt; adds up rent from occupied properties, and from all of them" time="0.001024375">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: the headline figures (FR-DSH-01) &gt; every status is counted exactly once" time="0.000570084">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: the occupancy rate (FR-DSH-02) &gt; is occupied divided by total, as a whole percentage" time="0.000255417">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: the occupancy rate (FR-DSH-02) &gt; rounds to a whole number rather than showing a fraction" time="0.000144334">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: the occupancy rate (FR-DSH-02) &gt; is null for an empty portfolio, so the page can show a dash" time="0.000118042">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: an empty portfolio (FR-DSH-04) &gt; reports zeros rather than failing" time="0.000405042">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: odd data &gt; ignores a rent that is not a number" time="0.000095625">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="summarise: odd data &gt; changes nothing about the properties it was given" time="0.000227291">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="byCity (FR-DSH-05) &gt; reports properties, occupied properties and rent for each city" time="0.000169334">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="byCity (FR-DSH-05) &gt; leaves out a city with no properties" time="0.000082041">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="byCity (FR-DSH-05) &gt; keeps the city order fixed, so the table does not reshuffle" time="0.000087875">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="byCity (FR-DSH-05) &gt; returns nothing for an empty portfolio" time="0.00006775">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="needsAttention (FR-DSH-06) &gt; lists the properties that are earning nothing" time="0.000551208">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="needsAttention (FR-DSH-06) &gt; puts Under maintenance before Vacant, since it cannot be let at all" time="0.000106375">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="needsAttention (FR-DSH-06) &gt; is empty when every property is occupied" time="0.000082417">
+        </testcase>
+        <testcase classname="src/utils/stats.test.js" name="needsAttention (FR-DSH-06) &gt; does not reorder the portfolio it was given" time="0.000094833">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/validation.test.js" timestamp="2026-11-14T15:57:57.247Z" hostname="Salmans-MacBook-Air.local" tests="70" failures="0" errors="0" skipped="0" time="0.020371459">
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; accepts a whole number and digits-only text" time="0.0023945">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects 4.5" time="0.000363833">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects &quot;4.5&quot;" time="0.00029925">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects &quot;&quot;" time="0.000087541">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects &quot;   &quot;" time="0.000068333">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects &quot;abc&quot;" time="0.000211916">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects &quot;4a&quot;" time="0.000156167">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects &quot;-5&quot;" time="0.000128958">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects null" time="0.000181292">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects undefined" time="0.000117208">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects null" time="0.000106584">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="toWholeNumber (FR-ADD-12) &gt; rejects {}" time="0.000120959">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: a valid property &gt; reports no error" time="0.001278834">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: a valid property &gt; accepts values that arrive from the form as text" time="0.000307459">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; rejects the city undefined" time="0.000212917">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; rejects the city &quot;&quot;" time="0.000134125">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; rejects the city &quot;Mecca&quot;" time="0.000111708">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; asks for the district when it is &quot;&quot;" time="0.000150375">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; asks for the district when it is &quot;   &quot;" time="0.000122333">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; asks for the district when it is undefined" time="0.000115209">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; holds the district to 2 to 60 characters" time="0.000248375">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; trims the district before measuring it" time="0.000148875">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; rejects the type undefined" time="0.000150625">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; rejects the type &quot;&quot;" time="0.00011275">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: city, district and type (Appendix C.1) &gt; rejects the type &quot;Apartment&quot;" time="0.000104958">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole size when it is &quot;&quot;" time="0.000146083">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole size when it is &quot;abc&quot;" time="0.000120834">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole size when it is &quot;45.5&quot;" time="0.000101333">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole size when it is undefined" time="0.000102458">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; holds the size to 20 to 100,000 m2" time="0.003698084">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole rent when it is &quot;&quot;" time="0.00019375">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole rent when it is &quot;abc&quot;" time="0.000068125">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole rent when it is &quot;1000.5&quot;" time="0.000050792">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; asks for a whole rent when it is undefined" time="0.000045834">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: size and rent have a separate whole-number message &gt; holds the rent to 1,000 to 10,000,000 SAR" time="0.000097042">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; accepts both boundaries of propertyAgeYears" time="0.000077667">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; accepts both boundaries of bedrooms" time="0.000052834">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; accepts both boundaries of bathrooms" time="0.00006075">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; accepts both boundaries of livingRooms" time="0.000050334">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects either side of propertyAgeYears" time="0.000063417">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects either side of bedrooms" time="0.000065">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects either side of bathrooms" time="0.000049708">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects either side of livingRooms" time="0.000052042">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects text and a missing value for propertyAgeYears" time="0.000069125">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects text and a missing value for bedrooms" time="0.000050458">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects text and a missing value for bathrooms" time="0.000049125">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: the counts share one message for text and for range &gt; rejects text and a missing value for livingRooms" time="0.000048625">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: description and status &gt; allows exactly 2,000 characters and rejects 2,001" time="0.000069041">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: description and status &gt; allows an empty description, which is optional" time="0.0000525">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: description and status &gt; rejects the status undefined" time="0.000052459">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: description and status &gt; rejects the status &quot;&quot;" time="0.0000495">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: description and status &gt; rejects the status &quot;Sold&quot;" time="0.0000415">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: tenancy (FR-ADD-07) &gt; requires a tenant name when the property is Occupied" time="0.00005725">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: tenancy (FR-ADD-07) &gt; holds the tenant name to 2 to 80 characters" time="0.0025085">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: tenancy (FR-ADD-07) &gt; does not ask for a tenant name when the status is Vacant" time="0.000116458">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: tenancy (FR-ADD-07) &gt; does not ask for a tenant name when the status is Under maintenance" time="0.000056959">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: tenancy (FR-ADD-07) &gt; requires lease end to be after lease start" time="0.0001025">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: tenancy (FR-ADD-07) &gt; does not compare lease dates when only one is given" time="0.000066">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateProperty: every failing field is reported at once (FR-ADD-03) &gt; collects one message per invalid field" time="0.000120458">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateFilters (FR-SRC-07) &gt; rejects a rent range that is the wrong way round" time="0.000088292">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateFilters (FR-SRC-07) &gt; rejects a size range that is the wrong way round" time="0.000068666">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateFilters (FR-SRC-07) &gt; accepts equal ends and a correct order" time="0.000075334">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="validateFilters (FR-SRC-07) &gt; ignores a range with only one end set" time="0.000072542">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; trims text and turns number text into numbers" time="0.000138167">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; fills in all 13 amenity flags, defaulting each to no (SRS 3.2)" time="0.0004445">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; clears tenant and lease details when the status is Vacant (FR-UPD-07)" time="0.000320417">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; clears tenant and lease details when the status is Under maintenance (FR-UPD-07)" time="0.000055291">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; keeps tenant and lease details when the status is Occupied" time="0.000059208">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; drops a front that is not one of the choices, since it is optional" time="0.00029225">
+        </testcase>
+        <testcase classname="src/utils/validation.test.js" name="normaliseValues &gt; never changes the values it was given (NFR-REL-04)" time="0.00014475">
+        </testcase>
+    </testsuite>
+</testsuites>

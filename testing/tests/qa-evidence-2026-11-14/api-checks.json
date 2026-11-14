@@ -1,0 +1,69 @@
+[
+  {
+    "check": "default seeded pages, paging limits, Arabic, unknown ID",
+    "status": "PASS"
+  },
+  {
+    "check": "default CRUD, dates, tenant clearing, generated IDs",
+    "status": "PASS"
+  },
+  {
+    "check": "default validation and malformed input",
+    "status": "PASS"
+  },
+  {
+    "check": "Whole-number API validation for fractional rent",
+    "status": "FAIL",
+    "detail": "Expected HTTP 400 for a non-integer rent. HTTP 201 saved 120000 SAR."
+  },
+  {
+    "check": "24 concurrent writes with stable readback pagination",
+    "status": "PASS"
+  },
+  {
+    "check": "Memory H2 resets to the eight seeds on restart",
+    "status": "PASS"
+  },
+  {
+    "check": "local seeded pages, paging limits, Arabic, unknown ID",
+    "status": "PASS"
+  },
+  {
+    "check": "local CRUD, dates, tenant clearing, generated IDs",
+    "status": "PASS"
+  },
+  {
+    "check": "local validation and malformed input",
+    "status": "PASS"
+  },
+  {
+    "check": "local persists edits and deletions without duplicate seeds",
+    "status": "PASS"
+  },
+  {
+    "check": "local keeps a deliberately emptied portfolio empty on restart",
+    "status": "FAIL",
+    "detail": "Expected the empty portfolio to stay empty. Restart inserted 8 demo rows."
+  },
+  {
+    "check": "supabase seeded pages, paging limits, Arabic, unknown ID",
+    "status": "PASS"
+  },
+  {
+    "check": "supabase CRUD, dates, tenant clearing, generated IDs",
+    "status": "PASS"
+  },
+  {
+    "check": "supabase validation and malformed input",
+    "status": "PASS"
+  },
+  {
+    "check": "supabase persists edits and deletions without duplicate seeds",
+    "status": "PASS"
+  },
+  {
+    "check": "supabase keeps a deliberately emptied portfolio empty on restart",
+    "status": "FAIL",
+    "detail": "Expected the empty portfolio to stay empty. Restart inserted 8 demo rows."
+  }
+]
