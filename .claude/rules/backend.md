@@ -5,11 +5,11 @@ paths:
 
 # Backend rules (Part 2)
 
-The Part 1 brief says, underlined, that "the backend will be manually coded in part2". The Part 2 brief, in `docs/part-2-brief.md`, says nothing about AI tools, so that rule stands. The team must write the backend by hand.
+The Part 1 brief says, underlined, that "the backend will be manually coded in part2". On 13 November 2026 Muhammad Yawar decided to build the server with AI assistance instead, and Claude Code wrote `backend/`.
 
-- Do not create, edit or generate code under `backend/` on your own. This includes controllers, services, repositories, entities, configuration, `pom.xml` or `build.gradle`, and the JUnit and Mockito tests.
-- If the user asks for backend code, remind them of this rule and ask them to confirm that the course allows it before you write anything. Do not assume the rule has changed.
-- By default, explaining a concept, a design choice or an error message is fine, and so is reviewing code the team wrote. Writing or rewriting their backend code is not.
+- Backend changes are allowed. Record each one in `docs/ai-usage.md`, honestly, because the course asks which AI tool produced each part.
+- Keep the code plain and explained in comments: the team must be able to answer the instructor's questions about every line.
+- Run `mvnw.cmd test` (or `./mvnw test`) inside `backend/` before you report a change.
 
 ## The plan
 

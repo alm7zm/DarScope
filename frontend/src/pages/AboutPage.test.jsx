@@ -56,7 +56,7 @@ describe('AboutPage: the team (FR-ABT-02)', () => {
     renderAbout();
 
     const pending = TEAM.filter((member) => member.pending);
-    expect(panel('Team').getAllByText('Student ID to add')).toHaveLength(
+    expect(panel('Team').queryAllByText('Student ID to add')).toHaveLength(
       pending.length,
     );
   });

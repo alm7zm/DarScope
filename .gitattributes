@@ -1,3 +1,6 @@
 # Check every text file out with LF line endings on every machine.
 # Without this, Git for Windows converts to CRLF and Prettier reports each file as unformatted.
 * text=auto eol=lf
+
+# Windows batch files need CRLF, or cmd.exe can misread them.
+*.cmd text eol=crlf

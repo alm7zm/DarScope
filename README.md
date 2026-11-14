@@ -8,7 +8,7 @@ This repository holds both parts of the SE411 project (Fall 2026-27):
 | Part | Scope | Status |
 | --- | --- | --- |
 | Part 1 | React frontend. | Done |
-| Part 2 | Java Spring server with a SQL database (Supabase Postgres, or H2 locally), hand-coded by the team. The frontend already calls it. | In progress, due 14 November 2026: [docs/backend-plan.md](docs/backend-plan.md) |
+| Part 2 | Java Spring server with a SQL database (Supabase Postgres, or H2 locally), built with AI assistance (docs/ai-usage.md). The frontend calls it. | Written, being tested, due 14 November 2026: [docs/backend-plan.md](docs/backend-plan.md) |
 
 One AI feature runs entirely in the browser, with no API key: the Add and Edit forms suggest a yearly rent from a model the team trained on 2021 listings. Search by meaning, comparable market listings and a fair-rent estimate are planned.
 
@@ -19,7 +19,7 @@ https://www.kaggle.com/datasets/lama122/saudi-arabia-real-estate-aqar
 
 The app needs both halves running, in two terminals:
 
-1. **The server**, in `backend/`: `mvnw.cmd spring-boot:run` (`./mvnw` on macOS and Linux). It needs JDK 21 or later, and starts on <http://localhost:8080> with an in-memory H2 database, where changes last until the server stops. To use the team's Supabase database instead, so changes are kept, add `-Dspring-boot.run.profiles=supabase` and see [docs/backend-plan.md](docs/backend-plan.md), section 7.
+1. **The server**, in `backend/`: `mvnw.cmd spring-boot:run` (`./mvnw` on macOS and Linux). It needs JDK 21 or later, and starts on <http://localhost:8080> with an in-memory H2 database, where changes last until the server stops. To keep changes on your laptop between restarts, add `-Dspring-boot.run.profiles=local` (H2 saved to `backend/data/`). To use the team's Supabase database instead, add `-Dspring-boot.run.profiles=supabase` and see [docs/backend-plan.md](docs/backend-plan.md), section 7.
 2. **The app**, in `frontend/`: `npm install` once, then `npm run dev`, and open <http://localhost:5173>. It forwards every `/api` call to the server.
 
 The frontend commands need Node.js 22.13 or later (22 or 24 LTS) and npm. Run them inside `frontend/`. None of the tests needs the server.
@@ -57,7 +57,7 @@ darscope/
 │       ├── assets/     team photos, at any size: the build crops and shrinks them
 │       └── test/       test setup, fixtures, and the in-memory stand-in for the server
 ├── ai-model/           the rent model behind the suggested rent, trained on the dataset
-└── backend/            Part 2: the Java Spring server, hand-coded by the team
+└── backend/            Part 2: the Java Spring server
 ```
 
 A folder appears when its first file is written. Each test file sits beside the module it tests.

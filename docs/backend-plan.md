@@ -2,7 +2,7 @@
 
 How the four of us build the Spring server, and how it plugs into the React app. The brief is in [part-2-brief.md](part-2-brief.md). **Due 14 November 2026.**
 
-The Part 1 brief says the backend "will be manually coded in part2", so **we write every line of Java and SQL ourselves**. The AI tool wrote this plan and the frontend side of the connection (the `frontend/` changes listed at the end), and it can review our code. It does not write anything in `backend/`.
+The Part 1 brief says the backend "will be manually coded in part2". On 13 November 2026 Muhammad Yawar chose to build the server with AI assistance instead, and Claude Code wrote the code in `backend/` from this plan. `docs/ai-usage.md` records it. Everyone should still read and be able to explain all of it, because the instructor asks questions about the code.
 
 ## 1. How the two halves connect
 
@@ -196,20 +196,21 @@ These are the app's own checks (SRS Appendix C), copied from `frontend/src/const
 
 Supabase was dropped on 11 November 2026 and brought back on 12 November 2026, agreed by the team. The brief does not ask for a database, so Supabase is the extra the demo shows: a property added in the app is still there after Spring restarts. H2 stays the default, so the tests, a fresh laptop and a bad network all still work with no setup.
 
-| | H2 (default profile) | Supabase (`supabase` profile) |
-| --- | --- | --- |
-| Where the data lives | In memory, inside Spring | Postgres in the cloud |
-| `schema.sql` and `data.sql` | Run by Spring at every start | Run once, by hand, in step 2 below |
-| After a restart | Back to the 8 starting properties | Everything kept |
-| Needs | Nothing | `backend/.env` and a network that allows port 5432 |
-| Used by the tests | Yes | Never |
+| | H2 in memory (default profile) | H2 in a file (`local` profile) | Supabase (`supabase` profile) |
+| --- | --- | --- | --- |
+| Where the data lives | In memory, inside Spring | `backend/data/darscope.mv.db` on the laptop | Postgres in the cloud |
+| Setting up the table and the 8 starting properties | `schema.sql` and `data.sql` at every start | `schema.sql` and `data-once.sql` at every start, both safe to run again | `schema.sql`, `supabase/security.sql` and `data-once.sql` at every start, all safe to run again |
+| After a restart | Back to the 8 starting properties | Everything kept | Everything kept |
+| To start again from the 8 | Restart | Delete `backend/data/` | `DROP TABLE property;` in the SQL Editor |
+| Needs | Nothing | Nothing | `backend/.env` and a network that allows port 5432 |
+| Used by the tests | Yes | Never | Never |
+
+Run the `local` profile with `mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local`. It keeps the team's own data between restarts with nothing to install, so it is the everyday choice when Supabase is not needed. Its H2 console is at <http://localhost:8080/h2-console> with the JDBC URL `jdbc:h2:file:./data/darscope;AUTO_SERVER=TRUE`, while the server runs from `backend/`. `data-once.sql` inserts the starting properties only into an empty table, so a restart never adds them twice or brings back one the app deleted.
 
 ### Setting it up (Person A)
 
 1. Create a free project at [supabase.com](https://supabase.com). Keep the database password private: **this repository is public**.
-2. In the **SQL Editor**, run `schema.sql`, then `data.sql`, then this one line, which belongs to Supabase only:
-   `ALTER TABLE property ENABLE ROW LEVEL SECURITY;`
-   It closes Supabase's own public data API to the table. Spring is not affected, because it connects as the table's owner.
+2. Nothing to run in the SQL Editor: on its first start on the `supabase` profile, Spring creates the table, turns on row level security (`supabase/security.sql`, which closes Supabase's own public data API to the table; Spring is not affected, because it connects as the table's owner) and inserts the 8 starting properties. To start again from the 8, run `DROP TABLE property;` in the SQL Editor and restart Spring.
 3. Under **Connect**, copy the **Session pooler** connection details. That one works on any network. The "Direct connection" needs IPv6, which many networks lack.
 4. Each person creates `backend/.env`. The repository's `.gitignore` already keeps every `.env` out of git. It holds three lines:
    ```
@@ -217,11 +218,11 @@ Supabase was dropped on 11 November 2026 and brought back on 12 November 2026, a
    DB_USER=postgres.<project ref>
    DB_PASSWORD=<the password>
    ```
-5. `application.properties` imports that file with `spring.config.import=optional:file:.env[.properties]`. `application-supabase.properties` sets `spring.datasource.url`, `username` and `password` to `${DB_URL}`, `${DB_USER}` and `${DB_PASSWORD}`.
+5. `application.properties` imports that file with `spring.config.import=optional:file:.env[.properties]`. `application-supabase.properties` sets `spring.datasource.url`, `username` and `password` to `${DB_URL}`, `${DB_USER}` and `${DB_PASSWORD}`. The file is read from the folder Spring starts in, so start it inside `backend/` (in IntelliJ, set the run configuration's working directory to `backend`). The `.env` file is read as Java properties, so a backslash in the password must be written twice.
 6. **Free projects pause after a week without use.** Open the Supabase dashboard on 13 November, and again on the morning of 14 November, to be sure it is awake.
 7. **Never point the tests at Supabase.** `mvnw.cmd test` runs on the default profile, so the tests use H2 and mocks and never change the shared data.
 
-On H2, Spring runs `schema.sql` and `data.sql` itself at every start, because H2 is an embedded database. On Supabase it never runs them: the table was made once in step 2, and the data stays between restarts.
+On H2, Spring runs `schema.sql` and `data.sql` at every start, so the app always starts from the 8 properties. On Supabase it runs the safe versions, so the data stays between restarts.
 
 ### Looking at the data
 

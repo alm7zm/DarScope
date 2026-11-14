@@ -7,9 +7,9 @@ Darscope is a web app that manages one company's rental villas and duplexes in R
 | Part | Folder | What it is | Who writes the code |
 | --- | --- | --- | --- |
 | 1 | `frontend/` | React single-page app. Data is a collection of objects held in memory. Due 17 October 2026. | You, reviewed by the team |
-| 2 | `backend/` | Java Spring server whose REST API replaces the in-memory data service. Brief: `docs/part-2-brief.md`. Due 14 November 2026. | The team, by hand |
+| 2 | `backend/` | Java Spring server whose REST API replaces the in-memory data service. Brief: `docs/part-2-brief.md`. Due 14 November 2026. | Claude Code, at the team's request (13 November 2026), reviewed by the team |
 
-**Never write or change code under `backend/` on your own.** The Part 1 brief says the backend "will be manually coded in part2", and the Part 2 brief does not change that. If a request needs backend code, say so and stop until the user confirms that the course rules allow it.
+**Backend code is AI-assisted since 13 November 2026.** The Part 1 brief says the backend "will be manually coded in part2". Muhammad Yawar decided to build it with Claude Code anyway, and that decision is recorded in `docs/ai-usage.md`. Record every backend change there too.
 
 ## Where the truth lives
 
@@ -52,7 +52,7 @@ darscope/
 │       └── test/       setup.js, shared fixtures and helpers, and the in-memory stand-in
 │                       for the server: fakePropertyService.js, portfolio.seed.json
 ├── ai-model/           rent-prediction model, trained outside the app; feeds the rent suggestion
-└── backend/            Part 2: the Java Spring server, hand-coded by the team
+└── backend/            Part 2: the Java Spring server
 ```
 
 The layout is layered: each folder under `src/` holds one kind of code. A folder appears when its first file is written, so not all of them exist yet. The open tasks, most important first, are in `docs/tasks.md`.
@@ -75,7 +75,7 @@ Run these inside `frontend/`. If `frontend/package.json` does not exist, the app
 | `npm run format` | Format the code with Prettier |
 | `npm run build` | Build static files into `frontend/dist/` |
 
-`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` (H2), the same with `-Dspring-boot.run.profiles=supabase`, and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
+`npm run dev` forwards `/api` to the Spring server on port 8080, so run the server too to use the app. The tests never need it. The server's commands, run inside `backend/` once the team has generated it: `mvnw.cmd spring-boot:run` (H2 in memory), the same with `-Dspring-boot.run.profiles=local` (H2 in a file, kept between restarts) or `-Dspring-boot.run.profiles=supabase`, and `mvnw.cmd test` (`docs/backend-plan.md`, section 8).
 
 The team works on Windows. Every npm script must also run on macOS and Linux, so use Node scripts instead of shell commands such as `rm`, `cp` or `VAR=value command`.
 
@@ -134,7 +134,7 @@ These are the defaults from SRS section 11. Ask before you swap one.
 | `.claude/rules/ai-features.md` | Search by meaning, comparables, fair-rent estimate |
 | `.claude/rules/testing.md` | What to test and how |
 | `.claude/rules/data-prep.md` | The script that builds the data files |
-| `.claude/rules/backend.md` | The hand-coded rule for Part 2 |
+| `.claude/rules/backend.md` | Rules for the Part 2 server |
 
 Each one loads when you open a file it covers. When you start in an area that has no files yet, read its rule file yourself first.
 
